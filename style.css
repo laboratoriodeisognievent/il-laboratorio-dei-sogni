@@ -150,10 +150,13 @@ nav a:hover {
   font-weight: 500;
   text-align: center;
   margin-bottom: 30px;
-  color: #435b70;
+  color: #64b6e4;
 }
 
-/* TESTO INTRODUTTIVO */
+.story-title {
+  font-style: italic;
+  color: #64b6e4;
+}
 
 .section-intro {
   font-size: 18px;
@@ -162,6 +165,10 @@ nav a:hover {
   margin: 0 auto 45px;
   padding: 0 18px;
   text-align: left;
+}
+
+.section-intro p {
+  margin-bottom: 20px;
 }
 
 /* ==========================
@@ -184,6 +191,8 @@ nav a:hover {
   border-radius: 12px;
   text-align: center;
   transition: transform .25s, box-shadow .25s;
+  overflow: hidden;
+  min-width: 0;
 }
 
 .card:hover {
@@ -196,7 +205,20 @@ nav a:hover {
   font-size: 26px;
   font-weight: 500;
   margin-bottom: 20px;
-  color: #435b70;
+  color: #64b6e4;
+}
+
+/* FOTO RETTANGOLARI VERTICALI */
+
+.cards .card img.card-image {
+  display: block;
+  width: 220px;
+  max-width: 100%;
+  height: 265px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+  margin: 0 auto 20px;
 }
 
 .card-description {
@@ -247,7 +269,7 @@ nav a:hover {
   font-size: 19px;
   line-height: 1.9;
   max-width: 750px;
-  margin: 0 auto;
+  margin: 0 auto 30px;
 }
 
 /* ==========================
@@ -543,6 +565,13 @@ footer a {
     padding: 25px 20px;
   }
 
+  .cards .card img.card-image {
+    width: 220px;
+    max-width: 100%;
+    height: 265px;
+    object-fit: cover;
+  }
+
   .card-title {
     font-size: 25px;
   }
@@ -589,5 +618,4 @@ footer a {
     align-items: flex-start;
     flex-direction: column;
   }
-
 }
