@@ -1,180 +1,224 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Scopri le creazioni personalizzate e gli articoli per eventi de Il Laboratorio Dei Sogni.">
-  <title>Shop | Il Laboratorio Dei Sogni</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Il nostro catalogo | Il Laboratorio Dei Sogni</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fbfcfc;color:#394950;font-family:Arial,sans-serif}
+header{text-align:center;padding:65px 20px 45px;background:#edf3f4}
+.eyebrow{letter-spacing:3px;font-size:12px;color:#668b9a}
+h1,h2,h3{font-family:Georgia,serif;color:#587887}
+h1{font-size:clamp(32px,6vw,48px);font-weight:normal;margin:18px 0}
+header p{max-width:600px;margin:0 auto 25px;line-height:1.7}
+button{border:0;border-radius:25px;background:#668b9a;color:white;padding:13px 23px;cursor:pointer;font-size:15px}
+button.secondary{background:#e7eff1;color:#4d6b77}
+main{max-width:1100px;margin:auto;padding:30px 18px}
+#categories{display:none;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.category{background:white;border:1px solid #e4ebed;border-radius:13px;padding:24px;text-align:center;cursor:pointer}
+.category h3{font-size:20px;font-weight:normal}
+#products{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:25px}
+.product{background:white;border:1px solid #e4ebed;border-radius:13px;overflow:hidden}
+.product img{width:100%;height:230px;object-fit:cover;background:#edf1f2}
+.product-content{padding:17px}
+.product h3{margin:0 0 9px;font-size:21px}
+.product p{line-height:1.5;font-size:14px}
+.price{font-weight:bold;color:#587887;font-size:18px}
+.product input,.product select{width:100%;padding:10px;margin:5px 0 12px;border:1px solid #d9e2e4;border-radius:7px}
+.product label{font-size:13px}
+#catalogTitle{text-align:center}
+#back{margin-top:20px}
+#cart{background:#edf3f4;border-radius:13px;padding:20px;margin-top:35px}
+#cartItems p{font-size:14px}
+footer{text-align:center;padding:35px 15px;color:#718087;font-size:13px}
+.hidden{display:none}
+</style>
 </head>
-
 <body>
 
-  <header>
-    <h1>IL LABORATORIO DEI SOGNI</h1>
-    <h2>Marika Mazzara – Event Design</h2>
-  </header>
+<header>
+<div class="eyebrow">IL NOSTRO CATALOGO</div>
+<h1>Piccole creazioni, grandi emozioni</h1>
+<p>Scopri le nostre proposte e scegli i dettagli che preferisci. Ogni creazione può essere personalizzata insieme a noi.</p>
+<button id="discover">Scopri il catalogo</button>
+</header>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="storia.html">La nostra storia</a>
-    <a href="servizi.html">Servizi</a>
-    <a href="shop.html">Shop</a>
-    <a href="contatti.html">Contatti</a>
-  </nav>
+<main>
+<section id="catalog">
+<div id="categories"></div>
+<div id="productsArea" class="hidden">
+<button id="back" class="secondary">← Tutte le categorie</button>
+<h2 id="catalogTitle"></h2>
+<div id="products"></div>
+</div>
+</section>
 
-  <main>
+<section id="cart" class="hidden">
+<h2>Il tuo carrello</h2>
+<div id="cartItems"></div>
+<p id="cartTotal"></p>
+<button id="sendOrder">Invia richiesta su WhatsApp</button>
+</section>
+</main>
 
-    <section class="shop-hero">
-      <p class="shop-eyebrow">IL NOSTRO CATALOGO</p>
-      <h1>Piccole creazioni, grandi emozioni</h1>
-      <p>
-        Scopri le nostre proposte e scegli i dettagli che preferisci.
-        Ogni creazione può essere personalizzata insieme a noi.
-      </p>
-      <a class="button" href="#catalogo">Scopri il catalogo</a>
-    </section>
+<footer>Il Laboratorio Dei Sogni · Marsala e provincia di Trapani · Spedizioni in tutta Italia</footer>
 
-    <section class="section" id="catalogo">
-      <h2>Esplora le categorie</h2>
-      <p class="section-intro">
-        Trova la creazione giusta per la tua occasione.
-      </p>
+<script>
+const WHATSAPP = "393773611035";
+const API = "/api";
+let cart = [];
+let categories = [];
 
-      <div class="category-links">
-        <a href="#fiocchi">Fiocchi nascita</a>
-        <a href="#accessori">Accessori nascita</a>
-        <a href="#bomboniere">Bomboniere</a>
-        <a href="#personalizzati">Personalizzati</a>
-        <a href="#eventi">Articoli per eventi</a>
+const $ = id => document.getElementById(id);
+
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
+
+async function getData(path) {
+  const response = await fetch(API + path);
+  if (!response.ok) throw new Error("Impossibile caricare il catalogo.");
+  return response.json();
+}
+
+$("discover").addEventListener("click", async () => {
+  $("discover").disabled = true;
+  $("discover").textContent = "Caricamento...";
+  try {
+    categories = await getData("/categories");
+    $("categories").innerHTML = categories.map(c => `
+      <div class="category" data-slug="${esc(c.slug)}">
+        <h3>${esc(c.name)}</h3>
+        <p>${esc(c.description || "")}</p>
+        <button>Scopri</button>
       </div>
-    </section>
+    `).join("");
+    $("categories").style.display = "grid";
+    $("categories").scrollIntoView({behavior:"smooth"});
+  } catch(error) {
+    alert(error.message);
+  } finally {
+    $("discover").disabled = false;
+    $("discover").textContent = "Scopri il catalogo";
+  }
+});
 
-    <section class="section shop-category" id="fiocchi">
-      <h2>Fiocchi nascita</h2>
-      <p class="section-intro">
-        Un modo speciale per annunciare l'arrivo di una nuova vita.
-      </p>
-      <div class="empty-category">
-        <p>Stiamo preparando questa selezione.</p>
-        <a href="contatti.html">Richiedi informazioni</a>
+$("categories").addEventListener("click", async e => {
+  const card = e.target.closest("[data-slug]");
+  if (!card) return;
+  await openCategory(card.dataset.slug);
+});
+
+async function openCategory(slug) {
+  const category = categories.find(c => c.slug === slug);
+  $("catalogTitle").textContent = category?.name || "Catalogo";
+  $("categories").style.display = "none";
+  $("productsArea").classList.remove("hidden");
+  $("products").innerHTML = "<p>Caricamento prodotti...</p>";
+
+  try {
+    const products = await getData("/products?category=" + encodeURIComponent(slug));
+    $("products").innerHTML = products.length
+      ? products.map(renderProduct).join("")
+      : "<p>Stiamo preparando le nostre creazioni per questa categoria. Contattaci per informazioni!</p>";
+  } catch(error) {
+    $("products").innerHTML = "<p>Non è stato possibile caricare i prodotti.</p>";
+  }
+}
+
+function renderProduct(p) {
+  const fields = Array.isArray(p.custom_fields) ? p.custom_fields : [];
+  return `
+    <article class="product" data-id="${p.id}">
+      ${p.image_url ? `<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy">` : ""}
+      <div class="product-content">
+        <h3>${esc(p.name)}</h3>
+        <p>${esc(p.description || "")}</p>
+        <div class="price">€ ${Number(p.price).toFixed(2)}</div>
+        ${fields.map((f,i) => `
+          <label>${esc(f.label)}</label>
+          ${f.options?.length
+            ? `<select data-field="${i}"><option value="">Seleziona</option>${f.options.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join("")}</select>`
+            : `<input data-field="${i}" placeholder="Inserisci ${esc(f.label.toLowerCase())}">`
+          }
+        `).join("")}
+        <label>Quantità</label>
+        <input type="number" min="1" value="1" data-quantity>
+        <button data-add="${p.id}">Aggiungi al carrello</button>
       </div>
-    </section>
+    </article>
+  `;
+}
 
-    <section class="section shop-category" id="accessori">
-      <h2>Accessori nascita</h2>
-      <p class="section-intro">
-        Catenelle portaciuccio e piccoli accessori personalizzati.
-      </p>
+$("products").addEventListener("click", async e => {
+  const button = e.target.closest("[data-add]");
+  if (!button) return;
 
-      <div class="cards">
+  const card = button.closest(".product");
+  const id = Number(button.dataset.add);
+  const fields = [...card.querySelectorAll("[data-field]")];
+  const options = fields.map(f => ({
+    name:f.previousElementSibling?.textContent || "Personalizzazione",
+    value:f.value.trim()
+  })).filter(f => f.value);
 
-        <article class="card product-card">
-          <div class="product-placeholder">La tua foto qui</div>
+  const quantity = Math.max(1, Number(card.querySelector("[data-quantity]").value) || 1);
+  const name = card.querySelector("h3").textContent;
+  const price = Number(card.querySelector(".price").textContent.replace("€","").trim());
 
-          <p class="product-category">ACCESSORI NASCITA</p>
-          <h3>Catenella portaciuccio personalizzata</h3>
+  cart.push({id,name,price,quantity,options});
+  updateCart();
+  $("cart").classList.remove("hidden");
+  $("cart").scrollIntoView({behavior:"smooth"});
+});
 
-          <p>
-            Una creazione realizzata scegliendo colori,
-            decorazioni e dettagli insieme a noi.
-          </p>
+function updateCart() {
+  $("cartItems").innerHTML = cart.length ? cart.map((item,i) => `
+    <p><strong>${esc(item.name)}</strong> × ${item.quantity}
+    ${item.options.map(o => `<br>${esc(o.name)}: ${esc(o.value)}`).join("")}
+    <br>€ ${(item.price * item.quantity).toFixed(2)}
+    <button class="secondary" data-remove="${i}">Rimuovi</button></p>
+  `).join("") : "<p>Il carrello è vuoto.</p>";
 
-          <p class="price">Prezzo da concordare</p>
+  const total = cart.reduce((sum,item) => sum + item.price * item.quantity, 0);
+  $("cartTotal").textContent = "Totale indicativo: € " + total.toFixed(2);
+  $("sendOrder").disabled = !cart.length;
+}
 
-          <label for="colore-catenella">Colore preferito</label>
-          <select id="colore-catenella">
-            <option value="Da concordare">Da concordare</option>
-            <option value="Rosa">Rosa</option>
-            <option value="Azzurro">Azzurro</option>
-            <option value="Beige">Beige</option>
-            <option value="Verde salvia">Verde salvia</option>
-            <option value="Altro">Altro</option>
-          </select>
+$("cartItems").addEventListener("click", e => {
+  const button = e.target.closest("[data-remove]");
+  if (!button) return;
+  cart.splice(Number(button.dataset.remove),1);
+  updateCart();
+});
 
-          <label for="nome-catenella">Nome da inserire (facoltativo)</label>
-          <input id="nome-catenella" type="text" placeholder="Scrivi il nome">
+$("sendOrder").addEventListener("click", () => {
+  if (!cart.length) return;
 
-          <button class="button add-to-cart"
-            data-product="Catenella portaciuccio personalizzata"
-            data-color="colore-catenella"
-            data-name="nome-catenella">
-            Aggiungi al carrello
-          </button>
-        </article>
+  let message = "Ciao! Vorrei richiedere informazioni e un preventivo per questi prodotti:\n\n";
 
-      </div>
-    </section>
+  cart.forEach(item => {
+    message += `${item.name} - Quantità: ${item.quantity} - € ${(item.price * item.quantity).toFixed(2)}\n`;
+    item.options.forEach(o => {
+      message += `${o.name}: ${o.value}\n`;
+    });
+    message += "\n";
+  });
 
-    <section class="section shop-category" id="bomboniere">
-      <h2>Bomboniere</h2>
-      <p class="section-intro">
-        Piccoli ricordi personalizzati per battesimi,
-        matrimoni e occasioni da celebrare.
-      </p>
-      <div class="empty-category">
-        <p>Stiamo preparando questa selezione.</p>
-        <a href="contatti.html">Richiedi informazioni</a>
-      </div>
-    </section>
+  message += "Vorrei sapere disponibilità e costi di spedizione. Grazie!";
+  window.open("https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(message), "_blank");
+});
 
-    <section class="section shop-category" id="personalizzati">
-      <h2>Personalizzati</h2>
-      <p class="section-intro">
-        Creazioni uniche con nomi, colori e dettagli scelti da te.
-      </p>
-      <div class="empty-category">
-        <p>Stiamo preparando questa selezione.</p>
-        <a href="contatti.html">Raccontaci la tua idea</a>
-      </div>
-    </section>
+$("back").addEventListener("click", () => {
+  $("productsArea").classList.add("hidden");
+  $("categories").style.display = "grid";
+  $("categories").scrollIntoView({behavior:"smooth"});
+});
 
-    <section class="section shop-category" id="eventi">
-      <h2>Articoli per eventi</h2>
-      <p class="section-intro">
-        Dettagli e decorazioni per feste e occasioni speciali.
-      </p>
-      <div class="empty-category">
-        <p>Stiamo preparando questa selezione.</p>
-        <a href="contatti.html">Richiedi informazioni</a>
-      </div>
-    </section>
-
-    <section class="section cart-section" id="carrello">
-      <h2>Il tuo carrello</h2>
-      <p class="section-intro">
-        Qui trovi le creazioni che hai scelto.
-        Potrai inviarci la tua richiesta direttamente su WhatsApp.
-      </p>
-
-      <div id="cart-items">
-        <p class="cart-empty">Il carrello è vuoto.</p>
-      </div>
-
-      <button class="button" id="send-order">
-        Invia la richiesta su WhatsApp
-      </button>
-
-      <p class="cart-note">
-        L'invio è una richiesta d'ordine, non un pagamento.
-        Confermeremo disponibilità, prezzo e spedizione.
-      </p>
-    </section>
-
-  </main>
-
-  <footer>
-    <p><strong>IL LABORATORIO DEI SOGNI</strong></p>
-    <p>Marika Mazzara – Event Design</p>
-    <p>Marsala e provincia di Trapani · Spedizioni in tutta Italia</p>
-    <p>
-      <a href="index.html">Home</a> ·
-      <a href="shop.html">Shop</a> ·
-      <a href="contatti.html">Contatti</a>
-    </p>
-    <p>© 2026 Il Laboratorio Dei Sogni. Tutti i diritti riservati.</p>
-  </footer>
-
-  <script src="shop.js"></script>
+updateCart();
+</script>
 </body>
 </html>
