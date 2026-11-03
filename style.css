@@ -1,0 +1,593 @@
+/* ==========================
+   IMPOSTAZIONI GENERALI
+========================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Georgia, serif;
+  background: #f8fcff;
+  color: #435b70;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+section[id] {
+  scroll-margin-top: 25px;
+}
+
+/* ==========================
+   HEADER
+========================== */
+
+header {
+  background: white;
+  padding: 25px 6%;
+  text-align: center;
+  border-bottom: 1px solid #e5f1f8;
+}
+
+header h1 {
+  color: #69b8e5;
+  font-size: 30px;
+  letter-spacing: 3px;
+}
+
+header h2 {
+  font-size: 13px;
+  font-weight: normal;
+  letter-spacing: 3px;
+  margin-top: 10px;
+}
+
+/* ==========================
+   MENU
+========================== */
+
+nav {
+  padding: 18px;
+  text-align: center;
+  background: white;
+}
+
+nav a {
+  color: #55758e;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: 500;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================
+   HOME - INTRODUZIONE
+========================== */
+
+.hero {
+  min-height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  padding: 28px 20px 65px;
+  background: linear-gradient(180deg, #e6f6ff, #ffffff);
+}
+
+.hero-title,
+.final-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.hero-title {
+  font-size: 36px;
+  line-height: 1.35;
+  color: #64b6e4;
+  max-width: 850px;
+  margin-bottom: 22px;
+}
+
+.hero-description,
+.section-intro,
+.card-description,
+.final-description {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.hero-description {
+  font-size: 19px;
+  line-height: 1.8;
+  max-width: 650px;
+  margin-bottom: 42px;
+}
+
+/* ==========================
+   PULSANTI
+========================== */
+
+.button {
+  display: inline-block;
+  padding: 15px 32px;
+  border: 1.5px solid #8bb8d0;
+  border-radius: 5px;
+  text-decoration: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #55758e;
+  background: white;
+  transition: 0.3s ease;
+}
+
+.button:hover {
+  background-color: #8bb8d0;
+  color: white;
+}
+
+/* ==========================
+   SEZIONI HOME
+========================== */
+
+.section {
+  padding: 65px 25px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #435b70;
+}
+
+/* TESTO INTRODUTTIVO */
+
+.section-intro {
+  font-size: 18px;
+  line-height: 1.9;
+  max-width: 850px;
+  margin: 0 auto 45px;
+  padding: 0 18px;
+  text-align: left;
+}
+
+/* ==========================
+   CATALOGHI
+========================== */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+  max-width: 1150px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+
+.card {
+  padding: 30px 24px;
+  background: white;
+  border: 1px solid #e5f1f8;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform .25s, box-shadow .25s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(75, 125, 160, .12);
+}
+
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #435b70;
+}
+
+.card-description {
+  font-size: 17px;
+  line-height: 1.8;
+  margin-bottom: 22px;
+}
+
+/* PULSANTI DEI CATALOGHI */
+
+.card a {
+  display: inline-block;
+  padding: 14px 25px;
+  margin-top: 8px;
+  border: 1.5px solid #8bb8d0;
+  border-radius: 5px;
+  text-decoration: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #55758e;
+  background: white;
+  transition: 0.3s ease;
+}
+
+.card a:hover {
+  background: #8bb8d0;
+  color: white;
+}
+
+/* ==========================
+   SEZIONE FINALE
+========================== */
+
+.final-section {
+  padding: 65px 25px;
+  text-align: center;
+  background: linear-gradient(180deg, #ffffff, #eaf6fc);
+}
+
+.final-title {
+  font-size: 36px;
+  margin-bottom: 22px;
+  color: #64b6e4;
+}
+
+.final-description {
+  font-size: 19px;
+  line-height: 1.9;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+/* ==========================
+   FOOTER
+========================== */
+
+footer {
+  text-align: center;
+  padding: 30px;
+  background: #eaf6fc;
+  line-height: 2;
+}
+
+footer a {
+  color: #55758e;
+  text-decoration: none;
+}
+
+/* ==========================
+   LOGO
+========================== */
+
+.main-logo {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.logo-container {
+  text-align: center;
+  padding: 15px 10px;
+  background: white;
+}
+
+/* ==========================
+   SHOP
+========================== */
+
+.shop-hero {
+  padding: 85px 20px;
+  text-align: center;
+  background: linear-gradient(180deg, #e5f5ff, #fbfdff);
+}
+
+.shop-hero h1 {
+  color: var(--blue-dark);
+  font-size: clamp(28px, 5vw, 45px);
+  margin: 12px auto;
+  max-width: 750px;
+  line-height: 1.25;
+}
+
+.shop-hero p {
+  max-width: 650px;
+  margin: 15px auto;
+}
+
+.shop-eyebrow,
+.product-category {
+  color: var(--blue-dark);
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+/* CATEGORIE SHOP */
+
+.category-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  max-width: 950px;
+  margin: 30px auto;
+}
+
+.category-links a {
+  display: inline-block;
+  padding: 12px 20px;
+  border: 1px solid #c9e5f5;
+  border-radius: 30px;
+  color: var(--blue-dark);
+  text-decoration: none;
+  background: white;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+}
+
+.category-links a:hover {
+  background: var(--blue-light);
+}
+
+/* CATEGORIE VUOTE */
+
+.shop-category {
+  border-bottom: 1px solid #eaf1f5;
+}
+
+.empty-category {
+  max-width: 600px;
+  margin: 25px auto;
+  padding: 35px 20px;
+  background: white;
+  border: 1px dashed #c9e5f5;
+  border-radius: 15px;
+}
+
+.empty-category a {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--blue-dark);
+}
+
+/* PRODOTTI */
+
+.product-card {
+  overflow: hidden;
+  text-align: center;
+}
+
+.product-card img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+
+.product-card .price {
+  color: var(--blue-dark);
+  font-weight: bold;
+  margin-top: 12px;
+}
+
+.product-card .button {
+  margin-top: 15px;
+}
+
+.product-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 230px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  background: #eaf7ff;
+  color: #7299b1;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+}
+
+.product-card label {
+  display: block;
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 6px;
+  text-align: left;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+}
+
+.product-card select,
+.product-card input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d9e6ee;
+  border-radius: 8px;
+  background: white;
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.product-card .add-to-cart {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+}
+
+/* CARRELLO */
+
+.cart-section {
+  background: #f3faff;
+}
+
+#cart-items {
+  max-width: 750px;
+  margin: 30px auto;
+}
+
+.cart-empty {
+  padding: 25px;
+  background: white;
+  border-radius: 12px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 18px;
+  margin-bottom: 12px;
+  background: white;
+  border: 1px solid #e1edf4;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.cart-item p {
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.remove-item {
+  padding: 8px 12px;
+  border: 1px solid #e5cbd4;
+  border-radius: 20px;
+  background: white;
+  color: #a05c70;
+  cursor: pointer;
+}
+
+#send-order {
+  border: none;
+  cursor: pointer;
+}
+
+.cart-note {
+  max-width: 600px;
+  margin: 18px auto;
+  font-size: 12px;
+  color: #718697;
+}
+
+/* ==========================
+   VERSIONE TELEFONO
+========================== */
+
+@media (max-width: 600px) {
+
+  header h1 {
+    font-size: 23px;
+  }
+
+  nav {
+    padding: 15px 5px;
+  }
+
+  nav a {
+    font-size: 12px;
+    margin: 0 6px;
+  }
+
+  .hero {
+    padding: 25px 20px 50px;
+  }
+
+  .hero-title {
+    font-size: 29px;
+  }
+
+  .hero-description {
+    font-size: 17px;
+    margin-bottom: 35px;
+  }
+
+  .section {
+    padding: 50px 18px;
+  }
+
+  .section-title {
+    font-size: 31px;
+  }
+
+  .section-intro {
+    font-size: 17px;
+    padding: 0 12px;
+    margin-bottom: 35px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .card {
+    padding: 25px 20px;
+  }
+
+  .card-title {
+    font-size: 25px;
+  }
+
+  .card-description {
+    font-size: 16px;
+  }
+
+  .card a {
+    font-size: 16px;
+    padding: 14px 25px;
+  }
+
+  .final-section {
+    padding: 50px 20px;
+  }
+
+  .final-title {
+    font-size: 29px;
+  }
+
+  .final-description {
+    font-size: 17px;
+  }
+
+  .shop-hero {
+    padding: 55px 18px;
+  }
+
+  .category-links {
+    gap: 8px;
+  }
+
+  .category-links a {
+    padding: 10px 13px;
+    font-size: 12px;
+  }
+
+  .product-card img {
+    height: 220px;
+  }
+
+  .cart-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+}

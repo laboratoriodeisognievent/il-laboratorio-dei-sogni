@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Scopri le creazioni personalizzate e gli articoli per eventi de Il Laboratorio Dei Sogni.">
+  <title>Shop | Il Laboratorio Dei Sogni</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header>
+    <h1>IL LABORATORIO DEI SOGNI</h1>
+    <h2>Marika Mazzara – Event Design</h2>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="storia.html">La nostra storia</a>
+    <a href="servizi.html">Servizi</a>
+    <a href="shop.html">Shop</a>
+    <a href="contatti.html">Contatti</a>
+  </nav>
+
+  <main>
+
+    <section class="shop-hero">
+      <p class="shop-eyebrow">IL NOSTRO CATALOGO</p>
+      <h1>Piccole creazioni, grandi emozioni</h1>
+      <p>
+        Scopri le nostre proposte e scegli i dettagli che preferisci.
+        Ogni creazione può essere personalizzata insieme a noi.
+      </p>
+      <a class="button" href="#catalogo">Scopri il catalogo</a>
+    </section>
+
+    <section class="section" id="catalogo">
+      <h2>Esplora le categorie</h2>
+      <p class="section-intro">
+        Trova la creazione giusta per la tua occasione.
+      </p>
+
+      <div class="category-links">
+        <a href="#fiocchi">Fiocchi nascita</a>
+        <a href="#accessori">Accessori nascita</a>
+        <a href="#bomboniere">Bomboniere</a>
+        <a href="#personalizzati">Personalizzati</a>
+        <a href="#eventi">Articoli per eventi</a>
+      </div>
+    </section>
+
+    <section class="section shop-category" id="fiocchi">
+      <h2>Fiocchi nascita</h2>
+      <p class="section-intro">
+        Un modo speciale per annunciare l'arrivo di una nuova vita.
+      </p>
+      <div class="empty-category">
+        <p>Stiamo preparando questa selezione.</p>
+        <a href="contatti.html">Richiedi informazioni</a>
+      </div>
+    </section>
+
+    <section class="section shop-category" id="accessori">
+      <h2>Accessori nascita</h2>
+      <p class="section-intro">
+        Catenelle portaciuccio e piccoli accessori personalizzati.
+      </p>
+
+      <div class="cards">
+
+        <article class="card product-card">
+          <div class="product-placeholder">La tua foto qui</div>
+
+          <p class="product-category">ACCESSORI NASCITA</p>
+          <h3>Catenella portaciuccio personalizzata</h3>
+
+          <p>
+            Una creazione realizzata scegliendo colori,
+            decorazioni e dettagli insieme a noi.
+          </p>
+
+          <p class="price">Prezzo da concordare</p>
+
+          <label for="colore-catenella">Colore preferito</label>
+          <select id="colore-catenella">
+            <option value="Da concordare">Da concordare</option>
+            <option value="Rosa">Rosa</option>
+            <option value="Azzurro">Azzurro</option>
+            <option value="Beige">Beige</option>
+            <option value="Verde salvia">Verde salvia</option>
+            <option value="Altro">Altro</option>
+          </select>
+
+          <label for="nome-catenella">Nome da inserire (facoltativo)</label>
+          <input id="nome-catenella" type="text" placeholder="Scrivi il nome">
+
+          <button class="button add-to-cart"
+            data-product="Catenella portaciuccio personalizzata"
+            data-color="colore-catenella"
+            data-name="nome-catenella">
+            Aggiungi al carrello
+          </button>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="section shop-category" id="bomboniere">
+      <h2>Bomboniere</h2>
+      <p class="section-intro">
+        Piccoli ricordi personalizzati per battesimi,
+        matrimoni e occasioni da celebrare.
+      </p>
+      <div class="empty-category">
+        <p>Stiamo preparando questa selezione.</p>
+        <a href="contatti.html">Richiedi informazioni</a>
+      </div>
+    </section>
+
+    <section class="section shop-category" id="personalizzati">
+      <h2>Personalizzati</h2>
+      <p class="section-intro">
+        Creazioni uniche con nomi, colori e dettagli scelti da te.
+      </p>
+      <div class="empty-category">
+        <p>Stiamo preparando questa selezione.</p>
+        <a href="contatti.html">Raccontaci la tua idea</a>
+      </div>
+    </section>
+
+    <section class="section shop-category" id="eventi">
+      <h2>Articoli per eventi</h2>
+      <p class="section-intro">
+        Dettagli e decorazioni per feste e occasioni speciali.
+      </p>
+      <div class="empty-category">
+        <p>Stiamo preparando questa selezione.</p>
+        <a href="contatti.html">Richiedi informazioni</a>
+      </div>
+    </section>
+
+    <section class="section cart-section" id="carrello">
+      <h2>Il tuo carrello</h2>
+      <p class="section-intro">
+        Qui trovi le creazioni che hai scelto.
+        Potrai inviarci la tua richiesta direttamente su WhatsApp.
+      </p>
+
+      <div id="cart-items">
+        <p class="cart-empty">Il carrello è vuoto.</p>
+      </div>
+
+      <button class="button" id="send-order">
+        Invia la richiesta su WhatsApp
+      </button>
+
+      <p class="cart-note">
+        L'invio è una richiesta d'ordine, non un pagamento.
+        Confermeremo disponibilità, prezzo e spedizione.
+      </p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p><strong>IL LABORATORIO DEI SOGNI</strong></p>
+    <p>Marika Mazzara – Event Design</p>
+    <p>Marsala e provincia di Trapani · Spedizioni in tutta Italia</p>
+    <p>
+      <a href="index.html">Home</a> ·
+      <a href="shop.html">Shop</a> ·
+      <a href="contatti.html">Contatti</a>
+    </p>
+    <p>© 2026 Il Laboratorio Dei Sogni. Tutti i diritti riservati.</p>
+  </footer>
+
+  <script src="shop.js"></script>
+</body>
+</html>
