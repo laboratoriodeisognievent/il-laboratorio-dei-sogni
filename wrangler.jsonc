@@ -1,1 +1,18 @@
-
+{
+  "$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",
+  "name": "il-laboratorio-dei-sogni",
+  "main": "./worker.js",
+  "compatibility_date": "2026-11-03",
+  "assets": {
+    "directory": "./",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "laboratorio-catalogo",
+      "database_id": "il-laboratorio-dei-sogni"
+    }
+  ]
+}
