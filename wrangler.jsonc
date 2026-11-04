@@ -3,11 +3,17 @@
   "name": "il-laboratorio-dei-sogni",
   "main": "./worker.js",
   "compatibility_date": "2026-11-03",
+
+  "vars": {
+    "ADMIN_EMAIL": "marikamazzara02@icloud.com"
+  },
+
   "assets": {
     "directory": "./",
     "binding": "ASSETS",
     "run_worker_first": ["/api/*"]
   },
+
   "d1_databases": [
     {
       "binding": "DB",
