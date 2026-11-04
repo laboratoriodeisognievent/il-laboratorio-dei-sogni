@@ -6,9 +6,7 @@
 <title>Il nostro catalogo | Il Laboratorio Dei Sogni</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -16,8 +14,6 @@ body {
   color: #394950;
   font-family: Arial, sans-serif;
 }
-
-/* HEADER */
 
 header {
   text-align: center;
@@ -48,8 +44,6 @@ header p {
   line-height: 1.7;
 }
 
-/* PULSANTI */
-
 button {
   border: 0;
   border-radius: 25px;
@@ -61,29 +55,19 @@ button {
   transition: 0.2s;
 }
 
-button:hover {
-  opacity: 0.85;
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+button:hover { opacity: 0.85; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 button.secondary {
   background: #e7eff1;
   color: #4d6b77;
 }
 
-/* CONTENITORE */
-
 main {
   max-width: 1200px;
   margin: auto;
   padding: 30px 22px;
 }
-
-/* CATEGORIE */
 
 #categories {
   display: none;
@@ -111,7 +95,12 @@ main {
   font-weight: normal;
 }
 
-/* TITOLO CATEGORIA */
+#subcategories {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
 
 #catalogTitle {
   text-align: center;
@@ -120,11 +109,7 @@ main {
   margin: 28px 0;
 }
 
-#back {
-  margin-top: 20px;
-}
-
-/* GRIGLIA PRODOTTI */
+#back { margin-top: 20px; }
 
 #products {
   display: grid;
@@ -133,8 +118,6 @@ main {
   margin-top: 25px;
   align-items: start;
 }
-
-/* SINGOLA SCHEDA */
 
 .product {
   background: white;
@@ -149,8 +132,6 @@ main {
   box-shadow: 0 5px 18px rgba(70, 100, 115, 0.09);
 }
 
-/* FOTOGRAFIE */
-
 .product img {
   display: block;
   width: 100%;
@@ -160,11 +141,7 @@ main {
   padding: 8px;
 }
 
-/* TESTI PRODOTTO */
-
-.product-content {
-  padding: 13px;
-}
+.product-content { padding: 13px; }
 
 .product h3 {
   margin: 0 0 8px;
@@ -184,8 +161,6 @@ main {
   font-size: 16px;
   margin: 12px 0;
 }
-
-/* PERSONALIZZAZIONI */
 
 .product input,
 .product select {
@@ -213,8 +188,6 @@ main {
   margin: 8px 0 0;
 }
 
-/* CARRELLO */
-
 #cart {
   background: #edf3f4;
   border-radius: 13px;
@@ -222,9 +195,7 @@ main {
   margin-top: 35px;
 }
 
-#cart h2 {
-  margin-top: 0;
-}
+#cart h2 { margin-top: 0; }
 
 #cartItems p {
   font-size: 14px;
@@ -239,8 +210,6 @@ main {
   font-size: 12px;
 }
 
-/* FOOTER */
-
 footer {
   text-align: center;
   padding: 35px 15px;
@@ -248,71 +217,33 @@ footer {
   font-size: 13px;
 }
 
-.hidden {
-  display: none !important;
-}
-
-/* TABLET */
+.hidden { display: none !important; }
 
 @media (max-width: 800px) {
-  main {
-    padding: 25px 16px;
-  }
+  main { padding: 25px 16px; }
 
   #products {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
   }
 
-  .product img {
-    height: 165px;
-  }
+  .product img { height: 165px; }
 }
 
-/* TELEFONO */
-
 @media (max-width: 480px) {
-  header {
-    padding: 45px 18px 35px;
-  }
+  header { padding: 45px 18px 35px; }
+  header p { font-size: 14px; }
+  main { padding: 20px 14px; }
 
-  header p {
-    font-size: 14px;
-  }
+  #products { grid-template-columns: 1fr; gap: 18px; }
+  #subcategories { grid-template-columns: 1fr; }
 
-  main {
-    padding: 20px 14px;
-  }
-
-  #products {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .product img {
-    height: 190px;
-  }
-
-  .product-content {
-    padding: 16px;
-  }
-
-  .product h3 {
-    font-size: 20px;
-  }
-
-  .product p {
-    font-size: 14px;
-  }
-
-  .product button {
-    font-size: 14px;
-    padding: 12px;
-  }
-
-  #catalogTitle {
-    font-size: 26px;
-  }
+  .product img { height: 190px; }
+  .product-content { padding: 16px; }
+  .product h3 { font-size: 20px; }
+  .product p { font-size: 14px; }
+  .product button { font-size: 14px; padding: 12px; }
+  #catalogTitle { font-size: 26px; }
 }
 </style>
 </head>
@@ -321,51 +252,47 @@ footer {
 
 <header>
   <div class="eyebrow">IL NOSTRO CATALOGO</div>
-
   <h1>Piccole creazioni, grandi emozioni</h1>
-
   <p>
     Scopri le nostre proposte e scegli i dettagli che preferisci.
     Ogni creazione può essere personalizzata insieme a noi.
   </p>
-
   <button id="discover">Scopri il catalogo</button>
 </header>
 
 <main>
-
   <section id="catalog">
-
     <div id="categories"></div>
 
     <div id="productsArea" class="hidden">
-
-      <button id="back" class="secondary">
-        ← Tutte le categorie
-      </button>
+      <button id="back" class="secondary">← Tutte le categorie</button>
 
       <h2 id="catalogTitle"></h2>
 
+      <div id="subcategories" class="hidden">
+        <div class="category" data-subcategory="femminuccia">
+          <h3>Femminuccia</h3>
+          <p>Le nostre catenelle dai colori delicati e romantici.</p>
+          <button type="button">Scopri</button>
+        </div>
+
+        <div class="category" data-subcategory="maschietto">
+          <h3>Maschietto</h3>
+          <p>Le nostre catenelle pensate per i maschietti.</p>
+          <button type="button">Scopri</button>
+        </div>
+      </div>
+
       <div id="products"></div>
-
     </div>
-
   </section>
 
   <section id="cart" class="hidden">
-
     <h2>Il tuo carrello</h2>
-
     <div id="cartItems"></div>
-
     <p id="cartTotal"></p>
-
-    <button id="sendOrder">
-      Invia richiesta su WhatsApp
-    </button>
-
+    <button id="sendOrder">Invia richiesta su WhatsApp</button>
   </section>
-
 </main>
 
 <footer>
@@ -379,6 +306,8 @@ const API = "/api";
 
 let cart = [];
 let categories = [];
+let currentCategory = "";
+let currentSubcategory = "";
 
 const $ = id => document.getElementById(id);
 
@@ -405,117 +334,136 @@ async function getData(path) {
 /* APERTURA CATALOGO */
 
 $("discover").addEventListener("click", async () => {
-
   $("discover").disabled = true;
   $("discover").textContent = "Caricamento...";
 
   try {
-
     categories = await getData("/categories");
 
     $("categories").innerHTML = categories.map(c => `
       <div class="category" data-slug="${esc(c.slug)}">
-
         <h3>${esc(c.name)}</h3>
-
         <p>${esc(c.description || "")}</p>
-
         <button type="button">Scopri</button>
-
       </div>
     `).join("");
 
     $("categories").style.display = "grid";
 
-    $("categories").scrollIntoView({
-      behavior: "smooth"
-    });
+    $("categories").scrollIntoView({ behavior: "smooth" });
 
   } catch(error) {
-
     alert(error.message);
-
   } finally {
-
     $("discover").disabled = false;
     $("discover").textContent = "Scopri il catalogo";
-
   }
-
 });
 
 /* APERTURA CATEGORIA */
 
 $("categories").addEventListener("click", async e => {
-
   const card = e.target.closest("[data-slug]");
-
   if (!card) return;
 
   await openCategory(card.dataset.slug);
-
 });
 
 async function openCategory(slug) {
-
   const category = categories.find(c => c.slug === slug);
 
+  currentCategory = slug;
+  currentSubcategory = "";
+
   $("catalogTitle").textContent = category?.name || "Catalogo";
-
   $("categories").style.display = "none";
-
   $("productsArea").classList.remove("hidden");
 
+  if (slug === "catenelle-ciuccio") {
+    $("products").innerHTML = "";
+    $("products").classList.add("hidden");
+    $("subcategories").classList.remove("hidden");
+  } else {
+    $("subcategories").classList.add("hidden");
+    $("products").classList.remove("hidden");
+    $("products").innerHTML = "<p>Caricamento prodotti...</p>";
+
+    try {
+      const products = await getData(
+        "/products?category=" + encodeURIComponent(slug)
+      );
+
+      $("products").innerHTML = products.length
+        ? products.map(renderProduct).join("")
+        : "<p>Stiamo preparando le nostre creazioni per questa categoria. Contattaci per informazioni!</p>";
+
+    } catch(error) {
+      $("products").innerHTML =
+        "<p>Non è stato possibile caricare i prodotti.</p>";
+    }
+  }
+
+  $("productsArea").scrollIntoView({ behavior: "smooth" });
+}
+
+/* SCELTA FEMMINUCCIA / MASCHIETTO */
+
+$("subcategories").addEventListener("click", async e => {
+  const card = e.target.closest("[data-subcategory]");
+  if (!card) return;
+
+  currentSubcategory = card.dataset.subcategory;
+  await loadSubcategory();
+});
+
+async function loadSubcategory() {
+  const name = currentSubcategory === "femminuccia"
+    ? "Femminuccia"
+    : "Maschietto";
+
+  $("catalogTitle").textContent = "Catenelle ciuccio · " + name;
+  $("subcategories").classList.add("hidden");
+  $("products").classList.remove("hidden");
   $("products").innerHTML = "<p>Caricamento prodotti...</p>";
 
   try {
-
     const products = await getData(
-      "/products?category=" + encodeURIComponent(slug)
+      "/products?category=" +
+      encodeURIComponent(currentCategory) +
+      "&subcategory=" +
+      encodeURIComponent(currentSubcategory)
     );
 
     $("products").innerHTML = products.length
       ? products.map(renderProduct).join("")
-      : "<p>Stiamo preparando le nostre creazioni per questa categoria. Contattaci per informazioni!</p>";
-
-    $("productsArea").scrollIntoView({
-      behavior: "smooth"
-    });
+      : "<p>Presto troverai qui le nostre nuove catenelle. Contattaci per informazioni!</p>";
 
   } catch(error) {
-
     $("products").innerHTML =
       "<p>Non è stato possibile caricare i prodotti.</p>";
-
   }
-
 }
 
 /* VISUALIZZAZIONE PRODOTTI */
 
 function renderProduct(p) {
-
   const fields = Array.isArray(p.custom_fields)
     ? p.custom_fields
     : [];
 
   return `
-
     <article class="product" data-id="${Number(p.id)}">
 
-      ${p.image_url
-        ? `<img
-            src="${esc(p.image_url)}"
-            alt="${esc(p.name)}"
-            loading="lazy"
-          >`
-        : ""
-      }
+      ${p.image_url ? `
+        <img
+          src="${esc(p.image_url)}"
+          alt="${esc(p.name)}"
+          loading="lazy"
+        >
+      ` : ""}
 
       <div class="product-content">
-
         <h3>${esc(p.name)}</h3>
-
         <p>${esc(p.description || "")}</p>
 
         <div class="price">
@@ -523,71 +471,44 @@ function renderProduct(p) {
         </div>
 
         ${fields.map((f, i) => `
-
           <label>${esc(f.label)}</label>
 
-          ${f.options?.length
-
-            ? `
-              <select data-field="${i}">
-                <option value="">Seleziona</option>
-
-                ${f.options.map(o => `
-                  <option value="${esc(o)}">
-                    ${esc(o)}
-                  </option>
-                `).join("")}
-
-              </select>
-            `
-
-            : `
-              <input
-                data-field="${i}"
-                placeholder="Inserisci ${esc(f.label.toLowerCase())}"
-              >
-            `
-
-          }
-
+          ${f.options?.length ? `
+            <select data-field="${i}">
+              <option value="">Seleziona</option>
+              ${f.options.map(o => `
+                <option value="${esc(o)}">${esc(o)}</option>
+              `).join("")}
+            </select>
+          ` : `
+            <input
+              data-field="${i}"
+              placeholder="Inserisci ${esc(f.label.toLowerCase())}"
+            >
+          `}
         `).join("")}
 
         <label>Quantità</label>
-
-        <input
-          type="number"
-          min="1"
-          value="1"
-          data-quantity
-        >
+        <input type="number" min="1" value="1" data-quantity>
 
         <button type="button" data-add="${Number(p.id)}">
           Aggiungi al carrello
         </button>
-
       </div>
-
     </article>
-
   `;
-
 }
 
 /* AGGIUNTA AL CARRELLO */
 
-$("products").addEventListener("click", async e => {
-
+$("products").addEventListener("click", e => {
   const button = e.target.closest("[data-add]");
-
   if (!button) return;
 
   const card = button.closest(".product");
-
   const id = Number(button.dataset.add);
 
-  const fields = [
-    ...card.querySelectorAll("[data-field]")
-  ];
+  const fields = [...card.querySelectorAll("[data-field]")];
 
   const options = fields.map(f => ({
     name: f.previousElementSibling?.textContent || "Personalizzazione",
@@ -602,41 +523,24 @@ $("products").addEventListener("click", async e => {
   const name = card.querySelector("h3").textContent;
 
   const price = Number(
-    card.querySelector(".price").textContent
-      .replace("€", "")
-      .trim()
+    card.querySelector(".price").textContent.replace("€", "").trim()
   );
 
-  cart.push({
-    id,
-    name,
-    price,
-    quantity,
-    options
-  });
+  cart.push({ id, name, price, quantity, options });
 
   updateCart();
 
   $("cart").classList.remove("hidden");
-
-  $("cart").scrollIntoView({
-    behavior: "smooth"
-  });
-
+  $("cart").scrollIntoView({ behavior: "smooth" });
 });
 
 /* AGGIORNAMENTO CARRELLO */
 
 function updateCart() {
-
   $("cartItems").innerHTML = cart.length
-
     ? cart.map((item, i) => `
-
         <p>
-
-          <strong>${esc(item.name)}</strong>
-          × ${item.quantity}
+          <strong>${esc(item.name)}</strong> × ${item.quantity}
 
           ${item.options.map(o => `
             <br>${esc(o.name)}: ${esc(o.value)}
@@ -645,17 +549,11 @@ function updateCart() {
           <br>
           € ${(item.price * item.quantity).toFixed(2)}
 
-          <button
-            class="secondary"
-            data-remove="${i}"
-          >
+          <button class="secondary" data-remove="${i}">
             Rimuovi
           </button>
-
         </p>
-
       `).join("")
-
     : "<p>Il carrello è vuoto.</p>";
 
   const total = cart.reduce(
@@ -667,45 +565,35 @@ function updateCart() {
     "Totale indicativo: € " + total.toFixed(2);
 
   $("sendOrder").disabled = !cart.length;
-
 }
 
 /* RIMOZIONE PRODOTTO */
 
 $("cartItems").addEventListener("click", e => {
-
   const button = e.target.closest("[data-remove]");
-
   if (!button) return;
 
   cart.splice(Number(button.dataset.remove), 1);
-
   updateCart();
-
 });
 
 /* INVIO WHATSAPP */
 
 $("sendOrder").addEventListener("click", () => {
-
   if (!cart.length) return;
 
   let message =
     "Ciao! Vorrei richiedere informazioni e un preventivo per questi prodotti:\n\n";
 
   cart.forEach(item => {
-
     message +=
       `${item.name} - Quantità: ${item.quantity} - € ${(item.price * item.quantity).toFixed(2)}\n`;
 
     item.options.forEach(o => {
-
       message += `${o.name}: ${o.value}\n`;
-
     });
 
     message += "\n";
-
   });
 
   message +=
@@ -716,27 +604,22 @@ $("sendOrder").addEventListener("click", () => {
     "?text=" + encodeURIComponent(message),
     "_blank"
   );
-
 });
 
 /* RITORNO ALLE CATEGORIE */
 
 $("back").addEventListener("click", () => {
-
   $("productsArea").classList.add("hidden");
-
+  $("subcategories").classList.add("hidden");
+  $("products").classList.remove("hidden");
   $("categories").style.display = "grid";
 
-  $("categories").scrollIntoView({
-    behavior: "smooth"
-  });
-
+  $("categories").scrollIntoView({ behavior: "smooth" });
 });
 
 /* AVVIO */
 
 updateCart();
-
 </script>
 
 </body>
