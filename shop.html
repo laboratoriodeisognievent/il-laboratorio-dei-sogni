@@ -4,69 +4,379 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Il nostro catalogo | Il Laboratorio Dei Sogni</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#fbfcfc;color:#394950;font-family:Arial,sans-serif}
-header{text-align:center;padding:65px 20px 45px;background:#edf3f4}
-.eyebrow{letter-spacing:3px;font-size:12px;color:#668b9a}
-h1,h2,h3{font-family:Georgia,serif;color:#587887}
-h1{font-size:clamp(32px,6vw,48px);font-weight:normal;margin:18px 0}
-header p{max-width:600px;margin:0 auto 25px;line-height:1.7}
-button{border:0;border-radius:25px;background:#668b9a;color:white;padding:13px 23px;cursor:pointer;font-size:15px}
-button.secondary{background:#e7eff1;color:#4d6b77}
-main{max-width:1100px;margin:auto;padding:30px 18px}
-#categories{display:none;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
-.category{background:white;border:1px solid #e4ebed;border-radius:13px;padding:24px;text-align:center;cursor:pointer}
-.category h3{font-size:20px;font-weight:normal}
-#products{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:25px}
-.product{background:white;border:1px solid #e4ebed;border-radius:13px;overflow:hidden}
-.product img{width:100%;height:230px;object-fit:cover;background:#edf1f2}
-.product-content{padding:17px}
-.product h3{margin:0 0 9px;font-size:21px}
-.product p{line-height:1.5;font-size:14px}
-.price{font-weight:bold;color:#587887;font-size:18px}
-.product input,.product select{width:100%;padding:10px;margin:5px 0 12px;border:1px solid #d9e2e4;border-radius:7px}
-.product label{font-size:13px}
-#catalogTitle{text-align:center}
-#back{margin-top:20px}
-#cart{background:#edf3f4;border-radius:13px;padding:20px;margin-top:35px}
-#cartItems p{font-size:14px}
-footer{text-align:center;padding:35px 15px;color:#718087;font-size:13px}
-.hidden{display:none}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #fbfcfc;
+  color: #394950;
+  font-family: Arial, sans-serif;
+}
+
+/* HEADER */
+
+header {
+  text-align: center;
+  padding: 65px 20px 45px;
+  background: #edf3f4;
+}
+
+.eyebrow {
+  letter-spacing: 3px;
+  font-size: 12px;
+  color: #668b9a;
+}
+
+h1, h2, h3 {
+  font-family: Georgia, serif;
+  color: #587887;
+}
+
+h1 {
+  font-size: clamp(32px, 6vw, 48px);
+  font-weight: normal;
+  margin: 18px 0;
+}
+
+header p {
+  max-width: 600px;
+  margin: 0 auto 25px;
+  line-height: 1.7;
+}
+
+/* PULSANTI */
+
+button {
+  border: 0;
+  border-radius: 25px;
+  background: #668b9a;
+  color: white;
+  padding: 13px 23px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.secondary {
+  background: #e7eff1;
+  color: #4d6b77;
+}
+
+/* CONTENITORE */
+
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 30px 22px;
+}
+
+/* CATEGORIE */
+
+#categories {
+  display: none;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.category {
+  background: white;
+  border: 1px solid #e4ebed;
+  border-radius: 13px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.category:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 18px rgba(70, 100, 115, 0.08);
+}
+
+.category h3 {
+  font-size: 20px;
+  font-weight: normal;
+}
+
+/* TITOLO CATEGORIA */
+
+#catalogTitle {
+  text-align: center;
+  font-size: 30px;
+  font-weight: normal;
+  margin: 28px 0;
+}
+
+#back {
+  margin-top: 20px;
+}
+
+/* GRIGLIA PRODOTTI */
+
+#products {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 25px;
+  align-items: start;
+}
+
+/* SINGOLA SCHEDA */
+
+.product {
+  background: white;
+  border: 1px solid #e4ebed;
+  border-radius: 13px;
+  overflow: hidden;
+  min-width: 0;
+  transition: box-shadow 0.2s;
+}
+
+.product:hover {
+  box-shadow: 0 5px 18px rgba(70, 100, 115, 0.09);
+}
+
+/* FOTOGRAFIE */
+
+.product img {
+  display: block;
+  width: 100%;
+  height: 170px;
+  object-fit: contain;
+  background: #fff;
+  padding: 8px;
+}
+
+/* TESTI PRODOTTO */
+
+.product-content {
+  padding: 13px;
+}
+
+.product h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: normal;
+}
+
+.product p {
+  line-height: 1.45;
+  font-size: 13px;
+  color: #596b72;
+}
+
+.price {
+  font-weight: bold;
+  color: #587887;
+  font-size: 16px;
+  margin: 12px 0;
+}
+
+/* PERSONALIZZAZIONI */
+
+.product input,
+.product select {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 12px;
+  border: 1px solid #d9e2e4;
+  border-radius: 7px;
+  background: white;
+  font-size: 13px;
+  color: #394950;
+}
+
+.product label {
+  display: block;
+  font-size: 12px;
+  color: #52666e;
+  margin-top: 8px;
+}
+
+.product button {
+  width: 100%;
+  font-size: 13px;
+  padding: 11px 12px;
+  margin: 8px 0 0;
+}
+
+/* CARRELLO */
+
+#cart {
+  background: #edf3f4;
+  border-radius: 13px;
+  padding: 20px;
+  margin-top: 35px;
+}
+
+#cart h2 {
+  margin-top: 0;
+}
+
+#cartItems p {
+  font-size: 14px;
+  line-height: 1.6;
+  border-bottom: 1px solid #dce6e8;
+  padding-bottom: 12px;
+}
+
+#cartItems button {
+  width: auto;
+  padding: 7px 12px;
+  font-size: 12px;
+}
+
+/* FOOTER */
+
+footer {
+  text-align: center;
+  padding: 35px 15px;
+  color: #718087;
+  font-size: 13px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* TABLET */
+
+@media (max-width: 800px) {
+  main {
+    padding: 25px 16px;
+  }
+
+  #products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .product img {
+    height: 165px;
+  }
+}
+
+/* TELEFONO */
+
+@media (max-width: 480px) {
+  header {
+    padding: 45px 18px 35px;
+  }
+
+  header p {
+    font-size: 14px;
+  }
+
+  main {
+    padding: 20px 14px;
+  }
+
+  #products {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .product img {
+    height: 190px;
+  }
+
+  .product-content {
+    padding: 16px;
+  }
+
+  .product h3 {
+    font-size: 20px;
+  }
+
+  .product p {
+    font-size: 14px;
+  }
+
+  .product button {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  #catalogTitle {
+    font-size: 26px;
+  }
+}
 </style>
 </head>
+
 <body>
 
 <header>
-<div class="eyebrow">IL NOSTRO CATALOGO</div>
-<h1>Piccole creazioni, grandi emozioni</h1>
-<p>Scopri le nostre proposte e scegli i dettagli che preferisci. Ogni creazione può essere personalizzata insieme a noi.</p>
-<button id="discover">Scopri il catalogo</button>
+  <div class="eyebrow">IL NOSTRO CATALOGO</div>
+
+  <h1>Piccole creazioni, grandi emozioni</h1>
+
+  <p>
+    Scopri le nostre proposte e scegli i dettagli che preferisci.
+    Ogni creazione può essere personalizzata insieme a noi.
+  </p>
+
+  <button id="discover">Scopri il catalogo</button>
 </header>
 
 <main>
-<section id="catalog">
-<div id="categories"></div>
-<div id="productsArea" class="hidden">
-<button id="back" class="secondary">← Tutte le categorie</button>
-<h2 id="catalogTitle"></h2>
-<div id="products"></div>
-</div>
-</section>
 
-<section id="cart" class="hidden">
-<h2>Il tuo carrello</h2>
-<div id="cartItems"></div>
-<p id="cartTotal"></p>
-<button id="sendOrder">Invia richiesta su WhatsApp</button>
-</section>
+  <section id="catalog">
+
+    <div id="categories"></div>
+
+    <div id="productsArea" class="hidden">
+
+      <button id="back" class="secondary">
+        ← Tutte le categorie
+      </button>
+
+      <h2 id="catalogTitle"></h2>
+
+      <div id="products"></div>
+
+    </div>
+
+  </section>
+
+  <section id="cart" class="hidden">
+
+    <h2>Il tuo carrello</h2>
+
+    <div id="cartItems"></div>
+
+    <p id="cartTotal"></p>
+
+    <button id="sendOrder">
+      Invia richiesta su WhatsApp
+    </button>
+
+  </section>
+
 </main>
 
-<footer>Il Laboratorio Dei Sogni · Marsala e provincia di Trapani · Spedizioni in tutta Italia</footer>
+<footer>
+  Il Laboratorio Dei Sogni · Marsala e provincia di Trapani ·
+  Spedizioni in tutta Italia
+</footer>
 
 <script>
 const WHATSAPP = "393773611035";
 const API = "/api";
+
 let cart = [];
 let categories = [];
 
@@ -74,151 +384,360 @@ const $ = id => document.getElementById(id);
 
 function esc(value) {
   return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
   })[c]);
 }
 
 async function getData(path) {
   const response = await fetch(API + path);
-  if (!response.ok) throw new Error("Impossibile caricare il catalogo.");
+
+  if (!response.ok) {
+    throw new Error("Impossibile caricare il catalogo.");
+  }
+
   return response.json();
 }
 
+/* APERTURA CATALOGO */
+
 $("discover").addEventListener("click", async () => {
+
   $("discover").disabled = true;
   $("discover").textContent = "Caricamento...";
+
   try {
+
     categories = await getData("/categories");
+
     $("categories").innerHTML = categories.map(c => `
       <div class="category" data-slug="${esc(c.slug)}">
+
         <h3>${esc(c.name)}</h3>
+
         <p>${esc(c.description || "")}</p>
-        <button>Scopri</button>
+
+        <button type="button">Scopri</button>
+
       </div>
     `).join("");
+
     $("categories").style.display = "grid";
-    $("categories").scrollIntoView({behavior:"smooth"});
+
+    $("categories").scrollIntoView({
+      behavior: "smooth"
+    });
+
   } catch(error) {
+
     alert(error.message);
+
   } finally {
+
     $("discover").disabled = false;
     $("discover").textContent = "Scopri il catalogo";
+
   }
+
 });
 
+/* APERTURA CATEGORIA */
+
 $("categories").addEventListener("click", async e => {
+
   const card = e.target.closest("[data-slug]");
+
   if (!card) return;
+
   await openCategory(card.dataset.slug);
+
 });
 
 async function openCategory(slug) {
+
   const category = categories.find(c => c.slug === slug);
+
   $("catalogTitle").textContent = category?.name || "Catalogo";
+
   $("categories").style.display = "none";
+
   $("productsArea").classList.remove("hidden");
+
   $("products").innerHTML = "<p>Caricamento prodotti...</p>";
 
   try {
-    const products = await getData("/products?category=" + encodeURIComponent(slug));
+
+    const products = await getData(
+      "/products?category=" + encodeURIComponent(slug)
+    );
+
     $("products").innerHTML = products.length
       ? products.map(renderProduct).join("")
       : "<p>Stiamo preparando le nostre creazioni per questa categoria. Contattaci per informazioni!</p>";
+
+    $("productsArea").scrollIntoView({
+      behavior: "smooth"
+    });
+
   } catch(error) {
-    $("products").innerHTML = "<p>Non è stato possibile caricare i prodotti.</p>";
+
+    $("products").innerHTML =
+      "<p>Non è stato possibile caricare i prodotti.</p>";
+
   }
+
 }
+
+/* VISUALIZZAZIONE PRODOTTI */
 
 function renderProduct(p) {
-  const fields = Array.isArray(p.custom_fields) ? p.custom_fields : [];
+
+  const fields = Array.isArray(p.custom_fields)
+    ? p.custom_fields
+    : [];
+
   return `
-    <article class="product" data-id="${p.id}">
-      ${p.image_url ? `<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy">` : ""}
+
+    <article class="product" data-id="${Number(p.id)}">
+
+      ${p.image_url
+        ? `<img
+            src="${esc(p.image_url)}"
+            alt="${esc(p.name)}"
+            loading="lazy"
+          >`
+        : ""
+      }
+
       <div class="product-content">
+
         <h3>${esc(p.name)}</h3>
+
         <p>${esc(p.description || "")}</p>
-        <div class="price">€ ${Number(p.price).toFixed(2)}</div>
-        ${fields.map((f,i) => `
+
+        <div class="price">
+          € ${Number(p.price).toFixed(2)}
+        </div>
+
+        ${fields.map((f, i) => `
+
           <label>${esc(f.label)}</label>
+
           ${f.options?.length
-            ? `<select data-field="${i}"><option value="">Seleziona</option>${f.options.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join("")}</select>`
-            : `<input data-field="${i}" placeholder="Inserisci ${esc(f.label.toLowerCase())}">`
+
+            ? `
+              <select data-field="${i}">
+                <option value="">Seleziona</option>
+
+                ${f.options.map(o => `
+                  <option value="${esc(o)}">
+                    ${esc(o)}
+                  </option>
+                `).join("")}
+
+              </select>
+            `
+
+            : `
+              <input
+                data-field="${i}"
+                placeholder="Inserisci ${esc(f.label.toLowerCase())}"
+              >
+            `
+
           }
+
         `).join("")}
+
         <label>Quantità</label>
-        <input type="number" min="1" value="1" data-quantity>
-        <button data-add="${p.id}">Aggiungi al carrello</button>
+
+        <input
+          type="number"
+          min="1"
+          value="1"
+          data-quantity
+        >
+
+        <button type="button" data-add="${Number(p.id)}">
+          Aggiungi al carrello
+        </button>
+
       </div>
+
     </article>
+
   `;
+
 }
 
+/* AGGIUNTA AL CARRELLO */
+
 $("products").addEventListener("click", async e => {
+
   const button = e.target.closest("[data-add]");
+
   if (!button) return;
 
   const card = button.closest(".product");
+
   const id = Number(button.dataset.add);
-  const fields = [...card.querySelectorAll("[data-field]")];
+
+  const fields = [
+    ...card.querySelectorAll("[data-field]")
+  ];
+
   const options = fields.map(f => ({
-    name:f.previousElementSibling?.textContent || "Personalizzazione",
-    value:f.value.trim()
+    name: f.previousElementSibling?.textContent || "Personalizzazione",
+    value: f.value.trim()
   })).filter(f => f.value);
 
-  const quantity = Math.max(1, Number(card.querySelector("[data-quantity]").value) || 1);
+  const quantity = Math.max(
+    1,
+    Number(card.querySelector("[data-quantity]").value) || 1
+  );
+
   const name = card.querySelector("h3").textContent;
-  const price = Number(card.querySelector(".price").textContent.replace("€","").trim());
 
-  cart.push({id,name,price,quantity,options});
-  updateCart();
-  $("cart").classList.remove("hidden");
-  $("cart").scrollIntoView({behavior:"smooth"});
-});
+  const price = Number(
+    card.querySelector(".price").textContent
+      .replace("€", "")
+      .trim()
+  );
 
-function updateCart() {
-  $("cartItems").innerHTML = cart.length ? cart.map((item,i) => `
-    <p><strong>${esc(item.name)}</strong> × ${item.quantity}
-    ${item.options.map(o => `<br>${esc(o.name)}: ${esc(o.value)}`).join("")}
-    <br>€ ${(item.price * item.quantity).toFixed(2)}
-    <button class="secondary" data-remove="${i}">Rimuovi</button></p>
-  `).join("") : "<p>Il carrello è vuoto.</p>";
-
-  const total = cart.reduce((sum,item) => sum + item.price * item.quantity, 0);
-  $("cartTotal").textContent = "Totale indicativo: € " + total.toFixed(2);
-  $("sendOrder").disabled = !cart.length;
-}
-
-$("cartItems").addEventListener("click", e => {
-  const button = e.target.closest("[data-remove]");
-  if (!button) return;
-  cart.splice(Number(button.dataset.remove),1);
-  updateCart();
-});
-
-$("sendOrder").addEventListener("click", () => {
-  if (!cart.length) return;
-
-  let message = "Ciao! Vorrei richiedere informazioni e un preventivo per questi prodotti:\n\n";
-
-  cart.forEach(item => {
-    message += `${item.name} - Quantità: ${item.quantity} - € ${(item.price * item.quantity).toFixed(2)}\n`;
-    item.options.forEach(o => {
-      message += `${o.name}: ${o.value}\n`;
-    });
-    message += "\n";
+  cart.push({
+    id,
+    name,
+    price,
+    quantity,
+    options
   });
 
-  message += "Vorrei sapere disponibilità e costi di spedizione. Grazie!";
-  window.open("https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(message), "_blank");
+  updateCart();
+
+  $("cart").classList.remove("hidden");
+
+  $("cart").scrollIntoView({
+    behavior: "smooth"
+  });
+
 });
+
+/* AGGIORNAMENTO CARRELLO */
+
+function updateCart() {
+
+  $("cartItems").innerHTML = cart.length
+
+    ? cart.map((item, i) => `
+
+        <p>
+
+          <strong>${esc(item.name)}</strong>
+          × ${item.quantity}
+
+          ${item.options.map(o => `
+            <br>${esc(o.name)}: ${esc(o.value)}
+          `).join("")}
+
+          <br>
+          € ${(item.price * item.quantity).toFixed(2)}
+
+          <button
+            class="secondary"
+            data-remove="${i}"
+          >
+            Rimuovi
+          </button>
+
+        </p>
+
+      `).join("")
+
+    : "<p>Il carrello è vuoto.</p>";
+
+  const total = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  $("cartTotal").textContent =
+    "Totale indicativo: € " + total.toFixed(2);
+
+  $("sendOrder").disabled = !cart.length;
+
+}
+
+/* RIMOZIONE PRODOTTO */
+
+$("cartItems").addEventListener("click", e => {
+
+  const button = e.target.closest("[data-remove]");
+
+  if (!button) return;
+
+  cart.splice(Number(button.dataset.remove), 1);
+
+  updateCart();
+
+});
+
+/* INVIO WHATSAPP */
+
+$("sendOrder").addEventListener("click", () => {
+
+  if (!cart.length) return;
+
+  let message =
+    "Ciao! Vorrei richiedere informazioni e un preventivo per questi prodotti:\n\n";
+
+  cart.forEach(item => {
+
+    message +=
+      `${item.name} - Quantità: ${item.quantity} - € ${(item.price * item.quantity).toFixed(2)}\n`;
+
+    item.options.forEach(o => {
+
+      message += `${o.name}: ${o.value}\n`;
+
+    });
+
+    message += "\n";
+
+  });
+
+  message +=
+    "Vorrei sapere disponibilità e costi di spedizione. Grazie!";
+
+  window.open(
+    "https://wa.me/" + WHATSAPP +
+    "?text=" + encodeURIComponent(message),
+    "_blank"
+  );
+
+});
+
+/* RITORNO ALLE CATEGORIE */
 
 $("back").addEventListener("click", () => {
+
   $("productsArea").classList.add("hidden");
+
   $("categories").style.display = "grid";
-  $("categories").scrollIntoView({behavior:"smooth"});
+
+  $("categories").scrollIntoView({
+    behavior: "smooth"
+  });
+
 });
 
+/* AVVIO */
+
 updateCart();
+
 </script>
+
 </body>
 </html>
