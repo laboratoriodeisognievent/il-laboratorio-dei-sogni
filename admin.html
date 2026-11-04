@@ -6,97 +6,93 @@
 <title>Gestione catalogo | Il Laboratorio Dei Sogni</title>
 
 <style>
-*{box-sizing:border-box}
+* { box-sizing: border-box; }
 
-body{
-  margin:0;
-  background:#f7f8f8;
-  color:#34434a;
-  font-family:Arial,sans-serif;
-  padding:24px
+body {
+  margin: 0;
+  background: #f7f8f8;
+  color: #34434a;
+  font-family: Arial, sans-serif;
+  padding: 24px;
 }
 
-main{max-width:850px;margin:auto}
+main { max-width: 850px; margin: auto; }
 
-h1,h2{
-  font-family:Georgia,serif;
-  color:#557786
+h1, h2 {
+  font-family: Georgia, serif;
+  color: #557786;
 }
 
-.card{
-  background:white;
-  border:1px solid #e2e8e9;
-  border-radius:14px;
-  padding:22px;
-  margin:18px 0
+.card {
+  background: white;
+  border: 1px solid #e2e8e9;
+  border-radius: 14px;
+  padding: 22px;
+  margin: 18px 0;
 }
 
-input,textarea,select{
-  width:100%;
-  padding:12px;
-  margin:7px 0 15px;
-  border:1px solid #d4dfe2;
-  border-radius:8px;
-  font:inherit
+input, textarea, select {
+  width: 100%;
+  padding: 12px;
+  margin: 7px 0 15px;
+  border: 1px solid #d4dfe2;
+  border-radius: 8px;
+  font: inherit;
 }
 
-label{font-size:14px;font-weight:bold}
+label { font-size: 14px; font-weight: bold; }
 
-button{
-  padding:12px 18px;
-  border:0;
-  border-radius:8px;
-  background:#668b9a;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-  margin:4px;
-  text-decoration:none;
-  display:inline-block
+button {
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: #668b9a;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 4px;
+  text-decoration: none;
+  display: inline-block;
 }
 
-button.secondary,.home-link{
-  background:#e8eff1;
-  color:#405b66
+button.secondary, .home-link {
+  background: #e8eff1;
+  color: #405b66;
 }
 
-button.danger{background:#a94e4e}
+button.danger { background: #a94e4e; }
 
-.home-link:hover,button.secondary:hover{
-  background:#dce8eb
+.home-link:hover, button.secondary:hover { background: #dce8eb; }
+button:hover { opacity: .88; }
+
+.product {
+  border-bottom: 1px solid #e5e9ea;
+  padding: 14px 0;
 }
 
-button:hover{opacity:.88}
-
-.product{
-  border-bottom:1px solid #e5e9ea;
-  padding:14px 0
+.product img {
+  width: 65px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 8px;
+  float: left;
+  margin-right: 12px;
 }
 
-.product img{
-  width:65px;
-  height:65px;
-  object-fit:cover;
-  border-radius:8px;
-  float:left;
-  margin-right:12px
+.small { font-size: 13px; color: #718087; }
+.hidden { display: none !important; }
+#message { margin: 12px 0; color: #557786; }
+#loginMessage { color: #a94e4e; }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
-.small{font-size:13px;color:#718087}
-.hidden{display:none}
-#message{margin:12px 0;color:#557786}
-#loginMessage{color:#a94e4e}
-
-.actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-  margin-bottom:12px
-}
-
-@media(max-width:600px){
-  body{padding:14px}
-  .card{padding:17px}
+@media(max-width:600px) {
+  body { padding: 14px; }
+  .card { padding: 17px; }
 }
 </style>
 </head>
@@ -108,81 +104,94 @@ button:hover{opacity:.88}
 <p>Area riservata – Gestione catalogo</p>
 
 <section class="card" id="login">
-<h2>Accedi</h2>
+  <h2>Accedi</h2>
 
-<form id="loginForm">
-<label>Email</label>
-<input id="email" type="email" required autocomplete="username">
+  <form id="loginForm">
+    <label>Email</label>
+    <input id="email" type="email" required autocomplete="username">
 
-<label>Password</label>
-<input id="password" type="password" required autocomplete="current-password">
+    <label>Password</label>
+    <input id="password" type="password" required autocomplete="current-password">
 
-<button type="submit">Entra nel pannello</button>
-<a href="/" class="home-link" style="padding:12px 18px;border-radius:8px;text-decoration:none;display:inline-block;margin:4px;font-weight:bold;font-size:14px">
-Torna alla Home
-</a>
-</form>
+    <button type="submit">Entra nel pannello</button>
 
-<p id="loginMessage"></p>
+    <a href="/" class="home-link"
+       style="padding:12px 18px;border-radius:8px;text-decoration:none;display:inline-block;margin:4px;font-weight:bold;font-size:14px">
+      Torna alla Home
+    </a>
+  </form>
+
+  <p id="loginMessage"></p>
 </section>
 
 <section id="panel" class="hidden">
 
-<div class="card">
+  <div class="card">
+    <div class="actions">
+      <button id="logout" class="secondary">Esci</button>
 
-<div class="actions">
-<button id="logout" class="secondary">Esci</button>
-<a href="/shop.html" target="_blank" rel="noopener noreferrer" class="home-link" style="padding:12px 18px;border-radius:8px;text-decoration:none;display:inline-block;margin:4px;font-weight:bold;font-size:14px">
-Visualizza Shop
-</a>
-</div>
+      <a href="/shop.html" target="_blank" rel="noopener noreferrer"
+         class="home-link"
+         style="padding:12px 18px;border-radius:8px;text-decoration:none;display:inline-block;margin:4px;font-weight:bold;font-size:14px">
+        Visualizza Shop
+      </a>
+    </div>
 
-<h2>Prodotti del catalogo</h2>
+    <h2>Prodotti del catalogo</h2>
+    <button id="newProduct">+ Aggiungi prodotto</button>
+    <div id="products">Caricamento...</div>
+  </div>
 
-<button id="newProduct">+ Aggiungi prodotto</button>
+  <div class="card hidden" id="editor">
+    <h2 id="editorTitle">Nuovo prodotto</h2>
 
-<div id="products">Caricamento...</div>
-</div>
+    <form id="productForm">
 
-<div class="card hidden" id="editor">
-<h2 id="editorTitle">Nuovo prodotto</h2>
+      <label>Nome prodotto</label>
+      <input id="name" required>
 
-<form id="productForm">
+      <label>Categoria</label>
+      <select id="category" required></select>
 
-<label>Nome prodotto</label>
-<input id="name" required>
+      <div id="subcategoryBox" class="hidden">
+        <label>Sezione catenella</label>
+        <select id="subcategory">
+          <option value="femminuccia">Femminuccia</option>
+          <option value="maschietto">Maschietto</option>
+        </select>
+      </div>
 
-<label>Categoria</label>
-<select id="category" required></select>
+      <label>Descrizione</label>
+      <textarea id="description" rows="3"></textarea>
 
-<label>Descrizione</label>
-<textarea id="description" rows="3"></textarea>
+      <label>Prezzo in euro</label>
+      <input id="price" type="number" min="0" step="0.01" required>
 
-<label>Prezzo in euro</label>
-<input id="price" type="number" min="0" step="0.01" required>
+      <label>Percorso fotografia su GitHub</label>
+      <input id="image" placeholder="/images/prodotti/catenella-giada.jpg">
 
-<label>Percorso fotografia su GitHub</label>
-<input id="image" placeholder="/images/prodotti/catenella-giada.jpg">
+      <p class="small">
+        Prima carica la foto nella cartella images/prodotti su GitHub.
+        Qui inserisci il suo percorso.
+      </p>
 
-<p class="small">
-Prima carica la foto nella cartella images/prodotti su GitHub. Qui inserisci il suo percorso.
-</p>
+      <label>Personalizzazioni (una per riga)</label>
+      <textarea id="fields" rows="5"
+        placeholder="Nome del bambino&#10;Colore: Rosa, Azzurro, Beige&#10;Decorazione: Cuore, Stella, Mongolfiera"></textarea>
 
-<label>Personalizzazioni (una per riga)</label>
-<textarea id="fields" rows="5" placeholder="Nome del bambino&#10;Colore: Rosa, Azzurro, Beige&#10;Decorazione: Cuore, Stella, Mongolfiera"></textarea>
+      <label>
+        <input id="visible" type="checkbox" checked
+          style="width:auto;margin:0 6px 0 0">
+        Prodotto visibile nel catalogo
+      </label>
 
-<label>
-<input id="visible" type="checkbox" checked style="width:auto;margin:0 6px 0 0">
-Prodotto visibile nel catalogo
-</label>
+      <br><br>
 
-<br><br>
+      <button type="submit">Salva prodotto</button>
+      <button type="button" id="cancel" class="secondary">Annulla</button>
 
-<button type="submit">Salva prodotto</button>
-<button type="button" id="cancel" class="secondary">Annulla</button>
-
-</form>
-</div>
+    </form>
+  </div>
 
 </section>
 
@@ -192,6 +201,7 @@ Prodotto visibile nel catalogo
 
 <script>
 const API = "/api";
+
 let categories = [];
 let editingId = null;
 
@@ -199,11 +209,11 @@ const $ = id => document.getElementById(id);
 
 function esc(value) {
   return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
   })[c]);
 }
 
@@ -211,7 +221,7 @@ async function api(path, options = {}) {
   const response = await fetch(API + path, {
     ...options,
     headers: {
-      ...(options.body ? {"Content-Type":"application/json"} : {}),
+      ...(options.body ? {"Content-Type": "application/json"} : {}),
       ...(options.headers || {})
     }
   });
@@ -252,10 +262,10 @@ $("loginForm").addEventListener("submit", async e => {
 
   try {
     await api("/admin/login", {
-      method:"POST",
-      body:JSON.stringify({
-        email:$("email").value,
-        password:$("password").value
+      method: "POST",
+      body: JSON.stringify({
+        email: $("email").value,
+        password: $("password").value
       })
     });
 
@@ -271,7 +281,7 @@ $("loginForm").addEventListener("submit", async e => {
 
 $("logout").addEventListener("click", async () => {
   try {
-    await api("/admin/logout", {method:"POST"});
+    await api("/admin/logout", { method: "POST" });
   } catch {}
 
   $("panel").classList.add("hidden");
@@ -295,8 +305,17 @@ async function loadProducts() {
     ? products.map(p => `
       <div class="product">
         ${p.image_url ? `<img src="${esc(p.image_url)}" alt="">` : ""}
+
         <strong>${esc(p.name)}</strong>
-        <p>€ ${Number(p.price).toFixed(2)} · ${p.visible ? "Visibile" : "Nascosto"}</p>
+
+        <p>
+          € ${Number(p.price).toFixed(2)}
+          · ${p.visible ? "Visibile" : "Nascosto"}
+          ${p.category_slug === "catenelle-ciuccio"
+            ? " · " + (p.subcategory === "maschietto" ? "Maschietto" : "Femminuccia")
+            : ""}
+        </p>
+
         <button class="secondary" data-edit="${p.id}">Modifica</button>
         <button class="danger" data-delete="${p.id}">Elimina</button>
         <div style="clear:both"></div>
@@ -304,6 +323,21 @@ async function loadProducts() {
     `).join("")
     : "<p>Non hai ancora inserito prodotti.</p>";
 }
+
+/* MOSTRA LA SCELTA SOLO PER LE CATENELLE */
+
+function updateSubcategoryVisibility() {
+  const selected = categories.find(
+    c => Number(c.id) === Number($("category").value)
+  );
+
+  $("subcategoryBox").classList.toggle(
+    "hidden",
+    selected?.slug !== "catenelle-ciuccio"
+  );
+}
+
+$("category").addEventListener("change", updateSubcategoryVisibility);
 
 function openEditor(product = null) {
   editingId = product ? product.id : null;
@@ -314,8 +348,9 @@ function openEditor(product = null) {
 
   $("name").value = product?.name || "";
   $("category").value = product?.category_id || categories[0]?.id || "";
+  $("subcategory").value = product?.subcategory || "femminuccia";
   $("description").value = product?.description || "";
-  $("price").value = product?.price || "";
+  $("price").value = product?.price ?? "";
   $("image").value = product?.image_url || "";
   $("visible").checked = product ? !!product.visible : true;
 
@@ -325,8 +360,10 @@ function openEditor(product = null) {
     f.label + (f.options?.length ? ": " + f.options.join(", ") : "")
   ).join("\n");
 
+  updateSubcategoryVisibility();
+
   $("editor").classList.remove("hidden");
-  $("editor").scrollIntoView({behavior:"smooth"});
+  $("editor").scrollIntoView({ behavior: "smooth" });
 }
 
 $("newProduct").addEventListener("click", () => openEditor());
@@ -360,7 +397,7 @@ $("products").addEventListener("click", async e => {
     try {
       await api(
         "/admin/products/" + deleteButton.dataset.delete,
-        {method:"DELETE"}
+        { method: "DELETE" }
       );
 
       showMessage("Prodotto eliminato.");
@@ -371,6 +408,8 @@ $("products").addEventListener("click", async e => {
     }
   }
 });
+
+/* SALVATAGGIO PRODOTTO */
 
 $("productForm").addEventListener("submit", async e => {
   e.preventDefault();
@@ -383,12 +422,12 @@ $("productForm").addEventListener("submit", async e => {
       const separator = line.indexOf(":");
 
       if (separator === -1) {
-        return {label:line, options:[]};
+        return { label: line, options: [] };
       }
 
       return {
-        label:line.slice(0, separator).trim(),
-        options:line.slice(separator + 1)
+        label: line.slice(0, separator).trim(),
+        options: line.slice(separator + 1)
           .split(",")
           .map(x => x.trim())
           .filter(Boolean)
@@ -396,13 +435,14 @@ $("productForm").addEventListener("submit", async e => {
     });
 
   const body = {
-    name:$("name").value.trim(),
-    category_id:Number($("category").value),
-    description:$("description").value,
-    price:Number($("price").value),
-    image_url:$("image").value.trim(),
-    custom_fields:customFields,
-    visible:$("visible").checked
+    name: $("name").value.trim(),
+    category_id: Number($("category").value),
+    subcategory: $("subcategory").value,
+    description: $("description").value,
+    price: Number($("price").value),
+    image_url: $("image").value.trim(),
+    custom_fields: customFields,
+    visible: $("visible").checked
   };
 
   try {
@@ -411,8 +451,8 @@ $("productForm").addEventListener("submit", async e => {
       : "/admin/products";
 
     await api(path, {
-      method:editingId ? "PUT" : "POST",
-      body:JSON.stringify(body)
+      method: editingId ? "PUT" : "POST",
+      body: JSON.stringify(body)
     });
 
     $("editor").classList.add("hidden");
