@@ -99,7 +99,23 @@ main {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 15px;
-  margin: 20px 0;
+  margin: 25px 0;
+}
+
+.subcategory-button {
+  background: white;
+  color: #587887;
+  border: 1px solid #dce7e9;
+  border-radius: 13px;
+  padding: 24px 15px;
+  font-family: Georgia, serif;
+  font-size: 21px;
+  transition: 0.2s;
+}
+
+.subcategory-button:hover {
+  background: #edf3f4;
+  transform: translateY(-2px);
 }
 
 #catalogTitle {
@@ -132,14 +148,33 @@ main {
   box-shadow: 0 5px 18px rgba(70, 100, 115, 0.09);
 }
 
+/* FOTO CLICCABILE */
+
+.product-image-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: white;
+  cursor: zoom-in;
+}
+
+.product-image-button:hover {
+  opacity: 1;
+}
+
 .product img {
   display: block;
   width: 100%;
-  height: 170px;
+  height: 190px;
   object-fit: contain;
   background: #fff;
   padding: 8px;
 }
+
+/* TESTI PRODOTTO */
 
 .product-content { padding: 13px; }
 
@@ -162,6 +197,8 @@ main {
   margin: 12px 0;
 }
 
+/* PERSONALIZZAZIONI */
+
 .product input,
 .product select {
   width: 100%;
@@ -181,12 +218,48 @@ main {
   margin-top: 8px;
 }
 
-.product button {
+.product-content button {
   width: 100%;
   font-size: 13px;
   padding: 11px 12px;
   margin: 8px 0 0;
 }
+
+/* FOTO INGRANDITA */
+
+#imageViewer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(20, 29, 33, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+}
+
+#imageViewer img {
+  display: block;
+  max-width: 95%;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+#closeViewer {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  padding: 0;
+  font-size: 27px;
+  background: white;
+  color: #405b66;
+}
+
+/* CARRELLO */
 
 #cart {
   background: #edf3f4;
@@ -235,14 +308,23 @@ footer {
   header p { font-size: 14px; }
   main { padding: 20px 14px; }
 
-  #products { grid-template-columns: 1fr; gap: 18px; }
-  #subcategories { grid-template-columns: 1fr; }
+  #products {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  #subcategories {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .subcategory-button { padding: 20px; }
 
   .product img { height: 190px; }
   .product-content { padding: 16px; }
   .product h3 { font-size: 20px; }
   .product p { font-size: 14px; }
-  .product button { font-size: 14px; padding: 12px; }
+  .product-content button { font-size: 14px; padding: 12px; }
   #catalogTitle { font-size: 26px; }
 }
 </style>
@@ -262,28 +344,35 @@ footer {
 
 <main>
   <section id="catalog">
+
     <div id="categories"></div>
 
     <div id="productsArea" class="hidden">
-      <button id="back" class="secondary">← Tutte le categorie</button>
+
+      <button id="back" class="secondary">
+        ← Tutte le categorie
+      </button>
 
       <h2 id="catalogTitle"></h2>
 
       <div id="subcategories" class="hidden">
-        <div class="category" data-subcategory="femminuccia">
-          <h3>Femminuccia</h3>
-          <p>Le nostre catenelle dai colori delicati e romantici.</p>
-          <button type="button">Scopri</button>
-        </div>
 
-        <div class="category" data-subcategory="maschietto">
-          <h3>Maschietto</h3>
-          <p>Le nostre catenelle pensate per i maschietti.</p>
-          <button type="button">Scopri</button>
-        </div>
+        <button class="subcategory-button"
+          type="button"
+          data-subcategory="femminuccia">
+          Femminuccia
+        </button>
+
+        <button class="subcategory-button"
+          type="button"
+          data-subcategory="maschietto">
+          Maschietto
+        </button>
+
       </div>
 
       <div id="products"></div>
+
     </div>
   </section>
 
@@ -291,14 +380,27 @@ footer {
     <h2>Il tuo carrello</h2>
     <div id="cartItems"></div>
     <p id="cartTotal"></p>
-    <button id="sendOrder">Invia richiesta su WhatsApp</button>
+    <button id="sendOrder">
+      Invia richiesta su WhatsApp
+    </button>
   </section>
+
 </main>
 
 <footer>
   Il Laboratorio Dei Sogni · Marsala e provincia di Trapani ·
   Spedizioni in tutta Italia
 </footer>
+
+<!-- VISUALIZZATORE FOTO -->
+
+<div id="imageViewer" class="hidden" role="dialog"
+  aria-modal="true" aria-label="Fotografia del prodotto">
+
+  <button id="closeViewer" type="button" aria-label="Chiudi">×</button>
+  <img id="largeImage" src="" alt="Fotografia ingrandita del prodotto">
+
+</div>
 
 <script>
 const WHATSAPP = "393773611035";
@@ -349,7 +451,6 @@ $("discover").addEventListener("click", async () => {
     `).join("");
 
     $("categories").style.display = "grid";
-
     $("categories").scrollIntoView({ behavior: "smooth" });
 
   } catch(error) {
@@ -383,6 +484,7 @@ async function openCategory(slug) {
     $("products").innerHTML = "";
     $("products").classList.add("hidden");
     $("subcategories").classList.remove("hidden");
+
   } else {
     $("subcategories").classList.add("hidden");
     $("products").classList.remove("hidden");
@@ -409,10 +511,10 @@ async function openCategory(slug) {
 /* SCELTA FEMMINUCCIA / MASCHIETTO */
 
 $("subcategories").addEventListener("click", async e => {
-  const card = e.target.closest("[data-subcategory]");
-  if (!card) return;
+  const button = e.target.closest("[data-subcategory]");
+  if (!button) return;
 
-  currentSubcategory = card.dataset.subcategory;
+  currentSubcategory = button.dataset.subcategory;
   await loadSubcategory();
 });
 
@@ -421,7 +523,7 @@ async function loadSubcategory() {
     ? "Femminuccia"
     : "Maschietto";
 
-  $("catalogTitle").textContent = "Catenelle ciuccio · " + name;
+  $("catalogTitle").textContent = name;
   $("subcategories").classList.add("hidden");
   $("products").classList.remove("hidden");
   $("products").innerHTML = "<p>Caricamento prodotti...</p>";
@@ -455,14 +557,23 @@ function renderProduct(p) {
     <article class="product" data-id="${Number(p.id)}">
 
       ${p.image_url ? `
-        <img
-          src="${esc(p.image_url)}"
-          alt="${esc(p.name)}"
-          loading="lazy"
+        <button
+          type="button"
+          class="product-image-button"
+          data-image="${esc(p.image_url)}"
+          data-alt="${esc(p.name)}"
+          aria-label="Ingrandisci la foto di ${esc(p.name)}"
         >
+          <img
+            src="${esc(p.image_url)}"
+            alt="${esc(p.name)}"
+            loading="lazy"
+          >
+        </button>
       ` : ""}
 
       <div class="product-content">
+
         <h3>${esc(p.name)}</h3>
         <p>${esc(p.description || "")}</p>
 
@@ -494,10 +605,43 @@ function renderProduct(p) {
         <button type="button" data-add="${Number(p.id)}">
           Aggiungi al carrello
         </button>
+
       </div>
     </article>
   `;
 }
+
+/* APERTURA FOTO INGRANDITA */
+
+$("products").addEventListener("click", e => {
+  const imageButton = e.target.closest("[data-image]");
+  if (!imageButton) return;
+
+  $("largeImage").src = imageButton.dataset.image;
+  $("largeImage").alt = imageButton.dataset.alt || "Prodotto";
+  $("imageViewer").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+});
+
+function closeImageViewer() {
+  $("imageViewer").classList.add("hidden");
+  $("largeImage").src = "";
+  document.body.style.overflow = "";
+}
+
+$("closeViewer").addEventListener("click", closeImageViewer);
+
+$("imageViewer").addEventListener("click", e => {
+  if (e.target === $("imageViewer")) {
+    closeImageViewer();
+  }
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !$("imageViewer").classList.contains("hidden")) {
+    closeImageViewer();
+  }
+});
 
 /* AGGIUNTA AL CARRELLO */
 
