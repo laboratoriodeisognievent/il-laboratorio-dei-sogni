@@ -102,20 +102,36 @@ main {
   margin: 25px 0;
 }
 
-.subcategory-button {
+.subcategory-card {
   background: white;
-  color: #587887;
   border: 1px solid #dce7e9;
   border-radius: 13px;
-  padding: 24px 15px;
-  font-family: Georgia, serif;
-  font-size: 21px;
+  padding: 24px 18px;
+  text-align: center;
   transition: 0.2s;
 }
 
-.subcategory-button:hover {
-  background: #edf3f4;
+.subcategory-card:hover {
   transform: translateY(-2px);
+  box-shadow: 0 5px 18px rgba(70, 100, 115, 0.08);
+}
+
+.subcategory-button {
+  width: 100%;
+  background: #edf3f4;
+  color: #587887;
+  border: 1px solid #dce7e9;
+  border-radius: 25px;
+  padding: 13px 15px;
+  font-family: Georgia, serif;
+  font-size: 21px;
+}
+
+.subcategory-description {
+  color: #596b72;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 15px 0 0;
 }
 
 #catalogTitle {
@@ -148,8 +164,6 @@ main {
   box-shadow: 0 5px 18px rgba(70, 100, 115, 0.09);
 }
 
-/* FOTO CLICCABILE */
-
 .product-image-button {
   display: block;
   width: 100%;
@@ -161,9 +175,7 @@ main {
   cursor: zoom-in;
 }
 
-.product-image-button:hover {
-  opacity: 1;
-}
+.product-image-button:hover { opacity: 1; }
 
 .product img {
   display: block;
@@ -173,8 +185,6 @@ main {
   background: #fff;
   padding: 8px;
 }
-
-/* TESTI PRODOTTO */
 
 .product-content { padding: 13px; }
 
@@ -196,8 +206,6 @@ main {
   font-size: 16px;
   margin: 12px 0;
 }
-
-/* PERSONALIZZAZIONI */
 
 .product input,
 .product select {
@@ -224,8 +232,6 @@ main {
   padding: 11px 12px;
   margin: 8px 0 0;
 }
-
-/* FOTO INGRANDITA */
 
 #imageViewer {
   position: fixed;
@@ -258,8 +264,6 @@ main {
   background: white;
   color: #405b66;
 }
-
-/* CARRELLO */
 
 #cart {
   background: #edf3f4;
@@ -318,8 +322,7 @@ footer {
     gap: 12px;
   }
 
-  .subcategory-button { padding: 20px; }
-
+  .subcategory-card { padding: 20px; }
   .product img { height: 190px; }
   .product-content { padding: 16px; }
   .product h3 { font-size: 20px; }
@@ -357,17 +360,27 @@ footer {
 
       <div id="subcategories" class="hidden">
 
-        <button class="subcategory-button"
-          type="button"
-          data-subcategory="femminuccia">
-          Femminuccia
-        </button>
+        <div class="subcategory-card">
+          <button class="subcategory-button"
+            type="button"
+            data-subcategory="femminuccia">
+            Femminuccia
+          </button>
+          <p class="subcategory-description">
+            Dolcezza e tenerezza in ogni piccolo dettaglio.
+          </p>
+        </div>
 
-        <button class="subcategory-button"
-          type="button"
-          data-subcategory="maschietto">
-          Maschietto
-        </button>
+        <div class="subcategory-card">
+          <button class="subcategory-button"
+            type="button"
+            data-subcategory="maschietto">
+            Maschietto
+          </button>
+          <p class="subcategory-description">
+            Piccole creazioni originali, pensate per accompagnare con dolcezza i suoi primi momenti.
+          </p>
+        </div>
 
       </div>
 
@@ -391,8 +404,6 @@ footer {
   Il Laboratorio Dei Sogni · Marsala e provincia di Trapani ·
   Spedizioni in tutta Italia
 </footer>
-
-<!-- VISUALIZZATORE FOTO -->
 
 <div id="imageViewer" class="hidden" role="dialog"
   aria-modal="true" aria-label="Fotografia del prodotto">
