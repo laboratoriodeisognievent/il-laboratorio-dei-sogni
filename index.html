@@ -9,13 +9,60 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    header {
+      position: relative;
+    }
+
+    .admin-access {
+      position: absolute;
+      top: 18px;
+      right: 25px;
+      padding: 10px 18px;
+      border: 1px solid #69b8e5;
+      border-radius: 5px;
+      color: #557b91;
+      background: transparent;
+      text-decoration: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      transition: 0.3s ease;
+    }
+
+    .admin-access:hover {
+      background: #69b8e5;
+      color: white;
+    }
+
+    @media (max-width: 600px) {
+      .admin-access {
+        top: 12px;
+        right: 12px;
+        padding: 8px 11px;
+        font-size: 10px;
+      }
+
+      header {
+        padding-top: 55px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
   <header>
+
+    <a href="admin.html" class="admin-access">
+      AREA RISERVATA
+    </a>
+
     <h1>IL LABORATORIO DEI SOGNI</h1>
     <h2>Marika Mazzara – Event Design</h2>
+
   </header>
 
   <nav>
@@ -123,7 +170,7 @@
       <a href="shop.html">Shop</a> ·
       <a href="contatti.html">Contatti</a>
     </p>
-    <p>© 2026 Il Laboratorio Dei Sogni. Tutti i diritti riservati.</p>
+    <p>©️ 2026 Il Laboratorio Dei Sogni. Tutti i diritti riservati.</p>
   </footer>
 
 </body>
