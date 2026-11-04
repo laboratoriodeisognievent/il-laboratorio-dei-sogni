@@ -2,6 +2,13 @@
    IMPOSTAZIONI GENERALI
 ========================== */
 
+:root {
+  --blue-dark: #55758e;
+  --blue-light: #e5f5ff;
+  --text: #435b70;
+  --blue-title: #64b6e4;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -454,7 +461,56 @@ footer a {
   cursor: pointer;
 }
 
-/* CARRELLO */
+/* ==========================
+   Catenelle - FEMMINUCCIA E MASCHIETTO
+========================== */
+
+.subcategory-card {
+  background: white;
+  border: 1px solid #dce7e9;
+  border-radius: 13px;
+  padding: 24px 18px;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.subcategory-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 18px rgba(70, 100, 115, 0.08);
+}
+
+.subcategory-button {
+  width: 100%;
+  background: #edf3f4;
+  color: #587887;
+  border: 1px solid #dce7e9;
+  border-radius: 25px;
+  padding: 13px 15px;
+  font-family: Georgia, serif;
+  font-size: 21px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.subcategory-button:hover {
+  background: #e5f5ff;
+}
+
+/* FRASI IN CORSIVO E STILE ELEGANTE */
+
+.subcategory-description {
+  color: #64b6e4;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.7;
+  margin: 17px 0 0;
+}
+
+/* ==========================
+   CARRELLO
+========================== */
 
 .cart-section {
   background: #f3faff;
@@ -617,5 +673,14 @@ footer a {
   .cart-item {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .subcategory-card {
+    padding: 20px;
+  }
+
+  .subcategory-description {
+    font-size: 16px;
+    line-height: 1.7;
   }
 }
