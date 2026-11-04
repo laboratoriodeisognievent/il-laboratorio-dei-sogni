@@ -3,7 +3,10 @@ function json(data, status = 200, headers = {}) {
 }
 
 function base64url(value) {
-  return btoa(value).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return btoa(value)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
 }
 
 async function sign(value, secret) {
@@ -21,7 +24,9 @@ async function sign(value, secret) {
     new TextEncoder().encode(value)
   );
 
-  return base64url(String.fromCharCode(...new Uint8Array(signature)));
+  return base64url(
+    String.fromCharCode(...new Uint8Array(signature))
+  );
 }
 
 async function createSession(email, secret) {
@@ -36,6 +41,7 @@ async function createSession(email, secret) {
 async function isAdmin(request, env) {
   const cookie = request.headers.get("Cookie") || "";
   const match = cookie.match(/(?:^|;\s*)admin_session=([^;]+)/);
+
   if (!match || !env.SESSION_SECRET) return false;
 
   const parts = match[1].split(".");
@@ -51,6 +57,7 @@ async function isAdmin(request, env) {
 
     return payload.email === env.ADMIN_EMAIL &&
       payload.exp > Date.now();
+
   } catch {
     return false;
   }
@@ -82,10 +89,19 @@ export default {
 
     try {
       if (path.startsWith("/api/")) {
+
+        /* VERIFICA DATABASE */
+
         if (path === "/api/health" && method === "GET") {
           await env.DB.prepare("SELECT 1").first();
-          return json({ success: true, database: "collegato" });
+
+          return json({
+            success: true,
+            database: "collegato"
+          });
         }
+
+        /* LOGIN */
 
         if (path === "/api/admin/login" && method === "POST") {
           if (!checkOrigin(request, url)) {
@@ -98,7 +114,9 @@ export default {
             body.email !== env.ADMIN_EMAIL ||
             body.password !== env.ADMIN_PASSWORD
           ) {
-            return json({ error: "Email o password non corrette" }, 401);
+            return json({
+              error: "Email o password non corrette"
+            }, 401);
           }
 
           const token = await createSession(
@@ -116,6 +134,8 @@ export default {
           );
         }
 
+        /* LOGOUT */
+
         if (path === "/api/admin/logout" && method === "POST") {
           if (!checkOrigin(request, url)) {
             return json({ error: "Richiesta non autorizzata" }, 403);
@@ -131,37 +151,60 @@ export default {
           );
         }
 
+        /* VERIFICA ACCESSO */
+
         if (path === "/api/admin/me" && method === "GET") {
           if (!await isAdmin(request, env)) {
             return json({ authenticated: false }, 401);
           }
+
           return json({ authenticated: true });
         }
 
-        // Categorie pubbliche
+        /* CATEGORIE PUBBLICHE */
+
         if (path === "/api/categories" && method === "GET") {
-          const result = await env.DB.prepare(
-            "SELECT id, name, slug, description, sort_order FROM categories WHERE active = 1 ORDER BY sort_order"
-          ).all();
+          const result = await env.DB.prepare(`
+            SELECT id, name, slug, description, sort_order
+            FROM categories
+            WHERE active = 1
+            ORDER BY sort_order
+          `).all();
 
           return json(result.results);
         }
 
-        // Prodotti pubblici: solo quelli visibili
+        /* PRODOTTI PUBBLICI */
+
         if (path === "/api/products" && method === "GET") {
           const category = url.searchParams.get("category");
+          const subcategory = url.searchParams.get("subcategory");
 
           let query = `
-            SELECT p.*, c.name AS category_name, c.slug AS category_slug
+            SELECT
+              p.*,
+              c.name AS category_name,
+              c.slug AS category_slug
             FROM products p
             JOIN categories c ON c.id = p.category_id
             WHERE p.visible = 1 AND c.active = 1
           `;
 
-          const statement = category
-            ? env.DB.prepare(query + " AND c.slug = ? ORDER BY p.sort_order, p.id DESC").bind(category)
-            : env.DB.prepare(query + " ORDER BY p.sort_order, p.id DESC");
+          const params = [];
 
+          if (category) {
+            query += " AND c.slug = ?";
+            params.push(category);
+          }
+
+          if (subcategory && category === "catenelle-ciuccio") {
+            query += " AND p.subcategory = ?";
+            params.push(subcategory);
+          }
+
+          query += " ORDER BY p.sort_order, p.id DESC";
+
+          const statement = env.DB.prepare(query).bind(...params);
           const result = await statement.all();
 
           return json(result.results.map(product => ({
@@ -170,20 +213,28 @@ export default {
           })));
         }
 
-        // Da qui in poi servono credenziali amministratore
+        /* DA QUI SERVE L'ACCESSO AMMINISTRATORE */
+
         if (path.startsWith("/api/admin/")) {
           if (!await isAdmin(request, env)) {
-            return json({ error: "Accesso non autorizzato" }, 401);
+            return json({
+              error: "Accesso non autorizzato"
+            }, 401);
           }
 
           if (method !== "GET" && !checkOrigin(request, url)) {
-            return json({ error: "Richiesta non autorizzata" }, 403);
+            return json({
+              error: "Richiesta non autorizzata"
+            }, 403);
           }
 
+          /* ELENCO PRODOTTI */
+
           if (path === "/api/admin/products" && method === "GET") {
-            const result = await env.DB.prepare(
-              "SELECT * FROM products ORDER BY sort_order, id DESC"
-            ).all();
+            const result = await env.DB.prepare(`
+              SELECT * FROM products
+              ORDER BY sort_order, id DESC
+            `).all();
 
             return json(result.results.map(product => ({
               ...product,
@@ -191,29 +242,51 @@ export default {
             })));
           }
 
+          /* ELENCO CATEGORIE */
+
           if (path === "/api/admin/categories" && method === "GET") {
-            const result = await env.DB.prepare(
-              "SELECT * FROM categories ORDER BY sort_order"
-            ).all();
+            const result = await env.DB.prepare(`
+              SELECT * FROM categories
+              ORDER BY sort_order
+            `).all();
 
             return json(result.results);
           }
 
+          /* AGGIUNTA PRODOTTO */
+
           if (path === "/api/admin/products" && method === "POST") {
             const body = await request.json();
 
-            if (!body.name || !Number.isInteger(Number(body.category_id))) {
-              return json({ error: "Inserisci nome e categoria" }, 400);
+            if (
+              !body.name ||
+              !Number.isInteger(Number(body.category_id))
+            ) {
+              return json({
+                error: "Inserisci nome e categoria"
+              }, 400);
             }
 
             if (body.image_url && !validImagePath(body.image_url)) {
-              return json({ error: "Percorso immagine non valido" }, 400);
+              return json({
+                error: "Percorso immagine non valido"
+              }, 400);
             }
 
             const result = await env.DB.prepare(`
               INSERT INTO products
-              (category_id, name, description, price, image_url, custom_fields, visible, sort_order)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+              (
+                category_id,
+                name,
+                description,
+                price,
+                image_url,
+                custom_fields,
+                visible,
+                sort_order,
+                subcategory
+              )
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             `).bind(
               Number(body.category_id),
               body.name.trim(),
@@ -222,33 +295,59 @@ export default {
               body.image_url || "",
               JSON.stringify(body.custom_fields || []),
               body.visible === false ? 0 : 1,
-              Number(body.sort_order) || 0
+              Number(body.sort_order) || 0,
+              body.subcategory === "maschietto"
+                ? "maschietto"
+                : "femminuccia"
             ).run();
 
-            return json({ success: true, id: result.meta.last_row_id }, 201);
+            return json({
+              success: true,
+              id: result.meta.last_row_id
+            }, 201);
           }
 
-          const match = path.match(/^\/api\/admin\/products\/(\d+)$/);
+          /* MODIFICA O ELIMINAZIONE PRODOTTO */
+
+          const match = path.match(
+            /^\/api\/admin\/products\/(\d+)$/
+          );
 
           if (match) {
             const id = Number(match[1]);
 
+            /* MODIFICA */
+
             if (method === "PUT") {
               const body = await request.json();
 
-              if (!body.name || !Number.isInteger(Number(body.category_id))) {
-                return json({ error: "Inserisci nome e categoria" }, 400);
+              if (
+                !body.name ||
+                !Number.isInteger(Number(body.category_id))
+              ) {
+                return json({
+                  error: "Inserisci nome e categoria"
+                }, 400);
               }
 
               if (body.image_url && !validImagePath(body.image_url)) {
-                return json({ error: "Percorso immagine non valido" }, 400);
+                return json({
+                  error: "Percorso immagine non valido"
+                }, 400);
               }
 
               await env.DB.prepare(`
                 UPDATE products SET
-                category_id = ?, name = ?, description = ?, price = ?,
-                image_url = ?, custom_fields = ?, visible = ?,
-                sort_order = ?, updated_at = CURRENT_TIMESTAMP
+                  category_id = ?,
+                  name = ?,
+                  description = ?,
+                  price = ?,
+                  image_url = ?,
+                  custom_fields = ?,
+                  visible = ?,
+                  sort_order = ?,
+                  subcategory = ?,
+                  updated_at = CURRENT_TIMESTAMP
                 WHERE id = ?
               `).bind(
                 Number(body.category_id),
@@ -259,11 +358,16 @@ export default {
                 JSON.stringify(body.custom_fields || []),
                 body.visible === false ? 0 : 1,
                 Number(body.sort_order) || 0,
+                body.subcategory === "maschietto"
+                  ? "maschietto"
+                  : "femminuccia",
                 id
               ).run();
 
               return json({ success: true });
             }
+
+            /* ELIMINAZIONE */
 
             if (method === "DELETE") {
               await env.DB.prepare(
@@ -278,16 +382,22 @@ export default {
             }
           }
 
-          return json({ error: "Operazione non disponibile" }, 404);
+          return json({
+            error: "Operazione non disponibile"
+          }, 404);
         }
 
-        return json({ error: "Endpoint non trovato" }, 404);
+        return json({
+          error: "Endpoint non trovato"
+        }, 404);
       }
 
       return env.ASSETS.fetch(request);
 
     } catch (error) {
-      return json({ error: "Errore interno del server" }, 500);
+      return json({
+        error: "Errore interno del server"
+      }, 500);
     }
   }
 };
