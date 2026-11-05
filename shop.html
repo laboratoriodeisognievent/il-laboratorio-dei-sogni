@@ -98,6 +98,176 @@ main {
   padding: 30px 22px;
 }
 
+/* ==========================
+   POP-UP PROMOZIONALE
+========================== */
+
+#promoOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(48, 66, 78, 0.55);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+#promoOverlay.hidden {
+  display: none !important;
+}
+
+.promo-box {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 38px 35px 30px;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 0% 0%, #dceffc 0%, transparent 34%),
+    radial-gradient(ellipse at 100% 100%, #dceffc 0%, transparent 35%),
+    #ffffff;
+  border: 1px solid #d9eaf4;
+  border-radius: 25px;
+  box-shadow: 0 15px 55px rgba(35, 65, 85, 0.24);
+  animation: promoAppear 0.5s ease;
+}
+
+@keyframes promoAppear {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+#closePromo {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #55758e;
+  font-family: Arial, sans-serif;
+  font-size: 30px;
+  line-height: 1;
+}
+
+#closePromo:hover {
+  background: #edf7fc;
+  opacity: 1;
+}
+
+.promo-heading {
+  margin: 5px 0 13px;
+  color: #6b91a7;
+  font-family: Georgia, serif;
+  font-size: clamp(23px, 5vw, 31px);
+  font-weight: normal;
+  letter-spacing: 2px;
+}
+
+.promo-discount {
+  margin: 0 0 12px;
+  color: #729bb4;
+  font-family: Georgia, serif;
+  font-size: clamp(37px, 8vw, 65px);
+  font-weight: bold;
+  line-height: 1.15;
+}
+
+.promo-subtitle {
+  margin: 0 auto 19px;
+  color: #55758e;
+  font-family: Georgia, serif;
+  font-size: clamp(17px, 3.8vw, 23px);
+  font-weight: normal;
+  line-height: 1.5;
+}
+
+.promo-description {
+  max-width: 490px;
+  margin: 0 auto 24px;
+  color: #526b7b;
+  font-family: Georgia, serif;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.promo-code-box {
+  width: min(100%, 400px);
+  margin: 0 auto 25px;
+  padding: 15px 12px 12px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #d9e6ef;
+  border-radius: 18px;
+}
+
+.promo-code-label {
+  display: block;
+  margin-bottom: 5px;
+  color: #55758e;
+  font-family: Georgia, serif;
+  font-size: 19px;
+  letter-spacing: 1px;
+}
+
+.promo-code {
+  display: block;
+  color: #75a5c3;
+  font-family: Georgia, serif;
+  font-size: clamp(35px, 7vw, 48px);
+  font-weight: bold;
+  line-height: 1.15;
+  letter-spacing: 1px;
+}
+
+#promoBuy {
+  display: block;
+  width: min(100%, 360px);
+  margin: 0 auto 25px;
+  padding: 17px 20px;
+  border-radius: 40px;
+  background: #729bb4;
+  color: white;
+  font-family: Georgia, serif;
+  font-size: 21px;
+  letter-spacing: 1px;
+  transition: 0.2s;
+}
+
+#promoBuy:hover {
+  background: #557f9a;
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.promo-footer {
+  margin: 0;
+  color: #55758e;
+  font-family: Georgia, serif;
+  font-size: 21px;
+  line-height: 1.5;
+}
+
+.promo-decoration {
+  margin-top: 9px;
+  color: #729bb4;
+  font-family: Georgia, serif;
+  font-size: 30px;
+}
+
 /* CATEGORIE */
 
 #categories {
@@ -302,9 +472,7 @@ main {
   color: #405b66;
 }
 
-/* ==========================
-   CARRELLO FLOTTANTE
-========================== */
+/* CARRELLO FLOTTANTE */
 
 #cartToggle {
   position: fixed;
@@ -508,6 +676,28 @@ footer {
     top: 145px;
     right: 70px;
   }
+
+  .promo-box {
+    padding: 38px 19px 24px;
+    border-radius: 21px;
+  }
+
+  .promo-description {
+    font-size: 16px;
+  }
+
+  .promo-code-label {
+    font-size: 16px;
+  }
+
+  #promoBuy {
+    font-size: 19px;
+    padding: 15px;
+  }
+
+  .promo-footer {
+    font-size: 18px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -546,6 +736,51 @@ footer {
   <a href="servizi.html">Servizi</a>
   <a href="contatti.html">Contatti</a>
 </nav>
+
+<!-- POP-UP PROMOZIONALE -->
+
+<div id="promoOverlay" class="hidden" role="dialog"
+  aria-modal="true" aria-labelledby="promoTitle">
+
+  <div class="promo-box">
+
+    <button id="closePromo" type="button"
+      aria-label="Chiudi promozione">×</button>
+
+    <h2 class="promo-heading" id="promoTitle">
+      UN REGALO PER TE
+    </h2>
+
+    <div class="promo-discount">
+      10% DI SCONTO ✨
+    </div>
+
+    <p class="promo-subtitle">
+      Perché ogni acquisto merita una sorpresa in più...
+    </p>
+
+    <p class="promo-description">
+      Con il tuo primo ordine riceverai un buono sconto
+      del 10% da utilizzare sul tuo prossimo acquisto.
+    </p>
+
+    <div class="promo-code-box">
+      <span class="promo-code-label">IL TUO CODICE SCONTO</span>
+      <span class="promo-code">SOGNI10</span>
+    </div>
+
+    <button id="promoBuy" type="button">
+      ACQUISTA ORA
+    </button>
+
+    <p class="promo-footer">
+      Piccole creazioni, grandi emozioni.
+    </p>
+
+    <div class="promo-decoration">♡</div>
+
+  </div>
+</div>
 
 <!-- CARRELLO SEMPRE VISIBILE -->
 
@@ -694,6 +929,53 @@ async function getData(path) {
 
   return response.json();
 }
+
+/* APERTURA AUTOMATICA POP-UP */
+
+function closePromo() {
+  $("promoOverlay").classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+function showPromo() {
+  let alreadyShown = false;
+
+  try {
+    alreadyShown = sessionStorage.getItem("promoSogniShown") === "true";
+  } catch(error) {
+    alreadyShown = false;
+  }
+
+  if (alreadyShown) return;
+
+  $("promoOverlay").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+
+  try {
+    sessionStorage.setItem("promoSogniShown", "true");
+  } catch(error) {}
+}
+
+setTimeout(showPromo, 3000);
+
+$("closePromo").addEventListener("click", closePromo);
+
+$("promoOverlay").addEventListener("click", e => {
+  if (e.target === $("promoOverlay")) {
+    closePromo();
+  }
+});
+
+$("promoBuy").addEventListener("click", () => {
+  closePromo();
+  $("discover").click();
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !$("promoOverlay").classList.contains("hidden")) {
+    closePromo();
+  }
+});
 
 /* APERTURA E CHIUSURA CARRELLO */
 
@@ -955,7 +1237,6 @@ $("products").addEventListener("click", e => {
 
   updateCart();
 
-  // Mostra un breve messaggio senza spostare la pagina
   $("cartMessage").classList.remove("hidden");
 
   clearTimeout(window.cartMessageTimeout);
@@ -963,7 +1244,6 @@ $("products").addEventListener("click", e => {
   window.cartMessageTimeout = setTimeout(() => {
     $("cartMessage").classList.add("hidden");
   }, 1800);
-
 });
 
 /* AGGIORNAMENTO CARRELLO */
