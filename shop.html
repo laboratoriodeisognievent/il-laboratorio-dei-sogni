@@ -337,7 +337,7 @@ main {
   margin: 15px 0 0;
 }
 
-/* PRODOTTI */
+/* TITOLO CATALOGO */
 
 #catalogTitle {
   text-align: center;
@@ -347,6 +347,36 @@ main {
 }
 
 #back { margin-top: 20px; }
+
+/* ORDINAMENTO PRODOTTI */
+
+#sortBar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin: 25px 0 10px;
+  flex-wrap: wrap;
+}
+
+#sortBar label {
+  color: #55758e;
+  font-family: Georgia, serif;
+  font-size: 15px;
+}
+
+#sortProducts {
+  min-width: 190px;
+  padding: 11px 14px;
+  border: 1px solid #d9e6ef;
+  border-radius: 20px;
+  background: white;
+  color: #55758e;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* PRODOTTI */
 
 #products {
   display: grid;
@@ -722,6 +752,16 @@ footer {
   .product p { font-size: 14px; }
   .product-content button { font-size: 14px; padding: 12px; }
   #catalogTitle { font-size: 26px; }
+
+  #sortBar {
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  #sortProducts {
+    flex: 1;
+    min-width: 0;
+  }
 }
 </style>
 </head>
@@ -861,6 +901,20 @@ footer {
 
       </div>
 
+      <!-- ORDINAMENTO: APPARE SOPRA OGNI SEZIONE DI PRODOTTI -->
+
+      <div id="sortBar" class="hidden">
+        <label for="sortProducts">Ordina per:</label>
+
+        <select id="sortProducts">
+          <option value="default">Ordine predefinito</option>
+          <option value="price-asc">Prezzo crescente</option>
+          <option value="price-desc">Prezzo decrescente</option>
+          <option value="name-asc">Nome A-Z</option>
+          <option value="name-desc">Nome Z-A</option>
+        </select>
+      </div>
+
       <div id="products"></div>
 
     </div>
@@ -908,6 +962,9 @@ let categories = [];
 let currentCategory = "";
 let currentSubcategory = "";
 
+let currentProducts = [];
+let currentSort = "default";
+
 const $ = id => document.getElementById(id);
 
 function esc(value) {
@@ -930,7 +987,48 @@ async function getData(path) {
   return response.json();
 }
 
-/* APERTURA AUTOMATICA POP-UP */
+/* ==========================
+   ORDINAMENTO PRODOTTI
+========================== */
+
+function displayProducts(emptyMessage) {
+  let sorted = [...currentProducts];
+
+  if (currentSort === "price-asc") {
+    sorted.sort((a, b) => Number(a.price) - Number(b.price));
+  }
+
+  if (currentSort === "price-desc") {
+    sorted.sort((a, b) => Number(b.price) - Number(a.price));
+  }
+
+  if (currentSort === "name-asc") {
+    sorted.sort((a, b) =>
+      String(a.name).localeCompare(String(b.name), "it")
+    );
+  }
+
+  if (currentSort === "name-desc") {
+    sorted.sort((a, b) =>
+      String(b.name).localeCompare(String(a.name), "it")
+    );
+  }
+
+  $("products").innerHTML = sorted.length
+    ? sorted.map(renderProduct).join("")
+    : `<p>${emptyMessage}</p>`;
+
+  $("sortBar").classList.toggle("hidden", sorted.length === 0);
+}
+
+$("sortProducts").addEventListener("change", e => {
+  currentSort = e.target.value;
+  displayProducts();
+});
+
+/* ==========================
+   APERTURA AUTOMATICA POP-UP
+========================== */
 
 function closePromo() {
   $("promoOverlay").classList.add("hidden");
@@ -977,7 +1075,9 @@ document.addEventListener("keydown", e => {
   }
 });
 
-/* APERTURA E CHIUSURA CARRELLO */
+/* ==========================
+   APERTURA E CHIUSURA CARRELLO
+========================== */
 
 $("cartToggle").addEventListener("click", () => {
   const isOpen = !$("cart").classList.contains("hidden");
@@ -991,7 +1091,9 @@ $("closeCart").addEventListener("click", () => {
   $("cartToggle").setAttribute("aria-expanded", "false");
 });
 
-/* APERTURA CATALOGO */
+/* ==========================
+   APERTURA CATALOGO
+========================== */
 
 $("discover").addEventListener("click", async () => {
   $("discover").disabled = true;
@@ -1019,7 +1121,9 @@ $("discover").addEventListener("click", async () => {
   }
 });
 
-/* APERTURA CATEGORIA */
+/* ==========================
+   APERTURA CATEGORIA
+========================== */
 
 $("categories").addEventListener("click", async e => {
   const card = e.target.closest("[data-slug]");
@@ -1033,6 +1137,11 @@ async function openCategory(slug) {
 
   currentCategory = slug;
   currentSubcategory = "";
+  currentProducts = [];
+  currentSort = "default";
+
+  $("sortProducts").value = "default";
+  $("sortBar").classList.add("hidden");
 
   $("catalogTitle").textContent = category?.name || "Catalogo";
   $("categories").style.display = "none";
@@ -1053,11 +1162,16 @@ async function openCategory(slug) {
         "/products?category=" + encodeURIComponent(slug)
       );
 
-      $("products").innerHTML = products.length
-        ? products.map(renderProduct).join("")
-        : "<p>Stiamo preparando le nostre creazioni per questa categoria. Contattaci per informazioni!</p>";
+      currentProducts = products;
+      currentSort = "default";
+      $("sortProducts").value = "default";
+
+      displayProducts(
+        "Stiamo preparando le nostre creazioni per questa categoria. Contattaci per informazioni!"
+      );
 
     } catch(error) {
+      $("sortBar").classList.add("hidden");
       $("products").innerHTML =
         "<p>Non è stato possibile caricare i prodotti.</p>";
     }
@@ -1066,7 +1180,9 @@ async function openCategory(slug) {
   $("productsArea").scrollIntoView({ behavior: "smooth" });
 }
 
-/* SCELTA FEMMINUCCIA / MASCHIETTO */
+/* ==========================
+   SCELTA FEMMINUCCIA / MASCHIETTO
+========================== */
 
 $("subcategories").addEventListener("click", async e => {
   const button = e.target.closest("[data-subcategory]");
@@ -1081,6 +1197,12 @@ async function loadSubcategory() {
     ? "Femminuccia"
     : "Maschietto";
 
+  currentProducts = [];
+  currentSort = "default";
+
+  $("sortProducts").value = "default";
+  $("sortBar").classList.add("hidden");
+
   $("catalogTitle").textContent = name;
   $("subcategories").classList.add("hidden");
   $("products").classList.remove("hidden");
@@ -1094,17 +1216,24 @@ async function loadSubcategory() {
       encodeURIComponent(currentSubcategory)
     );
 
-    $("products").innerHTML = products.length
-      ? products.map(renderProduct).join("")
-      : "<p>Presto troverai qui le nostre nuove catenelle. Contattaci per informazioni!</p>";
+    currentProducts = products;
+    currentSort = "default";
+    $("sortProducts").value = "default";
+
+    displayProducts(
+      "Presto troverai qui le nostre nuove catenelle. Contattaci per informazioni!"
+    );
 
   } catch(error) {
+    $("sortBar").classList.add("hidden");
     $("products").innerHTML =
       "<p>Non è stato possibile caricare i prodotti.</p>";
   }
 }
 
-/* VISUALIZZAZIONE PRODOTTI */
+/* ==========================
+   VISUALIZZAZIONE PRODOTTI
+========================== */
 
 function renderProduct(p) {
   const fields = Array.isArray(p.custom_fields)
@@ -1169,7 +1298,9 @@ function renderProduct(p) {
   `;
 }
 
-/* APERTURA FOTO INGRANDITA */
+/* ==========================
+   APERTURA FOTO INGRANDITA
+========================== */
 
 $("products").addEventListener("click", e => {
   const imageButton = e.target.closest("[data-image]");
@@ -1206,7 +1337,9 @@ document.addEventListener("keydown", e => {
   }
 });
 
-/* AGGIUNTA AL CARRELLO */
+/* ==========================
+   AGGIUNTA AL CARRELLO
+========================== */
 
 $("products").addEventListener("click", e => {
   const button = e.target.closest("[data-add]");
@@ -1246,7 +1379,9 @@ $("products").addEventListener("click", e => {
   }, 1800);
 });
 
-/* AGGIORNAMENTO CARRELLO */
+/* ==========================
+   AGGIORNAMENTO CARRELLO
+========================== */
 
 function updateCart() {
   $("cartItems").innerHTML = cart.length
@@ -1289,7 +1424,9 @@ function updateCart() {
   $("sendOrder").disabled = !cart.length;
 }
 
-/* RIMOZIONE PRODOTTO */
+/* ==========================
+   RIMOZIONE PRODOTTO
+========================== */
 
 $("cartItems").addEventListener("click", e => {
   const button = e.target.closest("[data-remove]");
@@ -1299,7 +1436,9 @@ $("cartItems").addEventListener("click", e => {
   updateCart();
 });
 
-/* INVIO WHATSAPP */
+/* ==========================
+   INVIO WHATSAPP
+========================== */
 
 $("sendOrder").addEventListener("click", () => {
   if (!cart.length) return;
@@ -1328,18 +1467,27 @@ $("sendOrder").addEventListener("click", () => {
   );
 });
 
-/* RITORNO ALLE CATEGORIE */
+/* ==========================
+   RITORNO ALLE CATEGORIE
+========================== */
 
 $("back").addEventListener("click", () => {
   $("productsArea").classList.add("hidden");
   $("subcategories").classList.add("hidden");
   $("products").classList.remove("hidden");
+  $("sortBar").classList.add("hidden");
   $("categories").style.display = "grid";
+
+  currentProducts = [];
+  currentSort = "default";
+  $("sortProducts").value = "default";
 
   $("categories").scrollIntoView({ behavior: "smooth" });
 });
 
-/* AVVIO */
+/* ==========================
+   AVVIO
+========================== */
 
 updateCart();
 </script>
