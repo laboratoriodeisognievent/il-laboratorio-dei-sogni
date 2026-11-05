@@ -15,9 +15,7 @@ body {
   font-family: Arial, sans-serif;
 }
 
-/* ==========================
-   MENU DI NAVIGAZIONE
-========================== */
+/* MENU DI NAVIGAZIONE */
 
 .shop-nav {
   display: flex;
@@ -44,9 +42,7 @@ body {
   text-decoration: underline;
 }
 
-/* ==========================
-   HEADER SHOP
-========================== */
+/* HEADER SHOP */
 
 header {
   text-align: center;
@@ -102,9 +98,7 @@ main {
   padding: 30px 22px;
 }
 
-/* ==========================
-   CATEGORIE
-========================== */
+/* CATEGORIE */
 
 #categories {
   display: none;
@@ -132,9 +126,7 @@ main {
   font-weight: normal;
 }
 
-/* ==========================
-   SOTTOCATEGORIE
-========================== */
+/* SOTTOCATEGORIE */
 
 #subcategories {
   display: grid;
@@ -175,9 +167,7 @@ main {
   margin: 15px 0 0;
 }
 
-/* ==========================
-   PRODOTTI
-========================== */
+/* PRODOTTI */
 
 #catalogTitle {
   text-align: center;
@@ -278,9 +268,7 @@ main {
   margin: 8px 0 0;
 }
 
-/* ==========================
-   FOTO INGRANDITA
-========================== */
+/* FOTO INGRANDITA */
 
 #imageViewer {
   position: fixed;
@@ -315,34 +303,153 @@ main {
 }
 
 /* ==========================
-   CARRELLO
+   CARRELLO FLOTTANTE
 ========================== */
 
-#cart {
-  background: #edf3f4;
-  border-radius: 13px;
-  padding: 20px;
-  margin-top: 35px;
+#cartToggle {
+  position: fixed;
+  top: 76px;
+  right: 22px;
+  z-index: 5000;
+  width: 55px;
+  height: 55px;
+  padding: 0;
+  border-radius: 50%;
+  background: #e5f5ff;
+  color: #55758e;
+  border: 1px solid #cce8f7;
+  box-shadow: 0 4px 15px rgba(70, 100, 115, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#cart h2 { margin-top: 0; }
+#cartToggle:hover {
+  background: #d5efff;
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+#cartToggle svg {
+  width: 25px;
+  height: 25px;
+}
+
+#cartCount {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  border-radius: 50px;
+  background: #69b8e5;
+  color: white;
+  border: 2px solid white;
+  font-size: 11px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* PANNELLO CARRELLO */
+
+#cart {
+  position: fixed;
+  top: 142px;
+  right: 22px;
+  z-index: 4999;
+  width: min(380px, calc(100vw - 28px));
+  max-height: calc(100vh - 165px);
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #dceaf0;
+  border-radius: 16px;
+  padding: 20px;
+  margin: 0;
+  box-shadow: 0 8px 30px rgba(55, 85, 100, 0.20);
+}
+
+#cart.hidden {
+  display: none !important;
+}
+
+.cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 13px;
+  border-bottom: 1px solid #e4edf1;
+}
+
+#cart h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: normal;
+}
+
+#closeCart {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 50%;
+  background: #edf3f4;
+  color: #55758e;
+  font-size: 22px;
+  line-height: 1;
+}
+
+#cartItems {
+  padding-top: 8px;
+}
 
 #cartItems p {
   font-size: 14px;
   line-height: 1.6;
-  border-bottom: 1px solid #dce6e8;
-  padding-bottom: 12px;
+  border-bottom: 1px solid #e5edf0;
+  padding: 10px 0 14px;
+  margin: 0;
 }
 
 #cartItems button {
   width: auto;
   padding: 7px 12px;
   font-size: 12px;
+  margin-top: 8px;
 }
 
-/* ==========================
-   FOOTER
-========================== */
+#cartTotal {
+  font-size: 16px;
+  font-weight: bold;
+  color: #587887;
+  padding: 12px 0;
+  border-top: 1px solid #e5edf0;
+}
+
+#sendOrder {
+  width: 100%;
+  font-size: 14px;
+}
+
+/* MESSAGGIO PRODOTTO AGGIUNTO */
+
+#cartMessage {
+  position: fixed;
+  top: 145px;
+  right: 90px;
+  z-index: 5001;
+  background: #55758e;
+  color: white;
+  padding: 11px 16px;
+  border-radius: 9px;
+  font-size: 13px;
+  box-shadow: 0 4px 15px rgba(70, 100, 115, 0.15);
+  pointer-events: none;
+}
+
+/* FOOTER */
 
 footer {
   text-align: center;
@@ -353,9 +460,7 @@ footer {
 
 .hidden { display: none !important; }
 
-/* ==========================
-   TABLET
-========================== */
+/* TABLET */
 
 @media (max-width: 800px) {
   main { padding: 25px 16px; }
@@ -368,9 +473,7 @@ footer {
   .product img { height: 165px; }
 }
 
-/* ==========================
-   TELEFONO
-========================== */
+/* TELEFONO */
 
 @media (max-width: 600px) {
   .shop-nav {
@@ -380,6 +483,30 @@ footer {
 
   .shop-nav a {
     font-size: 13px;
+  }
+
+  #cartToggle {
+    top: 85px;
+    right: 13px;
+    width: 49px;
+    height: 49px;
+  }
+
+  #cartToggle svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  #cart {
+    top: 143px;
+    right: 12px;
+    width: calc(100vw - 24px);
+    max-height: calc(100vh - 160px);
+  }
+
+  #cartMessage {
+    top: 145px;
+    right: 70px;
   }
 }
 
@@ -419,6 +546,31 @@ footer {
   <a href="servizi.html">Servizi</a>
   <a href="contatti.html">Contatti</a>
 </nav>
+
+<!-- CARRELLO SEMPRE VISIBILE -->
+
+<button
+  id="cartToggle"
+  type="button"
+  aria-label="Apri il carrello"
+  aria-expanded="false"
+  title="Il tuo carrello"
+>
+  <svg viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="1.8"
+    stroke-linecap="round" stroke-linejoin="round"
+    aria-hidden="true">
+    <circle cx="9" cy="21" r="1"></circle>
+    <circle cx="20" cy="21" r="1"></circle>
+    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+  </svg>
+
+  <span id="cartCount">0</span>
+</button>
+
+<div id="cartMessage" class="hidden" role="status">
+  Prodotto aggiunto!
+</div>
 
 <!-- INTESTAZIONE SHOP -->
 
@@ -479,13 +631,22 @@ footer {
     </div>
   </section>
 
+  <!-- PANNELLO DEL CARRELLO -->
+
   <section id="cart" class="hidden">
-    <h2>Il tuo carrello</h2>
+
+    <div class="cart-header">
+      <h2>Il tuo carrello</h2>
+      <button id="closeCart" type="button" aria-label="Chiudi carrello">×</button>
+    </div>
+
     <div id="cartItems"></div>
     <p id="cartTotal"></p>
+
     <button id="sendOrder">
       Invia richiesta su WhatsApp
     </button>
+
   </section>
 
 </main>
@@ -533,6 +694,20 @@ async function getData(path) {
 
   return response.json();
 }
+
+/* APERTURA E CHIUSURA CARRELLO */
+
+$("cartToggle").addEventListener("click", () => {
+  const isOpen = !$("cart").classList.contains("hidden");
+
+  $("cart").classList.toggle("hidden", isOpen);
+  $("cartToggle").setAttribute("aria-expanded", String(!isOpen));
+});
+
+$("closeCart").addEventListener("click", () => {
+  $("cart").classList.add("hidden");
+  $("cartToggle").setAttribute("aria-expanded", "false");
+});
 
 /* APERTURA CATALOGO */
 
@@ -742,6 +917,11 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape" && !$("imageViewer").classList.contains("hidden")) {
     closeImageViewer();
   }
+
+  if (e.key === "Escape" && !$("cart").classList.contains("hidden")) {
+    $("cart").classList.add("hidden");
+    $("cartToggle").setAttribute("aria-expanded", "false");
+  }
 });
 
 /* AGGIUNTA AL CARRELLO */
@@ -775,8 +955,15 @@ $("products").addEventListener("click", e => {
 
   updateCart();
 
-  $("cart").classList.remove("hidden");
-  $("cart").scrollIntoView({ behavior: "smooth" });
+  // Mostra un breve messaggio senza spostare la pagina
+  $("cartMessage").classList.remove("hidden");
+
+  clearTimeout(window.cartMessageTimeout);
+
+  window.cartMessageTimeout = setTimeout(() => {
+    $("cartMessage").classList.add("hidden");
+  }, 1800);
+
 });
 
 /* AGGIORNAMENTO CARRELLO */
@@ -794,6 +981,7 @@ function updateCart() {
           <br>
           € ${(item.price * item.quantity).toFixed(2)}
 
+          <br>
           <button class="secondary" data-remove="${i}">
             Rimuovi
           </button>
@@ -806,8 +994,17 @@ function updateCart() {
     0
   );
 
+  const count = cart.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
+
   $("cartTotal").textContent =
     "Totale indicativo: € " + total.toFixed(2);
+
+  $("cartCount").textContent = count;
+
+  $("cartCount").classList.toggle("hidden", count === 0);
 
   $("sendOrder").disabled = !cart.length;
 }
