@@ -102,16 +102,12 @@ button:hover { opacity: .88; }
   gap: 6px;
 }
 
-.image-upload {
+.image-box {
   border: 1px dashed #a9c2cb;
   background: #f8fcfd;
   border-radius: 12px;
   padding: 16px;
   margin: 8px 0 18px;
-}
-
-.image-upload input {
-  margin-top: 12px;
 }
 
 #imagePreview {
@@ -123,13 +119,6 @@ button:hover { opacity: .88; }
   object-fit: contain;
   border-radius: 10px;
   margin: 12px 0;
-}
-
-.upload-status {
-  font-size: 13px;
-  color: #557786;
-  margin-top: 8px;
-  overflow-wrap: anywhere;
 }
 
 @media(max-width:600px) {
@@ -209,33 +198,30 @@ button:hover { opacity: .88; }
       <label>Prezzo in euro</label>
       <input id="price" type="number" min="0" step="0.01" required>
 
-      <label>Fotografia prodotto</label>
+      <label>Nome file fotografia</label>
 
-      <div class="image-upload">
+      <div class="image-box">
         <p class="small">
-          Scegli una fotografia dalla galleria del tuo telefono.
-          Verrà caricata automaticamente su GitHub.
-          Formati consentiti: JPG, PNG, WEBP e GIF. Massimo 5 MB.
+          Prima carica manualmente la fotografia su GitHub,
+          nella cartella images/prodotti.
+          Qui scrivi soltanto il nome completo del file,
+          compresa l'estensione.
+          Esempio: fiocco-rosa.jpg
         </p>
 
         <input
-          id="imageFile"
-          type="file"
-          accept="image/jpeg,image/png,image/webp,image/gif"
+          id="image"
+          type="text"
+          placeholder="Es. fiocco-rosa.jpg"
+          autocomplete="off"
         >
 
         <img id="imagePreview" class="hidden" alt="Anteprima fotografia">
 
-        <p id="uploadStatus" class="upload-status">
-          Nessuna nuova fotografia selezionata.
+        <p class="small" id="imageStatus">
+          Nessuna fotografia inserita.
         </p>
-
-        <button type="button" id="removeImage" class="secondary hidden">
-          Rimuovi fotografia
-        </button>
       </div>
-
-      <input id="image" type="hidden">
 
       <label>Personalizzazioni (una per riga)</label>
       <textarea id="fields" rows="5"
@@ -264,10 +250,11 @@ button:hover { opacity: .88; }
 <script>
 const API = "/api";
 
+const GITHUB_IMAGE_BASE =
+  "https://raw.githubusercontent.com/laboratoriodeisognievent/il-laboratorio-dei-sogni/main/images/prodotti/";
+
 let categories = [];
 let editingId = null;
-let selectedImage = null;
-let previewObjectUrl = null;
 
 const $ = id => document.getElementById(id);
 
@@ -282,20 +269,29 @@ function esc(value) {
 }
 
 async function api(path, options = {}) {
-  const isFormData = options.body instanceof FormData;
-
   const response = await fetch(API + path, {
     ...options,
     credentials: "same-origin",
     headers: {
-      ...(!isFormData && options.body
+      ...(options.body
         ? { "Content-Type": "application/json" }
         : {}),
       ...(options.headers || {})
     }
   });
 
-  const data = await response.json().catch(() => ({}));
+  const text = await response.text();
+
+  let data;
+
+  try {
+    data = text ? JSON.parse(text) : {};
+  } catch {
+    throw new Error(
+      "Il server ha restituito una risposta non valida. " +
+      text.slice(0, 180)
+    );
+  }
 
   if (!response.ok) {
     throw new Error(
@@ -310,92 +306,57 @@ function showMessage(message) {
   $("message").textContent = message;
 }
 
-function clearPreviewObjectUrl() {
-  if (previewObjectUrl) {
-    URL.revokeObjectURL(previewObjectUrl);
-    previewObjectUrl = null;
+function imageUrl(filename) {
+  const name = String(filename || "").trim();
+
+  if (!name) return "";
+
+  // Permette anche eventuali vecchi URL completi già salvati.
+  if (/^https:\/\//i.test(name)) return name;
+
+  // Evita percorsi o nomi non validi.
+  if (
+    name.includes("..") ||
+    name.includes("/") ||
+    name.includes("\\") ||
+    !/^[a-zA-Z0-9._-]+$/.test(name)
+  ) {
+    return "";
   }
+
+  return GITHUB_IMAGE_BASE + encodeURIComponent(name);
 }
 
-function showPreview(source) {
-  if (!source) {
+function updateImagePreview() {
+  const filename = $("image").value.trim();
+  const url = imageUrl(filename);
+
+  if (!filename) {
     $("imagePreview").removeAttribute("src");
     $("imagePreview").classList.add("hidden");
+    $("imageStatus").textContent = "Nessuna fotografia inserita.";
     return;
   }
 
-  $("imagePreview").src = source;
+  if (!url) {
+    $("imagePreview").removeAttribute("src");
+    $("imagePreview").classList.add("hidden");
+    $("imageStatus").textContent =
+      "Nome file non valido. Inserisci solo il nome, ad esempio fiocco-rosa.jpg.";
+    return;
+  }
+
+  $("imagePreview").src = url;
   $("imagePreview").classList.remove("hidden");
+  $("imageStatus").textContent = "Percorso fotografia: " + filename;
 }
 
-function resetImageSelection() {
-  selectedImage = null;
-  $("imageFile").value = "";
-  clearPreviewObjectUrl();
+$("image").addEventListener("input", updateImagePreview);
 
-  $("uploadStatus").textContent =
-    "Nessuna nuova fotografia selezionata.";
-
-  $("removeImage").classList.add("hidden");
-  showPreview($("image").value);
-}
-
-$("imageFile").addEventListener("change", () => {
-  const file = $("imageFile").files[0];
-
-  if (!file) {
-    resetImageSelection();
-    return;
-  }
-
-  const allowedTypes = [
-    "image/jpeg",
-    "image/png",
-    "image/webp",
-    "image/gif"
-  ];
-
-  if (!allowedTypes.includes(file.type)) {
-    $("imageFile").value = "";
-    selectedImage = null;
-    $("uploadStatus").textContent =
-      "Formato non supportato. Usa JPG, PNG, WEBP o GIF.";
-    return;
-  }
-
-  if (file.size > 5 * 1024 * 1024) {
-    $("imageFile").value = "";
-    selectedImage = null;
-    $("uploadStatus").textContent =
-      "La fotografia supera il limite di 5 MB.";
-    return;
-  }
-
-  selectedImage = file;
-
-  clearPreviewObjectUrl();
-  previewObjectUrl = URL.createObjectURL(file);
-
-  showPreview(previewObjectUrl);
-
-  $("uploadStatus").textContent =
-    "Fotografia selezionata: " + file.name;
-
-  $("removeImage").classList.remove("hidden");
-});
-
-$("removeImage").addEventListener("click", () => {
-  selectedImage = null;
-  $("imageFile").value = "";
-  $("image").value = "";
-
-  clearPreviewObjectUrl();
-  showPreview("");
-
-  $("uploadStatus").textContent =
-    "Fotografia rimossa. Il prodotto verrà salvato senza immagine.";
-
-  $("removeImage").classList.add("hidden");
+$("imagePreview").addEventListener("error", () => {
+  $("imagePreview").classList.add("hidden");
+  $("imageStatus").textContent =
+    "Foto non trovata. Controlla che il nome file su GitHub sia corretto.";
 });
 
 /* ACCESSO */
@@ -494,36 +455,40 @@ async function loadProducts() {
     return;
   }
 
-  $("products").innerHTML = products.map(p => `
-    <div class="product">
+  $("products").innerHTML = products.map(p => {
+    const photo = imageUrl(p.image_url);
 
-      ${p.image_url
-        ? `<img src="${esc(p.image_url)}" alt="">`
-        : ""}
+    return `
+      <div class="product">
 
-      <strong>${esc(p.name)}</strong>
-
-      <p>
-        € ${Number(p.price).toFixed(2)}
-        · ${Number(p.visible) ? "Visibile" : "Nascosto"}
-        ${p.category_slug === "catenelle-ciuccio"
-          ? " · " + (p.subcategory === "maschietto"
-            ? "Maschietto"
-            : "Femminuccia")
+        ${photo
+          ? `<img src="${esc(photo)}" alt="">`
           : ""}
-      </p>
 
-      <button class="secondary" data-edit="${Number(p.id)}">
-        Modifica
-      </button>
+        <strong>${esc(p.name)}</strong>
 
-      <button class="danger" data-delete="${Number(p.id)}">
-        Elimina
-      </button>
+        <p>
+          € ${Number(p.price).toFixed(2)}
+          · ${Number(p.visible) ? "Visibile" : "Nascosto"}
+          ${p.category_slug === "catenelle-ciuccio"
+            ? " · " + (p.subcategory === "maschietto"
+              ? "Maschietto"
+              : "Femminuccia")
+            : ""}
+        </p>
 
-      <div style="clear:both"></div>
-    </div>
-  `).join("");
+        <button class="secondary" data-edit="${Number(p.id)}">
+          Modifica
+        </button>
+
+        <button class="danger" data-delete="${Number(p.id)}">
+          Elimina
+        </button>
+
+        <div style="clear:both"></div>
+      </div>
+    `;
+  }).join("");
 }
 
 /* EDITOR */
@@ -540,8 +505,18 @@ function openEditor(product = null) {
   $("subcategory").value = product?.subcategory || "femminuccia";
   $("description").value = product?.description || "";
   $("price").value = product?.price ?? "";
-  $("image").value = product?.image_url || "";
-  $("visible").checked = product ? Number(product.visible) === 1 : true;
+
+  // Mantiene il vecchio URL, ma permette di inserire un semplice nome file.
+  const oldImage = product?.image_url || "";
+  const oldPrefix = GITHUB_IMAGE_BASE;
+
+  $("image").value = oldImage.startsWith(oldPrefix)
+    ? decodeURIComponent(oldImage.slice(oldPrefix.length))
+    : oldImage;
+
+  $("visible").checked = product
+    ? Number(product.visible) === 1
+    : true;
 
   let fields = product?.custom_fields || [];
 
@@ -561,7 +536,7 @@ function openEditor(product = null) {
       ).join("\n")
     : "";
 
-  resetImageSelection();
+  updateImagePreview();
   updateSubcategoryVisibility();
 
   $("editor").classList.remove("hidden");
@@ -574,7 +549,6 @@ $("newProduct").addEventListener("click", () => {
 
 $("cancel").addEventListener("click", () => {
   $("editor").classList.add("hidden");
-  resetImageSelection();
 });
 
 /* MODIFICA ED ELIMINAZIONE */
@@ -618,27 +592,6 @@ $("products").addEventListener("click", async e => {
   }
 });
 
-/* CARICAMENTO FOTO SU GITHUB */
-
-async function uploadImage(file) {
-  const formData = new FormData();
-  formData.append("image", file);
-
-  $("uploadStatus").textContent =
-    "Caricamento fotografia su GitHub in corso...";
-
-  const result = await api("/admin/upload-image", {
-    method: "POST",
-    body: formData
-  });
-
-  if (!result.success || !result.image_url) {
-    throw new Error("Caricamento della fotografia non riuscito.");
-  }
-
-  return result.image_url;
-}
-
 /* PERSONALIZZAZIONI */
 
 function readCustomFields() {
@@ -677,15 +630,13 @@ $("productForm").addEventListener("submit", async e => {
   saveButton.textContent = "Salvataggio in corso...";
 
   try {
-    let imageUrl = $("image").value.trim();
+    const filename = $("image").value.trim();
+    const imageUrlValue = imageUrl(filename);
 
-    if (selectedImage) {
-      imageUrl = await uploadImage(selectedImage);
-
-      $("image").value = imageUrl;
-
-      $("uploadStatus").textContent =
-        "Fotografia caricata correttamente su GitHub.";
+    if (filename && !imageUrlValue) {
+      throw new Error(
+        "Nome fotografia non valido. Inserisci solo il nome del file, ad esempio fiocco-rosa.jpg."
+      );
     }
 
     const body = {
@@ -694,7 +645,7 @@ $("productForm").addEventListener("submit", async e => {
       subcategory: $("subcategory").value,
       description: $("description").value,
       price: Number($("price").value),
-      image_url: imageUrl,
+      image_url: imageUrlValue,
       custom_fields: readCustomFields(),
       visible: $("visible").checked
     };
@@ -710,15 +661,12 @@ $("productForm").addEventListener("submit", async e => {
 
     $("editor").classList.add("hidden");
 
-    resetImageSelection();
-
     showMessage("Prodotto salvato correttamente.");
 
     await loadProducts();
 
   } catch(error) {
     showMessage(error.message);
-    $("uploadStatus").textContent = error.message;
 
   } finally {
     saveButton.disabled = false;
