@@ -71,18 +71,55 @@ button.danger { background: #a94e4e; }
 button:hover { opacity: .88; }
 
 .product {
-  border-bottom: 1px solid #e5e9ea;
-  padding: 14px 0;
-  min-height: 95px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid #e5e9ea;
+  border-radius: 12px;
+  padding: 13px;
+  margin: 12px 0;
+  background: #fff;
 }
 
-.product img {
-  width: 65px;
-  height: 65px;
+.product-photo {
+  width: 105px;
+  height: 105px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #f0f5f6;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-photo img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 8px;
-  float: left;
-  margin-right: 12px;
+}
+
+.photo-error {
+  font-size: 12px;
+  color: #a94e4e;
+  text-align: center;
+  padding: 8px;
+}
+
+.product-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.product-info strong {
+  font-size: 16px;
+  color: #405b66;
+}
+
+.product-info p {
+  font-size: 13px;
+  color: #718087;
+  margin: 7px 0;
 }
 
 .small { font-size: 13px; color: #718087; }
@@ -124,6 +161,14 @@ button:hover { opacity: .88; }
 @media(max-width:600px) {
   body { padding: 14px; }
   .card { padding: 17px; }
+  .product { gap: 11px; padding: 10px; }
+  .product-photo { width: 85px; height: 85px; }
+  .product-info strong { font-size: 14px; }
+  .product-info p { font-size: 12px; }
+  .product-info .actions button {
+    padding: 9px 11px;
+    font-size: 12px;
+  }
 }
 </style>
 </head>
@@ -169,6 +214,7 @@ button:hover { opacity: .88; }
     </div>
 
     <h2>Prodotti del catalogo</h2>
+    <p class="small">Qui puoi visualizzare le fotografie di tutti i prodotti caricati nello shop.</p>
     <button id="newProduct">+ Aggiungi prodotto</button>
     <div id="products">Caricamento...</div>
   </div>
@@ -202,10 +248,8 @@ button:hover { opacity: .88; }
 
       <div class="image-box">
         <p class="small">
-          Prima carica manualmente la fotografia su GitHub,
+          Inserisci il nome del file già caricato su GitHub
           nella cartella images/prodotti.
-          Qui scrivi soltanto il nome completo del file,
-          compresa l'estensione.
           Esempio: fiocco-rosa.jpg
         </p>
 
@@ -311,10 +355,8 @@ function imageUrl(filename) {
 
   if (!name) return "";
 
-  // Permette anche eventuali vecchi URL completi già salvati.
   if (/^https:\/\//i.test(name)) return name;
 
-  // Evita percorsi o nomi non validi.
   if (
     name.includes("..") ||
     name.includes("/") ||
@@ -342,21 +384,25 @@ function updateImagePreview() {
     $("imagePreview").removeAttribute("src");
     $("imagePreview").classList.add("hidden");
     $("imageStatus").textContent =
-      "Nome file non valido. Inserisci solo il nome, ad esempio fiocco-rosa.jpg.";
+      "Nome file non valido. Controlla il nome inserito.";
     return;
   }
 
   $("imagePreview").src = url;
   $("imagePreview").classList.remove("hidden");
-  $("imageStatus").textContent = "Percorso fotografia: " + filename;
+  $("imageStatus").textContent = "Caricamento fotografia...";
 }
 
 $("image").addEventListener("input", updateImagePreview);
 
+$("imagePreview").addEventListener("load", () => {
+  $("imageStatus").textContent = "Fotografia caricata correttamente.";
+});
+
 $("imagePreview").addEventListener("error", () => {
   $("imagePreview").classList.add("hidden");
   $("imageStatus").textContent =
-    "Foto non trovata. Controlla che il nome file su GitHub sia corretto.";
+    "Foto non trovata. Controlla il nome del file su GitHub.";
 });
 
 /* ACCESSO */
@@ -458,34 +504,47 @@ async function loadProducts() {
   $("products").innerHTML = products.map(p => {
     const photo = imageUrl(p.image_url);
 
+    const section = p.category_slug === "catenelle-ciuccio"
+      ? (p.subcategory === "maschietto" ? "Maschietto" : "Femminuccia")
+      : "";
+
     return `
       <div class="product">
 
-        ${photo
-          ? `<img src="${esc(photo)}" alt="">`
-          : ""}
+        <div class="product-photo">
+          ${photo
+            ? `<img src="${esc(photo)}"
+                alt="${esc(p.name)}"
+                loading="lazy"
+                onerror="this.parentElement.innerHTML='<span class=photo-error>Foto non disponibile</span>'">`
+            : `<span class="photo-error">Nessuna foto</span>`
+          }
+        </div>
 
-        <strong>${esc(p.name)}</strong>
+        <div class="product-info">
 
-        <p>
-          € ${Number(p.price).toFixed(2)}
-          · ${Number(p.visible) ? "Visibile" : "Nascosto"}
-          ${p.category_slug === "catenelle-ciuccio"
-            ? " · " + (p.subcategory === "maschietto"
-              ? "Maschietto"
-              : "Femminuccia")
+          <strong>${esc(p.name)}</strong>
+
+          <p>
+            € ${Number(p.price).toFixed(2)}
+            · ${Number(p.visible) ? "Visibile nello shop" : "Nascosto"}
+          </p>
+
+          ${section
+            ? `<p>Sezione: ${section}</p>`
             : ""}
-        </p>
 
-        <button class="secondary" data-edit="${Number(p.id)}">
-          Modifica
-        </button>
+          <div class="actions">
+            <button class="secondary" data-edit="${Number(p.id)}">
+              Modifica
+            </button>
 
-        <button class="danger" data-delete="${Number(p.id)}">
-          Elimina
-        </button>
+            <button class="danger" data-delete="${Number(p.id)}">
+              Elimina
+            </button>
+          </div>
 
-        <div style="clear:both"></div>
+        </div>
       </div>
     `;
   }).join("");
@@ -506,7 +565,6 @@ function openEditor(product = null) {
   $("description").value = product?.description || "";
   $("price").value = product?.price ?? "";
 
-  // Mantiene il vecchio URL, ma permette di inserire un semplice nome file.
   const oldImage = product?.image_url || "";
   const oldPrefix = GITHUB_IMAGE_BASE;
 
@@ -635,7 +693,7 @@ $("productForm").addEventListener("submit", async e => {
 
     if (filename && !imageUrlValue) {
       throw new Error(
-        "Nome fotografia non valido. Inserisci solo il nome del file, ad esempio fiocco-rosa.jpg."
+        "Nome fotografia non valido. Inserisci solo il nome del file."
       );
     }
 
