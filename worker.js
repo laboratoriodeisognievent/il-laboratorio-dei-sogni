@@ -1,7 +1,3 @@
-const GITHUB_OWNER = "laboratoriodeisognievent";
-const GITHUB_REPO = "il-laboratorio-dei-sogni";
-const GITHUB_BRANCH = "main";
-
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
@@ -114,6 +110,12 @@ function validImagePath(value) {
 
   if (value.includes("..")) return false;
 
+  // Nome semplice del file inserito nel pannello.
+  if (/^[a-zA-Z0-9._-]+$/.test(value)) {
+    return true;
+  }
+
+  // Percorso relativo.
   if (/^\/images\/prodotti\/[a-zA-Z0-9._-]+$/.test(value)) {
     return true;
   }
@@ -126,7 +128,7 @@ function validImagePath(value) {
     if (
       url.hostname === "raw.githubusercontent.com" &&
       url.pathname.startsWith(
-        `/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/images/prodotti/`
+        "/laboratoriodeisognievent/il-laboratorio-dei-sogni/main/images/prodotti/"
       ) &&
       !url.search &&
       !url.hash
@@ -134,7 +136,7 @@ function validImagePath(value) {
       return true;
     }
 
-    // Compatibilità con eventuali vecchie foto Cloudinary.
+    // Compatibilità con vecchie foto Cloudinary.
     if (
       url.hostname === "res.cloudinary.com" &&
       url.pathname.startsWith("/ikvtqami/image/upload/")
@@ -184,81 +186,6 @@ function parseFields(value) {
   }
 }
 
-async function uploadImage(file, env) {
-  if (!env.GITHUB_TOKEN) {
-    throw new Error("Il secret GITHUB_TOKEN non è configurato su Cloudflare.");
-  }
-
-  if (!file || typeof file.arrayBuffer !== "function") {
-    throw new Error("Nessuna immagine ricevuta.");
-  }
-
-  if (file.size <= 0 || file.size > 5 * 1024 * 1024) {
-    throw new Error("L'immagine deve pesare al massimo 5 MB.");
-  }
-
-  const extensions = {
-    "image/jpeg": "jpg",
-    "image/png": "png",
-    "image/webp": "webp",
-    "image/gif": "gif"
-  };
-
-  const extension = extensions[file.type];
-
-  if (!extension) {
-    throw new Error("Formato non supportato. Usa JPG, PNG, WEBP o GIF.");
-  }
-
-  const filename = `${crypto.randomUUID()}.${extension}`;
-  const path = `images/prodotti/${filename}`;
-
-  const bytes = new Uint8Array(await file.arrayBuffer());
-
-  let binary = "";
-  const chunkSize = 0x8000;
-
-  for (let i = 0; i < bytes.length; i += chunkSize) {
-    binary += String.fromCharCode(
-      ...bytes.subarray(i, i + chunkSize)
-    );
-  }
-
-  const content = btoa(binary);
-
-  const githubUrl =
-    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}`;
-
-  const response = await fetch(githubUrl, {
-    method: "PUT",
-    headers: {
-      "Authorization": `Bearer ${env.GITHUB_TOKEN}`,
-      "Accept": "application/vnd.github+json",
-      "X-GitHub-Api-Version": "2022-11-28",
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      message: `Caricamento immagine prodotto ${filename}`,
-      content,
-      branch: GITHUB_BRANCH
-    })
-  });
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      result.message || `Errore GitHub (${response.status}).`
-    );
-  }
-
-  return {
-    filename,
-    image_url:
-      `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${path}`
-  };
-}
-
 async function getCategories(env) {
   return env.DB.prepare(`
     SELECT *
@@ -293,7 +220,11 @@ async function getProducts(env, url) {
 
   sql += " ORDER BY p.sort_order ASC, p.id DESC";
 
-  return env.DB.prepare(sql).bind(...values).all();
+  const statement = values.length
+    ? env.DB.prepare(sql).bind(...values)
+    : env.DB.prepare(sql);
+
+  return statement.all();
 }
 
 export default {
@@ -303,9 +234,8 @@ export default {
     const method = request.method;
 
     try {
-      // ==========================
+
       // CONTROLLO DATABASE
-      // ==========================
 
       if (path === "/api/health" && method === "GET") {
         await env.DB.prepare("SELECT 1").first();
@@ -313,14 +243,11 @@ export default {
         return json({
           success: true,
           message: "Worker pronto",
-          database: "collegato",
-          github: Boolean(env.GITHUB_TOKEN)
+          database: "collegato"
         });
       }
 
-      // ==========================
       // LOGIN AMMINISTRATORE
-      // ==========================
 
       if (path === "/api/admin/login" && method === "POST") {
         if (!checkOrigin(request)) {
@@ -362,9 +289,7 @@ export default {
         );
       }
 
-      // ==========================
       // LOGOUT
-      // ==========================
 
       if (path === "/api/admin/logout" && method === "POST") {
         return new Response(
@@ -380,41 +305,29 @@ export default {
         );
       }
 
-      // ==========================
       // VERIFICA SESSIONE
-      // ==========================
 
       if (path === "/api/admin/me" && method === "GET") {
         const authenticated = await isAdmin(request, env);
 
-        return json({
-          authenticated
-        });
+        return json({ authenticated });
       }
 
-      // ==========================
       // CATEGORIE PUBBLICHE
-      // ==========================
 
       if (path === "/api/categories" && method === "GET") {
         const result = await getCategories(env);
-
         return json(result.results || []);
       }
 
-      // ==========================
       // PRODOTTI PUBBLICI
-      // ==========================
 
       if (path === "/api/products" && method === "GET") {
         const result = await getProducts(env, url);
-
         return json(result.results || []);
       }
 
-      // ==========================
       // PROTEZIONE API ADMIN
-      // ==========================
 
       if (path.startsWith("/api/admin/")) {
         if (!await isAdmin(request, env)) {
@@ -430,26 +343,7 @@ export default {
           return json({ error: "Richiesta non autorizzata." }, 403);
         }
 
-        // ==========================
-        // CARICAMENTO FOTO SU GITHUB
-        // ==========================
-
-        if (path === "/api/admin/upload-image" && method === "POST") {
-          const formData = await request.formData();
-          const file = formData.get("image");
-
-          const uploaded = await uploadImage(file, env);
-
-          return json({
-            success: true,
-            filename: uploaded.filename,
-            image_url: uploaded.image_url
-          });
-        }
-
-        // ==========================
         // ELENCO CATEGORIE ADMIN
-        // ==========================
 
         if (path === "/api/admin/categories" && method === "GET") {
           const result = await env.DB.prepare(`
@@ -461,9 +355,7 @@ export default {
           return json(result.results || []);
         }
 
-        // ==========================
         // ELENCO PRODOTTI ADMIN
-        // ==========================
 
         if (path === "/api/admin/products" && method === "GET") {
           const result = await env.DB.prepare(`
@@ -479,9 +371,7 @@ export default {
           return json(result.results || []);
         }
 
-        // ==========================
         // CREA PRODOTTO
-        // ==========================
 
         if (path === "/api/admin/products" && method === "POST") {
           const body = await request.json();
@@ -502,10 +392,10 @@ export default {
             return json({ error: "Inserisci un prezzo valido." }, 400);
           }
 
-          const imageUrl = body.image_url || "";
+          const imageUrl = String(body.image_url || "").trim();
 
           if (!validImagePath(imageUrl)) {
-            return json({ error: "Percorso immagine non valido." }, 400);
+            return json({ error: "Nome o percorso immagine non valido." }, 400);
           }
 
           const customFields = JSON.stringify(
@@ -547,9 +437,7 @@ export default {
           }, 201);
         }
 
-        // ==========================
         // MODIFICA PRODOTTO
-        // ==========================
 
         const productMatch = path.match(
           /^\/api\/admin\/products\/(\d+)$/
@@ -575,10 +463,10 @@ export default {
             return json({ error: "Inserisci un prezzo valido." }, 400);
           }
 
-          const imageUrl = body.image_url || "";
+          const imageUrl = String(body.image_url || "").trim();
 
           if (!validImagePath(imageUrl)) {
-            return json({ error: "Percorso immagine non valido." }, 400);
+            return json({ error: "Nome o percorso immagine non valido." }, 400);
           }
 
           const customFields = JSON.stringify(
@@ -622,22 +510,19 @@ export default {
           return json({ success: true });
         }
 
-        // ==========================
         // ELIMINA PRODOTTO
-        // ==========================
 
         if (productMatch && method === "DELETE") {
           const id = Number(productMatch[1]);
 
-          // Elimina prima eventuali immagini collegate.
           try {
             await env.DB.prepare(`
               DELETE FROM product_images
               WHERE product_id = ?
             `).bind(id).run();
           } catch (error) {
-            // La cancellazione del prodotto continua anche
-            // se la tabella delle immagini non è disponibile.
+            // La cancellazione continua anche se non esistono
+            // immagini collegate nella tabella product_images.
           }
 
           const result = await env.DB.prepare(`
@@ -655,9 +540,7 @@ export default {
         return json({ error: "Endpoint amministratore non trovato." }, 404);
       }
 
-      // ==========================
       // FILE STATICI DEL SITO
-      // ==========================
 
       if (env.ASSETS) {
         return env.ASSETS.fetch(request);
