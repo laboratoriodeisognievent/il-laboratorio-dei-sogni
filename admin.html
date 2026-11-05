@@ -31,7 +31,7 @@ h1, h2 {
   margin: 18px 0;
 }
 
-input, textarea, select {
+input:not([type="checkbox"]), textarea, select {
   width: 100%;
   padding: 12px;
   margin: 7px 0 15px;
@@ -88,6 +88,36 @@ button:hover { opacity: .88; }
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+}
+
+.image-upload {
+  border: 1px dashed #a9c2cb;
+  background: #f8fcfd;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 8px 0 18px;
+}
+
+.image-upload input {
+  margin-top: 12px;
+}
+
+#imagePreview {
+  display: block;
+  max-width: 220px;
+  max-height: 220px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
+  margin: 12px 0;
+}
+
+.upload-status {
+  font-size: 13px;
+  color: #557786;
+  margin-top: 8px;
+  overflow-wrap: anywhere;
 }
 
 @media(max-width:600px) {
@@ -167,13 +197,32 @@ button:hover { opacity: .88; }
       <label>Prezzo in euro</label>
       <input id="price" type="number" min="0" step="0.01" required>
 
-      <label>Percorso fotografia su GitHub</label>
-      <input id="image" placeholder="/images/prodotti/catenella-giada.jpg">
+      <label>Fotografia prodotto</label>
 
-      <p class="small">
-        Prima carica la foto nella cartella images/prodotti su GitHub.
-        Qui inserisci il suo percorso.
-      </p>
+      <div class="image-upload">
+        <p class="small">
+          Scegli una fotografia dalla galleria del tuo telefono.
+          Verrà caricata automaticamente su GitHub.
+        </p>
+
+        <input
+          id="imageFile"
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+        >
+
+        <img id="imagePreview" class="hidden" alt="Anteprima fotografia">
+
+        <p id="uploadStatus" class="upload-status">
+          Nessuna nuova fotografia selezionata.
+        </p>
+
+        <button type="button" id="removeImage" class="secondary hidden">
+          Rimuovi fotografia
+        </button>
+      </div>
+
+      <input id="image" type="hidden">
 
       <label>Personalizzazioni (una per riga)</label>
       <textarea id="fields" rows="5"
@@ -187,7 +236,7 @@ button:hover { opacity: .88; }
 
       <br><br>
 
-      <button type="submit">Salva prodotto</button>
+      <button type="submit" id="saveProduct">Salva prodotto</button>
       <button type="button" id="cancel" class="secondary">Annulla</button>
 
     </form>
@@ -204,6 +253,8 @@ const API = "/api";
 
 let categories = [];
 let editingId = null;
+let selectedImage = null;
+let previewObjectUrl = null;
 
 const $ = id => document.getElementById(id);
 
@@ -218,10 +269,15 @@ function esc(value) {
 }
 
 async function api(path, options = {}) {
+  const isFormData = options.body instanceof FormData;
+
   const response = await fetch(API + path, {
     ...options,
+    credentials: "same-origin",
     headers: {
-      ...(options.body ? {"Content-Type": "application/json"} : {}),
+      ...(!isFormData && options.body
+        ? {"Content-Type": "application/json"}
+        : {}),
       ...(options.headers || {})
     }
   });
@@ -238,6 +294,95 @@ async function api(path, options = {}) {
 function showMessage(message) {
   $("message").textContent = message;
 }
+
+function clearPreviewObjectUrl() {
+  if (previewObjectUrl) {
+    URL.revokeObjectURL(previewObjectUrl);
+    previewObjectUrl = null;
+  }
+}
+
+function showPreview(source) {
+  if (!source) {
+    $("imagePreview").src = "";
+    $("imagePreview").classList.add("hidden");
+    return;
+  }
+
+  $("imagePreview").src = source;
+  $("imagePreview").classList.remove("hidden");
+}
+
+function resetImageSelection() {
+  selectedImage = null;
+  $("imageFile").value = "";
+  clearPreviewObjectUrl();
+
+  $("uploadStatus").textContent =
+    "Nessuna nuova fotografia selezionata.";
+
+  $("removeImage").classList.add("hidden");
+
+  showPreview($("image").value);
+}
+
+$("imageFile").addEventListener("change", () => {
+  const file = $("imageFile").files[0];
+
+  if (!file) {
+    resetImageSelection();
+    return;
+  }
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/gif"
+  ];
+
+  if (!allowedTypes.includes(file.type)) {
+    $("imageFile").value = "";
+    selectedImage = null;
+    $("uploadStatus").textContent =
+      "Formato non supportato. Usa JPG, PNG, WEBP o GIF.";
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    $("imageFile").value = "";
+    selectedImage = null;
+    $("uploadStatus").textContent =
+      "La fotografia supera il limite di 5 MB.";
+    return;
+  }
+
+  selectedImage = file;
+
+  clearPreviewObjectUrl();
+  previewObjectUrl = URL.createObjectURL(file);
+
+  showPreview(previewObjectUrl);
+
+  $("uploadStatus").textContent =
+    "Fotografia selezionata: " + file.name;
+
+  $("removeImage").classList.remove("hidden");
+});
+
+$("removeImage").addEventListener("click", () => {
+  selectedImage = null;
+  $("imageFile").value = "";
+  $("image").value = "";
+
+  clearPreviewObjectUrl();
+  showPreview("");
+
+  $("uploadStatus").textContent =
+    "Fotografia rimossa. Il prodotto verrà salvato senza immagine.";
+
+  $("removeImage").classList.add("hidden");
+});
 
 async function checkLogin() {
   try {
@@ -324,7 +469,7 @@ async function loadProducts() {
     : "<p>Non hai ancora inserito prodotti.</p>";
 }
 
-/* MOSTRA LA SCELTA SOLO PER LE CATENELLE */
+/* SCELTA SEZIONE CATENELLE */
 
 function updateSubcategoryVisibility() {
   const selected = categories.find(
@@ -338,6 +483,8 @@ function updateSubcategoryVisibility() {
 }
 
 $("category").addEventListener("change", updateSubcategoryVisibility);
+
+/* APERTURA MODIFICA / NUOVO PRODOTTO */
 
 function openEditor(product = null) {
   editingId = product ? product.id : null;
@@ -360,6 +507,8 @@ function openEditor(product = null) {
     f.label + (f.options?.length ? ": " + f.options.join(", ") : "")
   ).join("\n");
 
+  resetImageSelection();
+
   updateSubcategoryVisibility();
 
   $("editor").classList.remove("hidden");
@@ -370,6 +519,7 @@ $("newProduct").addEventListener("click", () => openEditor());
 
 $("cancel").addEventListener("click", () => {
   $("editor").classList.add("hidden");
+  resetImageSelection();
 });
 
 $("products").addEventListener("click", async e => {
@@ -409,43 +559,79 @@ $("products").addEventListener("click", async e => {
   }
 });
 
+/* CARICAMENTO FOTO SU GITHUB */
+
+async function uploadImage(file) {
+  const formData = new FormData();
+  formData.append("image", file);
+
+  $("uploadStatus").textContent =
+    "Caricamento fotografia su GitHub in corso...";
+
+  const result = await api("/admin/upload-image", {
+    method: "POST",
+    body: formData
+  });
+
+  if (!result.success || !result.image_url) {
+    throw new Error("Caricamento della fotografia non riuscito.");
+  }
+
+  return result.image_url;
+}
+
 /* SALVATAGGIO PRODOTTO */
 
 $("productForm").addEventListener("submit", async e => {
   e.preventDefault();
 
-  const customFields = $("fields").value
-    .split("\n")
-    .map(line => line.trim())
-    .filter(Boolean)
-    .map(line => {
-      const separator = line.indexOf(":");
-
-      if (separator === -1) {
-        return { label: line, options: [] };
-      }
-
-      return {
-        label: line.slice(0, separator).trim(),
-        options: line.slice(separator + 1)
-          .split(",")
-          .map(x => x.trim())
-          .filter(Boolean)
-      };
-    });
-
-  const body = {
-    name: $("name").value.trim(),
-    category_id: Number($("category").value),
-    subcategory: $("subcategory").value,
-    description: $("description").value,
-    price: Number($("price").value),
-    image_url: $("image").value.trim(),
-    custom_fields: customFields,
-    visible: $("visible").checked
-  };
+  const saveButton = $("saveProduct");
+  saveButton.disabled = true;
+  saveButton.textContent = "Salvataggio in corso...";
 
   try {
+    let imageUrl = $("image").value.trim();
+
+    if (selectedImage) {
+      imageUrl = await uploadImage(selectedImage);
+
+      $("image").value = imageUrl;
+
+      $("uploadStatus").textContent =
+        "Fotografia caricata correttamente su GitHub.";
+    }
+
+    const customFields = $("fields").value
+      .split("\n")
+      .map(line => line.trim())
+      .filter(Boolean)
+      .map(line => {
+        const separator = line.indexOf(":");
+
+        if (separator === -1) {
+          return { label: line, options: [] };
+        }
+
+        return {
+          label: line.slice(0, separator).trim(),
+          options: line.slice(separator + 1)
+            .split(",")
+            .map(x => x.trim())
+            .filter(Boolean)
+        };
+      });
+
+    const body = {
+      name: $("name").value.trim(),
+      category_id: Number($("category").value),
+      subcategory: $("subcategory").value,
+      description: $("description").value,
+      price: Number($("price").value),
+      image_url: imageUrl,
+      custom_fields: customFields,
+      visible: $("visible").checked
+    };
+
     const path = editingId
       ? "/admin/products/" + editingId
       : "/admin/products";
@@ -457,12 +643,19 @@ $("productForm").addEventListener("submit", async e => {
 
     $("editor").classList.add("hidden");
 
+    resetImageSelection();
+
     showMessage("Prodotto salvato correttamente.");
 
     await loadProducts();
 
   } catch(error) {
     showMessage(error.message);
+    $("uploadStatus").textContent = error.message;
+
+  } finally {
+    saveButton.disabled = false;
+    saveButton.textContent = "Salva prodotto";
   }
 });
 
