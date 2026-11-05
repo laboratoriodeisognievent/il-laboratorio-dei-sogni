@@ -55,6 +55,11 @@ button {
   display: inline-block;
 }
 
+button:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+
 button.secondary, .home-link {
   background: #e8eff1;
   color: #405b66;
@@ -68,6 +73,7 @@ button:hover { opacity: .88; }
 .product {
   border-bottom: 1px solid #e5e9ea;
   padding: 14px 0;
+  min-height: 95px;
 }
 
 .product img {
@@ -81,7 +87,13 @@ button:hover { opacity: .88; }
 
 .small { font-size: 13px; color: #718087; }
 .hidden { display: none !important; }
-#message { margin: 12px 0; color: #557786; }
+
+#message {
+  margin: 12px 0;
+  color: #557786;
+  overflow-wrap: anywhere;
+}
+
 #loginMessage { color: #a94e4e; }
 
 .actions {
@@ -203,6 +215,7 @@ button:hover { opacity: .88; }
         <p class="small">
           Scegli una fotografia dalla galleria del tuo telefono.
           Verrà caricata automaticamente su GitHub.
+          Formati consentiti: JPG, PNG, WEBP e GIF. Massimo 5 MB.
         </p>
 
         <input
@@ -276,7 +289,7 @@ async function api(path, options = {}) {
     credentials: "same-origin",
     headers: {
       ...(!isFormData && options.body
-        ? {"Content-Type": "application/json"}
+        ? { "Content-Type": "application/json" }
         : {}),
       ...(options.headers || {})
     }
@@ -285,7 +298,9 @@ async function api(path, options = {}) {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(data.error || "Si è verificato un errore");
+    throw new Error(
+      data.error || `Errore del server (${response.status})`
+    );
   }
 
   return data;
@@ -304,7 +319,7 @@ function clearPreviewObjectUrl() {
 
 function showPreview(source) {
   if (!source) {
-    $("imagePreview").src = "";
+    $("imagePreview").removeAttribute("src");
     $("imagePreview").classList.add("hidden");
     return;
   }
@@ -322,7 +337,6 @@ function resetImageSelection() {
     "Nessuna nuova fotografia selezionata.";
 
   $("removeImage").classList.add("hidden");
-
   showPreview($("image").value);
 }
 
@@ -384,9 +398,15 @@ $("removeImage").addEventListener("click", () => {
   $("removeImage").classList.add("hidden");
 });
 
+/* ACCESSO */
+
 async function checkLogin() {
   try {
-    await api("/admin/me");
+    const result = await api("/admin/me");
+
+    if (!result.authenticated) {
+      throw new Error("Sessione non valida");
+    }
 
     $("login").classList.add("hidden");
     $("panel").classList.remove("hidden");
@@ -394,9 +414,10 @@ async function checkLogin() {
     await loadCategories();
     await loadProducts();
 
-  } catch {
+  } catch(error) {
     $("login").classList.remove("hidden");
     $("panel").classList.add("hidden");
+    $("products").textContent = "Accedi per visualizzare i prodotti.";
   }
 }
 
@@ -427,13 +448,17 @@ $("loginForm").addEventListener("submit", async e => {
 $("logout").addEventListener("click", async () => {
   try {
     await api("/admin/logout", { method: "POST" });
-  } catch {}
+  } catch(error) {
+    console.error(error);
+  }
 
   $("panel").classList.add("hidden");
-  $("login").classList.remove("hidden");
   $("editor").classList.add("hidden");
+  $("login").classList.remove("hidden");
   $("loginMessage").textContent = "";
 });
+
+/* CATEGORIE */
 
 async function loadCategories() {
   categories = await api("/admin/categories");
@@ -441,35 +466,9 @@ async function loadCategories() {
   $("category").innerHTML = categories.map(c =>
     `<option value="${c.id}">${esc(c.name)}</option>`
   ).join("");
+
+  updateSubcategoryVisibility();
 }
-
-async function loadProducts() {
-  const products = await api("/admin/products");
-
-  $("products").innerHTML = products.length
-    ? products.map(p => `
-      <div class="product">
-        ${p.image_url ? `<img src="${esc(p.image_url)}" alt="">` : ""}
-
-        <strong>${esc(p.name)}</strong>
-
-        <p>
-          € ${Number(p.price).toFixed(2)}
-          · ${p.visible ? "Visibile" : "Nascosto"}
-          ${p.category_slug === "catenelle-ciuccio"
-            ? " · " + (p.subcategory === "maschietto" ? "Maschietto" : "Femminuccia")
-            : ""}
-        </p>
-
-        <button class="secondary" data-edit="${p.id}">Modifica</button>
-        <button class="danger" data-delete="${p.id}">Elimina</button>
-        <div style="clear:both"></div>
-      </div>
-    `).join("")
-    : "<p>Non hai ancora inserito prodotti.</p>";
-}
-
-/* SCELTA SEZIONE CATENELLE */
 
 function updateSubcategoryVisibility() {
   const selected = categories.find(
@@ -484,10 +483,53 @@ function updateSubcategoryVisibility() {
 
 $("category").addEventListener("change", updateSubcategoryVisibility);
 
-/* APERTURA MODIFICA / NUOVO PRODOTTO */
+/* PRODOTTI */
+
+async function loadProducts() {
+  const products = await api("/admin/products");
+
+  if (!products.length) {
+    $("products").innerHTML =
+      "<p>Non hai ancora inserito prodotti.</p>";
+    return;
+  }
+
+  $("products").innerHTML = products.map(p => `
+    <div class="product">
+
+      ${p.image_url
+        ? `<img src="${esc(p.image_url)}" alt="">`
+        : ""}
+
+      <strong>${esc(p.name)}</strong>
+
+      <p>
+        € ${Number(p.price).toFixed(2)}
+        · ${Number(p.visible) ? "Visibile" : "Nascosto"}
+        ${p.category_slug === "catenelle-ciuccio"
+          ? " · " + (p.subcategory === "maschietto"
+            ? "Maschietto"
+            : "Femminuccia")
+          : ""}
+      </p>
+
+      <button class="secondary" data-edit="${Number(p.id)}">
+        Modifica
+      </button>
+
+      <button class="danger" data-delete="${Number(p.id)}">
+        Elimina
+      </button>
+
+      <div style="clear:both"></div>
+    </div>
+  `).join("");
+}
+
+/* EDITOR */
 
 function openEditor(product = null) {
-  editingId = product ? product.id : null;
+  editingId = product ? Number(product.id) : null;
 
   $("editorTitle").textContent = product
     ? "Modifica prodotto"
@@ -499,28 +541,43 @@ function openEditor(product = null) {
   $("description").value = product?.description || "";
   $("price").value = product?.price ?? "";
   $("image").value = product?.image_url || "";
-  $("visible").checked = product ? !!product.visible : true;
+  $("visible").checked = product ? Number(product.visible) === 1 : true;
 
-  const fields = product?.custom_fields || [];
+  let fields = product?.custom_fields || [];
 
-  $("fields").value = fields.map(f =>
-    f.label + (f.options?.length ? ": " + f.options.join(", ") : "")
-  ).join("\n");
+  if (typeof fields === "string") {
+    try {
+      fields = JSON.parse(fields);
+    } catch {
+      fields = [];
+    }
+  }
+
+  $("fields").value = Array.isArray(fields)
+    ? fields.map(f =>
+        f.label + (f.options?.length
+          ? ": " + f.options.join(", ")
+          : "")
+      ).join("\n")
+    : "";
 
   resetImageSelection();
-
   updateSubcategoryVisibility();
 
   $("editor").classList.remove("hidden");
   $("editor").scrollIntoView({ behavior: "smooth" });
 }
 
-$("newProduct").addEventListener("click", () => openEditor());
+$("newProduct").addEventListener("click", () => {
+  openEditor();
+});
 
 $("cancel").addEventListener("click", () => {
   $("editor").classList.add("hidden");
   resetImageSelection();
 });
+
+/* MODIFICA ED ELIMINAZIONE */
 
 $("products").addEventListener("click", async e => {
   const editButton = e.target.closest("[data-edit]");
@@ -531,7 +588,7 @@ $("products").addEventListener("click", async e => {
       const products = await api("/admin/products");
 
       const product = products.find(
-        p => p.id === Number(editButton.dataset.edit)
+        p => Number(p.id) === Number(editButton.dataset.edit)
       );
 
       if (product) openEditor(product);
@@ -542,7 +599,9 @@ $("products").addEventListener("click", async e => {
   }
 
   if (deleteButton) {
-    if (!confirm("Vuoi davvero eliminare questo prodotto?")) return;
+    if (!confirm("Vuoi davvero eliminare questo prodotto?")) {
+      return;
+    }
 
     try {
       await api(
@@ -550,7 +609,7 @@ $("products").addEventListener("click", async e => {
         { method: "DELETE" }
       );
 
-      showMessage("Prodotto eliminato.");
+      showMessage("Prodotto eliminato correttamente.");
       await loadProducts();
 
     } catch(error) {
@@ -580,12 +639,40 @@ async function uploadImage(file) {
   return result.image_url;
 }
 
-/* SALVATAGGIO PRODOTTO */
+/* PERSONALIZZAZIONI */
+
+function readCustomFields() {
+  return $("fields").value
+    .split("\n")
+    .map(line => line.trim())
+    .filter(Boolean)
+    .map(line => {
+      const separator = line.indexOf(":");
+
+      if (separator === -1) {
+        return {
+          label: line,
+          options: []
+        };
+      }
+
+      return {
+        label: line.slice(0, separator).trim(),
+        options: line.slice(separator + 1)
+          .split(",")
+          .map(x => x.trim())
+          .filter(Boolean)
+      };
+    });
+}
+
+/* SALVATAGGIO */
 
 $("productForm").addEventListener("submit", async e => {
   e.preventDefault();
 
   const saveButton = $("saveProduct");
+
   saveButton.disabled = true;
   saveButton.textContent = "Salvataggio in corso...";
 
@@ -601,26 +688,6 @@ $("productForm").addEventListener("submit", async e => {
         "Fotografia caricata correttamente su GitHub.";
     }
 
-    const customFields = $("fields").value
-      .split("\n")
-      .map(line => line.trim())
-      .filter(Boolean)
-      .map(line => {
-        const separator = line.indexOf(":");
-
-        if (separator === -1) {
-          return { label: line, options: [] };
-        }
-
-        return {
-          label: line.slice(0, separator).trim(),
-          options: line.slice(separator + 1)
-            .split(",")
-            .map(x => x.trim())
-            .filter(Boolean)
-        };
-      });
-
     const body = {
       name: $("name").value.trim(),
       category_id: Number($("category").value),
@@ -628,7 +695,7 @@ $("productForm").addEventListener("submit", async e => {
       description: $("description").value,
       price: Number($("price").value),
       image_url: imageUrl,
-      custom_fields: customFields,
+      custom_fields: readCustomFields(),
       visible: $("visible").checked
     };
 
@@ -658,6 +725,8 @@ $("productForm").addEventListener("submit", async e => {
     saveButton.textContent = "Salva prodotto";
   }
 });
+
+/* AVVIO */
 
 checkLogin();
 </script>
