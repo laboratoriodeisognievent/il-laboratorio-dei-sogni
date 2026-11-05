@@ -350,27 +350,9 @@ function showMessage(message) {
   $("message").textContent = message;
 }
 
-function imageUrl(filename) {
-  const name = String(filename || "").trim();
-
-  if (!name) return "";
-
-  // Mantiene i link HTTPS già salvati
-  if (/^https:\/\//i.test(name)) return name;
-
-  // Riconosce i percorsi della cartella immagini
-  const path = name.replace(/^\/+/, "");
-
-  if (
-    path.startsWith("images/prodotti/") &&
-    !path.split("/").some(part =>
-      !part || part === "." || part === ".."
-    )
-  ) {
-    return "/" + path.split("/")
-      .map(part => encodeURIComponent(part))
-      .join("/");
-  }
+function imageUrl(value) {
+  return String(value || "").trim();
+}
 
   // Riconosce anche il semplice nome del file
   if (
