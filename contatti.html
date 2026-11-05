@@ -5,6 +5,291 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contatti | Il Laboratorio Dei Sogni</title>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* INTRODUZIONE */
+
+    .contact-intro {
+      text-align: center;
+      max-width: 750px;
+      margin: 0 auto 45px;
+    }
+
+    .contact-intro h2,
+    .section h2 {
+      color: #64b6e4;
+      font-family: Georgia, serif;
+      font-weight: normal;
+      text-align: center;
+    }
+
+    .contact-intro p {
+      line-height: 1.8;
+    }
+
+    /* PUNTI DI RITIRO */
+
+    .pickup-container {
+      max-width: 1000px;
+      margin: 35px auto;
+    }
+
+    .pickup-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .pickup-card {
+      background: #ffffff;
+      border: 1px solid #e0edf4;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 4px 15px rgba(80, 120, 145, 0.06);
+    }
+
+    .pickup-card h3 {
+      color: #55758e;
+      font-family: Georgia, serif;
+      font-size: 23px;
+      font-weight: normal;
+      margin: 0 0 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e6f0f5;
+    }
+
+    .pickup-item {
+      margin-bottom: 18px;
+    }
+
+    .pickup-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .pickup-item strong {
+      display: block;
+      color: #55758e;
+      margin-bottom: 6px;
+    }
+
+    .pickup-item p {
+      margin: 0;
+      color: #596b72;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .shipping-box {
+      max-width: 1000px;
+      margin: 25px auto 45px;
+      padding: 24px;
+      border-radius: 15px;
+      background: #edf6fb;
+      text-align: center;
+    }
+
+    .shipping-box h3 {
+      margin: 0 0 8px;
+      color: #55758e;
+      font-family: Georgia, serif;
+      font-size: 22px;
+      font-weight: normal;
+    }
+
+    .shipping-box p {
+      margin: 0;
+      line-height: 1.7;
+      color: #596b72;
+    }
+
+    /* DATI AZIENDA */
+
+    .business-info {
+      max-width: 750px;
+      margin: 45px auto;
+      padding: 30px 25px;
+      background: #ffffff;
+      border: 1px solid #e0edf4;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .business-info h2 {
+      margin-top: 0;
+      margin-bottom: 25px;
+    }
+
+    .business-info p {
+      color: #596b72;
+      line-height: 1.8;
+      margin: 10px 0;
+    }
+
+    .business-info strong {
+      color: #55758e;
+    }
+
+    .business-info a {
+      color: #55758e;
+      text-decoration: none;
+    }
+
+    .business-info a:hover {
+      color: #69b8e5;
+      text-decoration: underline;
+    }
+
+    /* CONTATTI E SOCIAL */
+
+    .social-contact {
+      max-width: 850px;
+      margin: 55px auto 25px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .social-card {
+      background: #ffffff;
+      border: 1px solid #e0edf4;
+      border-radius: 18px;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(80, 120, 145, 0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .social-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 7px 20px rgba(80, 120, 145, 0.11);
+    }
+
+    .social-card h3 {
+      color: #55758e;
+      font-family: Georgia, serif;
+      font-size: 22px;
+      font-weight: normal;
+      margin: 0 0 10px;
+    }
+
+    .social-card p {
+      color: #687b83;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .social-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+    }
+
+    .social-icon {
+      width: 48px;
+      height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #edf6fb;
+      color: #55758e;
+      transition: 0.2s;
+      text-decoration: none;
+    }
+
+    .social-icon:hover {
+      transform: scale(1.1);
+      background: #dceefa;
+    }
+
+    .social-icon svg {
+      width: 25px;
+      height: 25px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .social-icon.whatsapp {
+      color: #20b968;
+    }
+
+    .social-icon.instagram {
+      color: #c13584;
+    }
+
+    .social-icon.facebook {
+      color: #1877f2;
+    }
+
+    /* FAQ */
+
+    .faq {
+      max-width: 850px;
+      margin: 65px auto;
+    }
+
+    .faq .service {
+      background: #ffffff;
+      border: 1px solid #e0edf4;
+      border-radius: 13px;
+      padding: 20px 23px;
+      margin: 15px 0;
+    }
+
+    .faq .service h3 {
+      color: #55758e;
+      font-family: Georgia, serif;
+      font-weight: normal;
+      margin-top: 0;
+    }
+
+    .faq .service p {
+      color: #596b72;
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+
+    /* TELEFONI */
+
+    @media (max-width: 650px) {
+      .pickup-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .social-contact {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .social-card {
+        padding: 24px 12px;
+      }
+
+      .social-card h3 {
+        font-size: 19px;
+      }
+
+      .social-card p {
+        font-size: 13px;
+      }
+
+      .business-info {
+        padding: 25px 15px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .social-contact {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -21,84 +306,266 @@
   <a href="shop.html">Shop</a>
 </nav>
 
-<section class="section">
-  <h2>Mettiamoci in contatto</h2>
+<!-- INTRODUZIONE -->
+
+<section class="section contact-intro">
+
+  <h2>Hai un'idea da realizzare?</h2>
 
   <p class="section-intro">
-    Hai un'idea da realizzare, desideri un preventivo
-    o vuoi maggiori informazioni sulle nostre creazioni?
+    Desideri un preventivo o vuoi maggiori informazioni
+    sulle nostre creazioni?
     Saremo felici di aiutarti a dare forma ai tuoi sogni.
   </p>
 
-  <div class="cards">
+</section>
 
-    <div class="card">
-      <h3>WhatsApp</h3>
-      <p>Scrivici per informazioni, ordini e preventivi personalizzati.</p>
-      <a class="button"
-         href="https://wa.me/393773611035">
-         Scrivici su WhatsApp
-      </a>
+<!-- PUNTI DI RITIRO -->
+
+<section class="section pickup-container">
+
+  <h2>I nostri punti di ritiro</h2>
+
+  <p class="section-intro">
+    Puoi ritirare le tue creazioni presso i nostri punti di ritiro.
+    Per alcune località è necessario concordare anticipatamente
+    giorno e orario.
+  </p>
+
+  <div class="pickup-grid">
+
+    <!-- MARSALA -->
+
+    <div class="pickup-card">
+
+      <h3>Marsala</h3>
+
+      <div class="pickup-item">
+        <strong>Via Trapani 130</strong>
+        <p>
+          Dal lunedì al venerdì<br>
+          Dalle 9:00 alle 15:00
+        </p>
+      </div>
+
+      <div class="pickup-item">
+        <strong>Presso Gastropizza</strong>
+        <p>
+          Dal lunedì al venerdì<br>
+          Dalle 17:00 alle 23:00
+        </p>
+      </div>
+
     </div>
 
-    <div class="card">
-      <h3>Instagram</h3>
-      <p>Seguici per scoprire le nostre creazioni e gli ultimi allestimenti.</p>
-      <a class="button"
-         href="https://www.instagram.com/IlLaboratorioDeiSogni_/"
-         target="_blank">
-         Seguici su Instagram
-      </a>
+    <!-- PACECO -->
+
+    <div class="pickup-card">
+
+      <h3>Paceco</h3>
+
+      <div class="pickup-item">
+        <strong>Ritiro su richiesta</strong>
+        <p>
+          Disponibile previo accordo,
+          concordando anticipatamente
+          giorno e orario.
+        </p>
+      </div>
+
     </div>
 
-    <div class="card">
-      <h3>Facebook</h3>
-      <p>Seguici anche sulla nostra pagina Facebook per conoscere le novità e le nostre creazioni.</p>
-      <a class="button"
-         href="https://www.facebook.com/share/1EumvAqmL7/?mibextid=wwXIfr"
-         target="_blank"
-         rel="noopener noreferrer">
-         Seguici su Facebook
-      </a>
+    <!-- TRAPANI -->
+
+    <div class="pickup-card">
+
+      <h3>Trapani</h3>
+
+      <div class="pickup-item">
+        <strong>Via Ilio 3</strong>
+        <p>
+          Ritiro disponibile su richiesta,
+          previo accordo anticipato
+          per concordare giorno e orario.
+        </p>
+      </div>
+
     </div>
 
   </div>
+
+  <!-- SPEDIZIONI -->
+
+  <div class="shipping-box">
+
+    <h3>Spediamo in tutta Italia ♡</h3>
+
+    <p>
+      Non sei vicino a uno dei nostri punti di ritiro?
+      Nessun problema! Le nostre creazioni possono raggiungerti
+      ovunque in Italia.
+    </p>
+
+  </div>
+
 </section>
+
+<!-- INFORMAZIONI -->
 
 <section class="section">
-  <h2>Realizziamo insieme la tua idea</h2>
-  <p class="section-intro">
-    Ogni evento e ogni creazione raccontano una storia.
-    Raccontaci cosa immagini: studieremo insieme
-    la soluzione più adatta a te.
-  </p>
+
+  <div class="business-info">
+
+    <h2>Informazioni e recapiti</h2>
+
+    <p>
+      <strong>Marika Mazzara</strong>
+    </p>
+
+    <p>
+      <strong>Sede legale:</strong><br>
+      Via Trapani 130, Marsala
+    </p>
+
+    <p>
+      <strong>Telefono:</strong><br>
+      <a href="tel:+393773611035">
+        377 361 1035
+      </a>
+    </p>
+
+  </div>
+
 </section>
 
+<!-- CONTATTACI E SEGUICI -->
+
+<section class="section">
+
+  <div class="social-contact">
+
+    <!-- WHATSAPP -->
+
+    <div class="social-card">
+
+      <h3>CONTATTACI</h3>
+
+      <p>
+        Hai domande o desideri un preventivo?
+        Scrivici direttamente su WhatsApp.
+      </p>
+
+      <div class="social-links">
+
+        <a
+          class="social-icon whatsapp"
+          href="https://wa.me/393773611035"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Contattaci su WhatsApp"
+          title="WhatsApp"
+        >
+          <svg viewBox="0 0 24 24">
+            <path d="M20.5 11.8a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.4-4.7A8.5 8.5 0 1 1 20.5 11.8Z"/>
+            <path d="M8.5 8.2c.2-.5.5-.5.8-.5h.4c.2 0 .4.1.5.4l.8 1.9c.1.2 0 .4-.1.6l-.6.7c-.2.2-.2.4 0 .6.4.7 1 1.3 1.7 1.7.3.2.5.2.7-.1l.8-.9c.2-.2.4-.2.6-.1l1.8.9c.3.1.4.3.3.6-.1.5-.4 1.1-.9 1.4-.5.4-1.2.5-1.9.3-1.2-.3-2.6-1.1-3.8-2.3-1.2-1.2-2-2.6-2.2-3.7-.2-.6 0-1.2.3-1.5Z"/>
+          </svg>
+        </a>
+
+      </div>
+
+    </div>
+
+    <!-- SOCIAL -->
+
+    <div class="social-card">
+
+      <h3>SEGUICI</h3>
+
+      <p>
+        Seguici sui nostri social per scoprire
+        le creazioni e tutte le novità.
+      </p>
+
+      <div class="social-links">
+
+        <a
+          class="social-icon instagram"
+          href="https://www.instagram.com/IlLaboratorioDeiSogni_/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Seguici su Instagram"
+          title="Instagram"
+        >
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/>
+          </svg>
+        </a>
+
+        <a
+          class="social-icon facebook"
+          href="https://www.facebook.com/share/1EumvAqmL7/?mibextid=wwXIfr"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Seguici su Facebook"
+          title="Facebook"
+        >
+          <svg viewBox="0 0 24 24">
+            <path d="M14 21v-8h3l.5-4H14V7c0-1.2.4-2 2-2h2V1.5c-.4-.1-1.5-.2-2.8-.2-2.9 0-4.8 1.8-4.8 5V9H7v4h3.4v8"/>
+          </svg>
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- DOMANDE FREQUENTI -->
+
 <section class="section faq">
+
   <h2>Domande frequenti</h2>
+
   <p class="section-intro">
     Tutto quello che desideri sapere prima di realizzare il tuo progetto.
   </p>
 
   <div class="service">
     <h3>Come posso richiedere un preventivo?</h3>
-    <p>Puoi contattarci tramite WhatsApp, Instagram o Facebook raccontandoci la tua idea.</p>
+    <p>
+      Puoi contattarci tramite WhatsApp, Instagram o Facebook
+      raccontandoci la tua idea.
+    </p>
   </div>
 
   <div class="service">
     <h3>È possibile personalizzare le creazioni?</h3>
-    <p>Certo! Colori, nomi e dettagli possono essere concordati in base al prodotto scelto.</p>
+    <p>
+      Certo! Colori, nomi e dettagli possono essere concordati
+      in base al prodotto scelto.
+    </p>
   </div>
 
   <div class="service">
     <h3>Effettuate spedizioni?</h3>
-    <p>Spediamo in tutta Italia. Le modalità e i costi vengono comunicati al momento dell'ordine.</p>
+    <p>
+      Spediamo in tutta Italia. Le modalità e i costi vengono
+      comunicati al momento dell'ordine.
+    </p>
   </div>
 
   <div class="service">
     <h3>Con quanto anticipo devo prenotare un allestimento?</h3>
-    <p>Ti consigliamo di contattarci con anticipo per verificare disponibilità e organizzazione.</p>
+    <p>
+      Ti consigliamo di contattarci con anticipo per verificare
+      disponibilità e organizzazione.
+    </p>
   </div>
+
 </section>
 
 <footer>
