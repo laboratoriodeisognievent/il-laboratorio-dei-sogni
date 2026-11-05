@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Il nostro catalogo | Il Laboratorio Dei Sogni</title>
+<title>Shop Online | Il Laboratorio Dei Sogni</title>
 
 <style>
 * { box-sizing: border-box; }
@@ -14,6 +14,39 @@ body {
   color: #394950;
   font-family: Arial, sans-serif;
 }
+
+/* ==========================
+   MENU DI NAVIGAZIONE
+========================== */
+
+.shop-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 30px;
+  padding: 18px 15px;
+  background: white;
+  border-bottom: 1px solid #e5f1f8;
+}
+
+.shop-nav a {
+  color: #55758e;
+  text-decoration: none;
+  font-family: Georgia, serif;
+  font-size: 15px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.shop-nav a:hover {
+  color: #69b8e5;
+  text-decoration: underline;
+}
+
+/* ==========================
+   HEADER SHOP
+========================== */
 
 header {
   text-align: center;
@@ -69,6 +102,10 @@ main {
   padding: 30px 22px;
 }
 
+/* ==========================
+   CATEGORIE
+========================== */
+
 #categories {
   display: none;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -94,6 +131,10 @@ main {
   font-size: 20px;
   font-weight: normal;
 }
+
+/* ==========================
+   SOTTOCATEGORIE
+========================== */
 
 #subcategories {
   display: grid;
@@ -133,6 +174,10 @@ main {
   line-height: 1.6;
   margin: 15px 0 0;
 }
+
+/* ==========================
+   PRODOTTI
+========================== */
 
 #catalogTitle {
   text-align: center;
@@ -233,6 +278,10 @@ main {
   margin: 8px 0 0;
 }
 
+/* ==========================
+   FOTO INGRANDITA
+========================== */
+
 #imageViewer {
   position: fixed;
   inset: 0;
@@ -265,6 +314,10 @@ main {
   color: #405b66;
 }
 
+/* ==========================
+   CARRELLO
+========================== */
+
 #cart {
   background: #edf3f4;
   border-radius: 13px;
@@ -287,6 +340,10 @@ main {
   font-size: 12px;
 }
 
+/* ==========================
+   FOOTER
+========================== */
+
 footer {
   text-align: center;
   padding: 35px 15px;
@@ -295,6 +352,10 @@ footer {
 }
 
 .hidden { display: none !important; }
+
+/* ==========================
+   TABLET
+========================== */
 
 @media (max-width: 800px) {
   main { padding: 25px 16px; }
@@ -305,6 +366,21 @@ footer {
   }
 
   .product img { height: 165px; }
+}
+
+/* ==========================
+   TELEFONO
+========================== */
+
+@media (max-width: 600px) {
+  .shop-nav {
+    gap: 12px 17px;
+    padding: 15px 8px;
+  }
+
+  .shop-nav a {
+    font-size: 13px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -335,14 +411,28 @@ footer {
 
 <body>
 
+<!-- MENU DI NAVIGAZIONE -->
+
+<nav class="shop-nav">
+  <a href="index.html">Home</a>
+  <a href="storia.html">La Nostra Storia</a>
+  <a href="servizi.html">Servizi</a>
+  <a href="contatti.html">Contatti</a>
+</nav>
+
+<!-- INTESTAZIONE SHOP -->
+
 <header>
-  <div class="eyebrow">IL NOSTRO CATALOGO</div>
+  <div class="eyebrow">SHOP ONLINE</div>
+
   <h1>Piccole creazioni, grandi emozioni</h1>
+
   <p>
     Scopri le nostre proposte e scegli i dettagli che preferisci.
     Ogni creazione può essere personalizzata insieme a noi.
   </p>
-  <button id="discover">Scopri il catalogo</button>
+
+  <button id="discover">ACQUISTA ONLINE</button>
 </header>
 
 <main>
@@ -468,7 +558,7 @@ $("discover").addEventListener("click", async () => {
     alert(error.message);
   } finally {
     $("discover").disabled = false;
-    $("discover").textContent = "Scopri il catalogo";
+    $("discover").textContent = "ACQUISTA ONLINE";
   }
 });
 
