@@ -329,12 +329,18 @@ export default {
               }
             );
 
-            const githubData = await githubResponse.json();
+            let githubData = {};
+
+            try {
+              githubData = await githubResponse.json();
+            } catch {
+              githubData = {};
+            }
 
             if (!githubResponse.ok) {
               return json({
                 error: githubData.message ||
-                  "Errore durante il caricamento su GitHub"
+                  `GitHub ha restituito l'errore ${githubResponse.status}`
               }, 502);
             }
 
@@ -516,7 +522,7 @@ export default {
 
     } catch (error) {
       return json({
-        error: "Errore interno del server"
+        error: error.message || String(error)
       }, 500);
     }
   }
