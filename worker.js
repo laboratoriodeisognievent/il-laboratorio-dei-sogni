@@ -339,8 +339,10 @@ export default {
 
             if (!githubResponse.ok) {
               return json({
-                error: githubData.message ||
-                  `GitHub ha restituito l'errore ${githubResponse.status}`
+                error: "Errore GitHub",
+                status: githubResponse.status,
+                message: githubData.message || "Nessun dettaglio restituito",
+                documentation_url: githubData.documentation_url || ""
               }, 502);
             }
 
