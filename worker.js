@@ -68,9 +68,28 @@ function checkOrigin(request, url) {
 }
 
 function validImagePath(value) {
-  return typeof value === "string" &&
-    value.startsWith("/images/prodotti/") &&
-    !value.includes("..");
+  if (typeof value !== "string" || value.includes("..")) {
+    return false;
+  }
+
+  if (value.startsWith("/images/prodotti/")) {
+    return true;
+  }
+
+  try {
+    const imageUrl = new URL(value);
+
+    return imageUrl.protocol === "https:" &&
+      imageUrl.hostname === "raw.githubusercontent.com" &&
+      imageUrl.pathname.startsWith(
+        "/laboratoriodeisognievent/il-laboratorio-dei-sogni/main/images/prodotti/"
+      ) &&
+      !imageUrl.search &&
+      !imageUrl.hash;
+
+  } catch {
+    return false;
+  }
 }
 
 function parseFields(value) {
@@ -213,7 +232,7 @@ export default {
           })));
         }
 
-        /* DA QUI SERVE L'ACCESSO AMMINISTRATORE */
+        /* ACCESSO AMMINISTRATORE */
 
         if (path.startsWith("/api/admin/")) {
           if (!await isAdmin(request, env)) {
@@ -226,6 +245,107 @@ export default {
             return json({
               error: "Richiesta non autorizzata"
             }, 403);
+          }
+
+          /* CARICAMENTO FOTOGRAFIE SU GITHUB */
+
+          if (
+            path === "/api/admin/upload-image" &&
+            method === "POST"
+          ) {
+            if (!env.GITHUB_TOKEN) {
+              return json({
+                error: "Token GitHub non configurato"
+              }, 500);
+            }
+
+            const form = await request.formData();
+            const file = form.get("image");
+
+            if (!file || typeof file.arrayBuffer !== "function") {
+              return json({
+                error: "Seleziona una fotografia"
+              }, 400);
+            }
+
+            const extensions = {
+              "image/jpeg": "jpg",
+              "image/png": "png",
+              "image/webp": "webp",
+              "image/gif": "gif"
+            };
+
+            const extension = extensions[file.type];
+
+            if (!extension) {
+              return json({
+                error: "Formato immagine non supportato. Usa JPG, PNG, WEBP o GIF."
+              }, 400);
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+              return json({
+                error: "La fotografia supera i 5 MB"
+              }, 400);
+            }
+
+            const bytes = new Uint8Array(
+              await file.arrayBuffer()
+            );
+
+            let binary = "";
+
+            for (let i = 0; i < bytes.length; i += 32768) {
+              binary += String.fromCharCode(
+                ...bytes.subarray(i, i + 32768)
+              );
+            }
+
+            const content = btoa(binary);
+
+            const filename =
+              `${crypto.randomUUID()}.${extension}`;
+
+            const githubPath =
+              `images/prodotti/${filename}`;
+
+            const githubResponse = await fetch(
+              `https://api.github.com/repos/laboratoriodeisognievent/il-laboratorio-dei-sogni/contents/${githubPath}`,
+              {
+                method: "PUT",
+
+                headers: {
+                  "Authorization": `Bearer ${env.GITHUB_TOKEN}`,
+                  "Accept": "application/vnd.github+json",
+                  "X-GitHub-Api-Version": "2022-11-28",
+                  "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                  message: `Aggiunta fotografia prodotto ${filename}`,
+                  content,
+                  branch: "main"
+                })
+              }
+            );
+
+            const githubData = await githubResponse.json();
+
+            if (!githubResponse.ok) {
+              return json({
+                error: githubData.message ||
+                  "Errore durante il caricamento su GitHub"
+              }, 502);
+            }
+
+            const imageUrl =
+              `https://raw.githubusercontent.com/laboratoriodeisognievent/il-laboratorio-dei-sogni/main/${githubPath}`;
+
+            return json({
+              success: true,
+              image_url: imageUrl,
+              filename
+            }, 201);
           }
 
           /* ELENCO PRODOTTI */
