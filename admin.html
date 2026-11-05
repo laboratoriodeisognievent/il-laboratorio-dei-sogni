@@ -10,15 +10,15 @@
 
 body {
   margin: 0;
-  background: #f7f8f8;
+  background: #f7f9fa;
   color: #34434a;
   font-family: Arial, sans-serif;
   padding: 24px;
 }
 
-main { max-width: 850px; margin: auto; }
+main { max-width: 1000px; margin: auto; }
 
-h1, h2 {
+h1, h2, h3 {
   font-family: Georgia, serif;
   color: #557786;
 }
@@ -26,7 +26,7 @@ h1, h2 {
 .card {
   background: white;
   border: 1px solid #e2e8e9;
-  border-radius: 14px;
+  border-radius: 16px;
   padding: 22px;
   margin: 18px 0;
 }
@@ -42,7 +42,7 @@ input:not([type="checkbox"]), textarea, select {
 
 label { font-size: 14px; font-weight: bold; }
 
-button {
+button, .home-link {
   padding: 12px 18px;
   border: 0;
   border-radius: 8px;
@@ -64,8 +64,70 @@ button.secondary, .home-link {
 
 button.danger { background: #a94e4e; }
 
-.home-link:hover, button.secondary:hover { background: #dce8eb; }
 button:hover { opacity: .88; }
+
+.small { font-size: 13px; color: #718087; }
+.hidden { display: none !important; }
+
+#message {
+  margin: 12px 0;
+  color: #557786;
+  overflow-wrap: anywhere;
+}
+
+#loginMessage { color: #a94e4e; }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* CATEGORIE */
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 22px;
+}
+
+.category-card {
+  background: #fff;
+  border: 1px solid #dce8eb;
+  border-radius: 15px;
+  padding: 22px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: .2s;
+  min-height: 145px;
+}
+
+.category-card:hover {
+  background: #f1f8fa;
+  border-color: #9fc4d0;
+  transform: translateY(-2px);
+}
+
+.category-icon {
+  font-size: 34px;
+  margin-bottom: 12px;
+}
+
+.category-name {
+  font-family: Georgia, serif;
+  font-size: 17px;
+  color: #557786;
+  font-weight: bold;
+}
+
+.category-count {
+  font-size: 12px;
+  color: #89999f;
+  margin-top: 8px;
+}
+
+/* PRODOTTI */
 
 .product {
   display: flex;
@@ -120,22 +182,7 @@ button:hover { opacity: .88; }
   margin: 7px 0;
 }
 
-.small { font-size: 13px; color: #718087; }
-.hidden { display: none !important; }
-
-#message {
-  margin: 12px 0;
-  color: #557786;
-  overflow-wrap: anywhere;
-}
-
-#loginMessage { color: #a94e4e; }
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
+/* EDITOR FOTO */
 
 .image-box {
   border: 1px dashed #a9c2cb;
@@ -156,9 +203,20 @@ button:hover { opacity: .88; }
   margin: 12px 0;
 }
 
-@media(max-width:600px) {
+.category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+@media(max-width:700px) {
   body { padding: 14px; }
   .card { padding: 17px; }
+  .category-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .category-card { padding: 18px 8px; min-height: 130px; }
+  .category-name { font-size: 15px; }
   .product { gap: 11px; padding: 10px; }
   .product-photo { width: 75px; height: 75px; }
   .product-info strong { font-size: 14px; }
@@ -177,6 +235,8 @@ button:hover { opacity: .88; }
 <h1>Il Laboratorio Dei Sogni</h1>
 <p>Area riservata – Gestione catalogo</p>
 
+<!-- LOGIN -->
+
 <section class="card" id="login">
   <h2>Accedi</h2>
 
@@ -189,35 +249,55 @@ button:hover { opacity: .88; }
 
     <button type="submit">Entra nel pannello</button>
 
-    <a href="/" class="home-link"
-       style="padding:12px 18px;border-radius:8px;text-decoration:none;display:inline-block;margin:4px;font-weight:bold;font-size:14px">
-      Torna alla Home
-    </a>
+    <a href="/" class="home-link">Torna alla Home</a>
   </form>
 
   <p id="loginMessage"></p>
 </section>
+
+<!-- PANNELLO -->
 
 <section id="panel" class="hidden">
 
   <div class="card">
     <div class="actions">
       <button id="logout" class="secondary">Esci</button>
-
-      <a href="/shop.html" target="_blank" rel="noopener noreferrer"
-         class="home-link"
-         style="padding:12px 18px;border-radius:8px;text-decoration:none;display:inline-block;margin:4px;font-weight:bold;font-size:14px">
+      <a href="/shop.html" target="_blank" rel="noopener noreferrer" class="home-link">
         Visualizza Shop
       </a>
     </div>
+  </div>
 
-    <h2>Prodotti del catalogo</h2>
-    <p class="small">Qui puoi visualizzare le fotografie di tutti i prodotti caricati nello shop.</p>
+  <!-- SCHERMATA CATEGORIE -->
 
-    <button id="newProduct">+ Aggiungi prodotto</button>
+  <section id="categoryView" class="card hidden">
+    <h2>Gestione catalogo</h2>
+    <p class="small">Seleziona la categoria nella quale vuoi inserire o gestire i tuoi prodotti.</p>
+
+    <div id="categoryGrid" class="category-grid">
+      Caricamento categorie...
+    </div>
+  </section>
+
+  <!-- SCHERMATA PRODOTTI -->
+
+  <section id="productsView" class="card hidden">
+
+    <div class="category-header">
+      <div>
+        <button id="backCategories" class="secondary">← Tutte le categorie</button>
+        <h2 id="selectedCategoryTitle">Prodotti</h2>
+        <p class="small" id="selectedCategoryDescription"></p>
+      </div>
+
+      <button id="newProduct">+ Aggiungi prodotto</button>
+    </div>
 
     <div id="products">Caricamento...</div>
-  </div>
+
+  </section>
+
+  <!-- EDITOR -->
 
   <div class="card hidden" id="editor">
     <h2 id="editorTitle">Nuovo prodotto</h2>
@@ -248,13 +328,10 @@ button:hover { opacity: .88; }
 
       <div class="image-box">
         <p class="small">
-          Inserisci il percorso della fotografia caricata su GitHub.
-          Puoi usare, ad esempio:
+          Inserisci il percorso della fotografia oppure il link HTTPS.
         </p>
 
-        <p class="small">
-          <strong>/images/prodotti/catenella.jpeg</strong>
-        </p>
+        <p class="small"><strong>/images/prodotti/catenella.jpeg</strong></p>
 
         <input
           id="image"
@@ -265,9 +342,7 @@ button:hover { opacity: .88; }
 
         <img id="imagePreview" class="hidden" alt="Anteprima fotografia">
 
-        <p class="small" id="imageStatus">
-          Nessuna fotografia inserita.
-        </p>
+        <p class="small" id="imageStatus">Nessuna fotografia inserita.</p>
       </div>
 
       <label>Personalizzazioni (una per riga)</label>
@@ -301,7 +376,9 @@ const GITHUB_IMAGE_BASE =
   "https://raw.githubusercontent.com/laboratoriodeisognievent/il-laboratorio-dei-sogni/main/images/prodotti/";
 
 let categories = [];
+let allProducts = [];
 let editingId = null;
+let currentCategoryId = null;
 
 const $ = id => document.getElementById(id);
 
@@ -315,22 +392,19 @@ function esc(value) {
   })[c]);
 }
 
-/* COLLEGAMENTO API */
+/* API */
 
 async function api(path, options = {}) {
   const response = await fetch(API + path, {
     ...options,
     credentials: "same-origin",
     headers: {
-      ...(options.body
-        ? { "Content-Type": "application/json" }
-        : {}),
+      ...(options.body ? { "Content-Type": "application/json" } : {}),
       ...(options.headers || {})
     }
   });
 
   const text = await response.text();
-
   let data;
 
   try {
@@ -355,35 +429,25 @@ function showMessage(message) {
   $("message").textContent = message;
 }
 
-/* GESTIONE INDIRIZZI FOTO */
+/* FOTO */
 
 function imageUrl(value) {
   const image = String(value || "").trim();
 
   if (!image) return "";
 
-  // Link HTTPS già completo
-  if (/^https:\/\//i.test(image)) {
-    return image;
-  }
+  if (/^https:\/\//i.test(image)) return image;
 
-  // Percorso relativo già completo
   if (/^\/images\/prodotti\/[a-zA-Z0-9._-]+$/.test(image)) {
     return image;
   }
 
-  // Nome semplice del file
-  if (
-    /^[a-zA-Z0-9._-]+$/.test(image) &&
-    !image.includes("..")
-  ) {
+  if (/^[a-zA-Z0-9._-]+$/.test(image) && !image.includes("..")) {
     return GITHUB_IMAGE_BASE + encodeURIComponent(image);
   }
 
   return "";
 }
-
-/* ANTEPRIMA FOTO */
 
 function updateImagePreview() {
   const filename = $("image").value.trim();
@@ -399,8 +463,7 @@ function updateImagePreview() {
   if (!url) {
     $("imagePreview").removeAttribute("src");
     $("imagePreview").classList.add("hidden");
-    $("imageStatus").textContent =
-      "Percorso non valido. Controlla il link inserito.";
+    $("imageStatus").textContent = "Percorso non valido. Controlla il link.";
     return;
   }
 
@@ -411,7 +474,7 @@ function updateImagePreview() {
   $("imagePreview").onerror = () => {
     $("imagePreview").classList.add("hidden");
     $("imageStatus").textContent =
-      "Foto non trovata. Controlla il percorso e il nome del file su GitHub.";
+      "Foto non trovata. Controlla il percorso e il nome del file.";
   };
 
   $("imagePreview").src = url;
@@ -437,6 +500,8 @@ async function checkLogin() {
     await loadCategories();
     await loadProducts();
 
+    showCategoryView();
+
   } catch(error) {
     $("login").classList.remove("hidden");
     $("panel").classList.add("hidden");
@@ -446,7 +511,6 @@ async function checkLogin() {
 
 $("loginForm").addEventListener("submit", async e => {
   e.preventDefault();
-
   $("loginMessage").textContent = "Accesso in corso...";
 
   try {
@@ -490,8 +554,86 @@ async function loadCategories() {
     `<option value="${c.id}">${esc(c.name)}</option>`
   ).join("");
 
+  renderCategories();
   updateSubcategoryVisibility();
 }
+
+function categoryIcon(slug) {
+  const icons = {
+    "fiocchi-nascita": "🎀",
+    "catenelle-ciuccio": "🧸",
+    "lettere-3d": "🔤",
+    "body-personalizzati": "👕",
+    "bomboniere": "🎁",
+    "torte-scenografiche": "🎂",
+    "palline-di-natale": "🎄",
+    "fiocchi-fuoriporta-natale": "✨",
+    "regali-personalizzati": "💝"
+  };
+
+  return icons[slug] || "🌸";
+}
+
+function renderCategories() {
+  if (!categories.length) {
+    $("categoryGrid").innerHTML =
+      "<p>Nessuna categoria disponibile.</p>";
+    return;
+  }
+
+  $("categoryGrid").innerHTML = categories.map(c => {
+    const count = allProducts.filter(p =>
+      Number(p.category_id) === Number(c.id)
+    ).length;
+
+    return `
+      <div class="category-card" data-category="${Number(c.id)}">
+        <div class="category-icon">${categoryIcon(c.slug)}</div>
+        <div class="category-name">${esc(c.name)}</div>
+        <div class="category-count">
+          ${count} ${count === 1 ? "prodotto" : "prodotti"}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function showCategoryView() {
+  currentCategoryId = null;
+  $("editor").classList.add("hidden");
+  $("productsView").classList.add("hidden");
+  $("categoryView").classList.remove("hidden");
+  renderCategories();
+}
+
+function openCategory(categoryId) {
+  currentCategoryId = Number(categoryId);
+
+  const category = categories.find(c =>
+    Number(c.id) === currentCategoryId
+  );
+
+  if (!category) return;
+
+  $("categoryView").classList.add("hidden");
+  $("productsView").classList.remove("hidden");
+  $("editor").classList.add("hidden");
+
+  $("selectedCategoryTitle").textContent = category.name;
+  $("selectedCategoryDescription").textContent =
+    "Gestisci qui i prodotti di questa categoria.";
+
+  renderProducts();
+}
+
+$("categoryGrid").addEventListener("click", e => {
+  const card = e.target.closest("[data-category]");
+  if (card) openCategory(card.dataset.category);
+});
+
+$("backCategories").addEventListener("click", showCategoryView);
+
+/* CATEGORIA NEL MODULO */
 
 function updateSubcategoryVisibility() {
   const selected = categories.find(
@@ -506,16 +648,31 @@ function updateSubcategoryVisibility() {
 
 $("category").addEventListener("change", updateSubcategoryVisibility);
 
-/* CARICAMENTO PRODOTTI E MINIATURE */
+/* CARICAMENTO PRODOTTI */
 
 async function loadProducts() {
   $("products").textContent = "Caricamento prodotti...";
+  allProducts = await api("/admin/products");
 
-  const products = await api("/admin/products");
+  renderCategories();
+
+  if (currentCategoryId !== null) {
+    renderProducts();
+  }
+}
+
+function renderProducts() {
+  const products = allProducts.filter(p =>
+    Number(p.category_id) === Number(currentCategoryId)
+  );
 
   if (!products.length) {
-    $("products").innerHTML =
-      "<p>Non hai ancora inserito prodotti.</p>";
+    $("products").innerHTML = `
+      <div style="text-align:center;padding:30px 10px">
+        <p>Non hai ancora inserito prodotti in questa categoria.</p>
+        <p class="small">Usa il pulsante qui sopra per aggiungere il primo!</p>
+      </div>
+    `;
     return;
   }
 
@@ -542,7 +699,6 @@ async function loadProducts() {
         </div>
 
         <div class="product-info">
-
           <strong>${esc(p.name)}</strong>
 
           <p>
@@ -550,9 +706,7 @@ async function loadProducts() {
             · ${Number(p.visible) ? "Visibile nello shop" : "Nascosto"}
           </p>
 
-          ${section
-            ? `<p>Sezione: ${section}</p>`
-            : ""}
+          ${section ? `<p>Sezione: ${section}</p>` : ""}
 
           <div class="actions">
             <button class="secondary" data-edit="${Number(p.id)}">
@@ -563,14 +717,19 @@ async function loadProducts() {
               Elimina
             </button>
           </div>
-
         </div>
       </div>
     `;
   }).join("");
 }
 
-/* APERTURA EDITOR */
+/* NUOVO PRODOTTO */
+
+$("newProduct").addEventListener("click", () => {
+  openEditor();
+});
+
+/* APERTURA MODULO */
 
 function openEditor(product = null) {
   editingId = product ? Number(product.id) : null;
@@ -580,11 +739,14 @@ function openEditor(product = null) {
     : "Nuovo prodotto";
 
   $("name").value = product?.name || "";
-  $("category").value = product?.category_id || categories[0]?.id || "";
+
+  $("category").value = product
+    ? product.category_id
+    : currentCategoryId || categories[0]?.id || "";
+
   $("subcategory").value = product?.subcategory || "femminuccia";
   $("description").value = product?.description || "";
   $("price").value = product?.price ?? "";
-
   $("image").value = product?.image_url || "";
 
   $("visible").checked = product
@@ -616,10 +778,6 @@ function openEditor(product = null) {
   $("editor").scrollIntoView({ behavior: "smooth" });
 }
 
-$("newProduct").addEventListener("click", () => {
-  openEditor();
-});
-
 $("cancel").addEventListener("click", () => {
   $("editor").classList.add("hidden");
 });
@@ -632,10 +790,8 @@ $("products").addEventListener("click", async e => {
 
   if (editButton) {
     try {
-      const products = await api("/admin/products");
-
-      const product = products.find(
-        p => Number(p.id) === Number(editButton.dataset.edit)
+      const product = allProducts.find(p =>
+        Number(p.id) === Number(editButton.dataset.edit)
       );
 
       if (product) openEditor(product);
@@ -646,9 +802,7 @@ $("products").addEventListener("click", async e => {
   }
 
   if (deleteButton) {
-    if (!confirm("Vuoi davvero eliminare questo prodotto?")) {
-      return;
-    }
+    if (!confirm("Vuoi davvero eliminare questo prodotto?")) return;
 
     try {
       await api(
@@ -676,10 +830,7 @@ function readCustomFields() {
       const separator = line.indexOf(":");
 
       if (separator === -1) {
-        return {
-          label: line,
-          options: []
-        };
+        return { label: line, options: [] };
       }
 
       return {
@@ -692,7 +843,7 @@ function readCustomFields() {
     });
 }
 
-/* SALVATAGGIO PRODOTTO */
+/* SALVATAGGIO */
 
 $("productForm").addEventListener("submit", async e => {
   e.preventDefault();
@@ -733,7 +884,6 @@ $("productForm").addEventListener("submit", async e => {
     });
 
     $("editor").classList.add("hidden");
-
     showMessage("Prodotto salvato correttamente.");
 
     await loadProducts();
