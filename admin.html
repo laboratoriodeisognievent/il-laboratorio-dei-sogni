@@ -355,17 +355,35 @@ function imageUrl(filename) {
 
   if (!name) return "";
 
+  // Mantiene i link HTTPS già salvati
   if (/^https:\/\//i.test(name)) return name;
 
+  // Riconosce i percorsi della cartella immagini
+  const path = name.replace(/^\/+/, "");
+
   if (
-    name.includes("..") ||
-    name.includes("/") ||
-    name.includes("\\") ||
-    !/^[a-zA-Z0-9._-]+$/.test(name)
+    path.startsWith("images/prodotti/") &&
+    !path.split("/").some(part =>
+      !part || part === "." || part === ".."
+    )
   ) {
-    return "";
+    return "/" + path.split("/")
+      .map(part => encodeURIComponent(part))
+      .join("/");
   }
 
+  // Riconosce anche il semplice nome del file
+  if (
+    !name.includes("/") &&
+    !name.includes("\\") &&
+    !name.includes("..") &&
+    /^[a-zA-Z0-9._-]+$/.test(name)
+  ) {
+    return GITHUB_IMAGE_BASE + encodeURIComponent(name);
+  }
+
+  return "";
+}
   return GITHUB_IMAGE_BASE + encodeURIComponent(name);
 }
 
