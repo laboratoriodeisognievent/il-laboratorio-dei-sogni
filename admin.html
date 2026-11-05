@@ -55,10 +55,7 @@ button {
   display: inline-block;
 }
 
-button:disabled {
-  opacity: .55;
-  cursor: wait;
-}
+button:disabled { opacity: .55; cursor: wait; }
 
 button.secondary, .home-link {
   background: #e8eff1;
@@ -82,8 +79,8 @@ button:hover { opacity: .88; }
 }
 
 .product-photo {
-  width: 105px;
-  height: 105px;
+  width: 90px;
+  height: 90px;
   flex-shrink: 0;
   border-radius: 10px;
   background: #f0f5f6;
@@ -96,11 +93,12 @@ button:hover { opacity: .88; }
 .product-photo img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  padding: 4px;
 }
 
 .photo-error {
-  font-size: 12px;
+  font-size: 11px;
   color: #a94e4e;
   text-align: center;
   padding: 8px;
@@ -162,7 +160,7 @@ button:hover { opacity: .88; }
   body { padding: 14px; }
   .card { padding: 17px; }
   .product { gap: 11px; padding: 10px; }
-  .product-photo { width: 85px; height: 85px; }
+  .product-photo { width: 75px; height: 75px; }
   .product-info strong { font-size: 14px; }
   .product-info p { font-size: 12px; }
   .product-info .actions button {
@@ -215,7 +213,9 @@ button:hover { opacity: .88; }
 
     <h2>Prodotti del catalogo</h2>
     <p class="small">Qui puoi visualizzare le fotografie di tutti i prodotti caricati nello shop.</p>
+
     <button id="newProduct">+ Aggiungi prodotto</button>
+
     <div id="products">Caricamento...</div>
   </div>
 
@@ -244,19 +244,22 @@ button:hover { opacity: .88; }
       <label>Prezzo in euro</label>
       <input id="price" type="number" min="0" step="0.01" required>
 
-      <label>Nome file fotografia</label>
+      <label>Link immagine</label>
 
       <div class="image-box">
         <p class="small">
-          Inserisci il nome del file già caricato su GitHub
-          nella cartella images/prodotti.
-          Esempio: fiocco-rosa.jpg
+          Inserisci il percorso della fotografia caricata su GitHub.
+          Puoi usare, ad esempio:
+        </p>
+
+        <p class="small">
+          <strong>/images/prodotti/catenella.jpeg</strong>
         </p>
 
         <input
           id="image"
           type="text"
-          placeholder="Es. fiocco-rosa.jpg"
+          placeholder="/images/prodotti/catenella.jpeg"
           autocomplete="off"
         >
 
@@ -312,6 +315,8 @@ function esc(value) {
   })[c]);
 }
 
+/* COLLEGAMENTO API */
+
 async function api(path, options = {}) {
   const response = await fetch(API + path, {
     ...options,
@@ -350,24 +355,35 @@ function showMessage(message) {
   $("message").textContent = message;
 }
 
-function imageUrl(value) {
-  return String(value || "").trim();
-}
+/* GESTIONE INDIRIZZI FOTO */
 
-  // Riconosce anche il semplice nome del file
+function imageUrl(value) {
+  const image = String(value || "").trim();
+
+  if (!image) return "";
+
+  // Link HTTPS già completo
+  if (/^https:\/\//i.test(image)) {
+    return image;
+  }
+
+  // Percorso relativo già completo
+  if (/^\/images\/prodotti\/[a-zA-Z0-9._-]+$/.test(image)) {
+    return image;
+  }
+
+  // Nome semplice del file
   if (
-    !name.includes("/") &&
-    !name.includes("\\") &&
-    !name.includes("..") &&
-    /^[a-zA-Z0-9._-]+$/.test(name)
+    /^[a-zA-Z0-9._-]+$/.test(image) &&
+    !image.includes("..")
   ) {
-    return GITHUB_IMAGE_BASE + encodeURIComponent(name);
+    return GITHUB_IMAGE_BASE + encodeURIComponent(image);
   }
 
   return "";
 }
-  return GITHUB_IMAGE_BASE + encodeURIComponent(name);
-}
+
+/* ANTEPRIMA FOTO */
 
 function updateImagePreview() {
   const filename = $("image").value.trim();
@@ -384,9 +400,19 @@ function updateImagePreview() {
     $("imagePreview").removeAttribute("src");
     $("imagePreview").classList.add("hidden");
     $("imageStatus").textContent =
-      "Nome file non valido. Controlla il nome inserito.";
+      "Percorso non valido. Controlla il link inserito.";
     return;
   }
+
+  $("imagePreview").onload = () => {
+    $("imageStatus").textContent = "Fotografia caricata correttamente.";
+  };
+
+  $("imagePreview").onerror = () => {
+    $("imagePreview").classList.add("hidden");
+    $("imageStatus").textContent =
+      "Foto non trovata. Controlla il percorso e il nome del file su GitHub.";
+  };
 
   $("imagePreview").src = url;
   $("imagePreview").classList.remove("hidden");
@@ -394,16 +420,6 @@ function updateImagePreview() {
 }
 
 $("image").addEventListener("input", updateImagePreview);
-
-$("imagePreview").addEventListener("load", () => {
-  $("imageStatus").textContent = "Fotografia caricata correttamente.";
-});
-
-$("imagePreview").addEventListener("error", () => {
-  $("imagePreview").classList.add("hidden");
-  $("imageStatus").textContent =
-    "Foto non trovata. Controlla il nome del file su GitHub.";
-});
 
 /* ACCESSO */
 
@@ -490,9 +506,11 @@ function updateSubcategoryVisibility() {
 
 $("category").addEventListener("change", updateSubcategoryVisibility);
 
-/* PRODOTTI */
+/* CARICAMENTO PRODOTTI E MINIATURE */
 
 async function loadProducts() {
+  $("products").textContent = "Caricamento prodotti...";
+
   const products = await api("/admin/products");
 
   if (!products.length) {
@@ -513,10 +531,12 @@ async function loadProducts() {
 
         <div class="product-photo">
           ${photo
-            ? `<img src="${esc(photo)}"
+            ? `<img
+                src="${esc(photo)}"
                 alt="${esc(p.name)}"
                 loading="lazy"
-                onerror="this.parentElement.innerHTML='<span class=photo-error>Foto non disponibile</span>'">`
+                onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden')">
+               <span class="photo-error hidden">Foto non disponibile</span>`
             : `<span class="photo-error">Nessuna foto</span>`
           }
         </div>
@@ -550,7 +570,7 @@ async function loadProducts() {
   }).join("");
 }
 
-/* EDITOR */
+/* APERTURA EDITOR */
 
 function openEditor(product = null) {
   editingId = product ? Number(product.id) : null;
@@ -565,12 +585,7 @@ function openEditor(product = null) {
   $("description").value = product?.description || "";
   $("price").value = product?.price ?? "";
 
-  const oldImage = product?.image_url || "";
-  const oldPrefix = GITHUB_IMAGE_BASE;
-
-  $("image").value = oldImage.startsWith(oldPrefix)
-    ? decodeURIComponent(oldImage.slice(oldPrefix.length))
-    : oldImage;
+  $("image").value = product?.image_url || "";
 
   $("visible").checked = product
     ? Number(product.visible) === 1
@@ -677,7 +692,7 @@ function readCustomFields() {
     });
 }
 
-/* SALVATAGGIO */
+/* SALVATAGGIO PRODOTTO */
 
 $("productForm").addEventListener("submit", async e => {
   e.preventDefault();
@@ -693,7 +708,7 @@ $("productForm").addEventListener("submit", async e => {
 
     if (filename && !imageUrlValue) {
       throw new Error(
-        "Nome fotografia non valido. Inserisci solo il nome del file."
+        "Percorso fotografia non valido. Usa /images/prodotti/nomefile.jpeg oppure un link HTTPS."
       );
     }
 
@@ -735,6 +750,7 @@ $("productForm").addEventListener("submit", async e => {
 /* AVVIO */
 
 checkLogin();
+
 </script>
 
 </body>
