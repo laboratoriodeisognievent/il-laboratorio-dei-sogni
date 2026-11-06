@@ -1,907 +1,353 @@
+```html
 <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gestione catalogo | Il Laboratorio Dei Sogni</title>
-
 <style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  background: #f7f9fa;
-  color: #34434a;
-  font-family: Arial, sans-serif;
-  padding: 24px;
-}
-
-main { max-width: 1000px; margin: auto; }
-
-h1, h2, h3 {
-  font-family: Georgia, serif;
-  color: #557786;
-}
-
-.card {
-  background: white;
-  border: 1px solid #e2e8e9;
-  border-radius: 16px;
-  padding: 22px;
-  margin: 18px 0;
-}
-
-input:not([type="checkbox"]), textarea, select {
-  width: 100%;
-  padding: 12px;
-  margin: 7px 0 15px;
-  border: 1px solid #d4dfe2;
-  border-radius: 8px;
-  font: inherit;
-}
-
-label { font-size: 14px; font-weight: bold; }
-
-button, .home-link {
-  padding: 12px 18px;
-  border: 0;
-  border-radius: 8px;
-  background: #668b9a;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  margin: 4px;
-  text-decoration: none;
-  display: inline-block;
-}
-
-button:disabled { opacity: .55; cursor: wait; }
-
-button.secondary, .home-link {
-  background: #e8eff1;
-  color: #405b66;
-}
-
-button.danger { background: #a94e4e; }
-
-button:hover { opacity: .88; }
-
-.small { font-size: 13px; color: #718087; }
-.hidden { display: none !important; }
-
-#message {
-  margin: 12px 0;
-  color: #557786;
-  overflow-wrap: anywhere;
-}
-
-#loginMessage { color: #a94e4e; }
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-/* CATEGORIE */
-
-.category-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  margin-top: 22px;
-}
-
-.category-card {
-  background: #fff;
-  border: 1px solid #dce8eb;
-  border-radius: 15px;
-  padding: 22px 12px;
-  text-align: center;
-  cursor: pointer;
-  transition: .2s;
-  min-height: 145px;
-}
-
-.category-card:hover {
-  background: #f1f8fa;
-  border-color: #9fc4d0;
-  transform: translateY(-2px);
-}
-
-.category-icon {
-  font-size: 34px;
-  margin-bottom: 12px;
-}
-
-.category-name {
-  font-family: Georgia, serif;
-  font-size: 17px;
-  color: #557786;
-  font-weight: bold;
-}
-
-.category-count {
-  font-size: 12px;
-  color: #89999f;
-  margin-top: 8px;
-}
-
-/* PRODOTTI */
-
-.product {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  border: 1px solid #e5e9ea;
-  border-radius: 12px;
-  padding: 13px;
-  margin: 12px 0;
-  background: #fff;
-}
-
-.product-photo {
-  width: 90px;
-  height: 90px;
-  flex-shrink: 0;
-  border-radius: 10px;
-  background: #f0f5f6;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.product-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 4px;
-}
-
-.photo-error {
-  font-size: 11px;
-  color: #a94e4e;
-  text-align: center;
-  padding: 8px;
-}
-
-.product-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.product-info strong {
-  font-size: 16px;
-  color: #405b66;
-}
-
-.product-info p {
-  font-size: 13px;
-  color: #718087;
-  margin: 7px 0;
-}
-
-/* EDITOR FOTO */
-
-.image-box {
-  border: 1px dashed #a9c2cb;
-  background: #f8fcfd;
-  border-radius: 12px;
-  padding: 16px;
-  margin: 8px 0 18px;
-}
-
-#imagePreview {
-  display: block;
-  max-width: 220px;
-  max-height: 220px;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  border-radius: 10px;
-  margin: 12px 0;
-}
-
-.category-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-@media(max-width:700px) {
-  body { padding: 14px; }
-  .card { padding: 17px; }
-  .category-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .category-card { padding: 18px 8px; min-height: 130px; }
-  .category-name { font-size: 15px; }
-  .product { gap: 11px; padding: 10px; }
-  .product-photo { width: 75px; height: 75px; }
-  .product-info strong { font-size: 14px; }
-  .product-info p { font-size: 12px; }
-  .product-info .actions button {
-    padding: 9px 11px;
-    font-size: 12px;
-  }
-}
+*{box-sizing:border-box}
+body{margin:0;background:#f7f9fa;color:#34434a;font-family:Arial,sans-serif;padding:24px}
+main{max-width:1000px;margin:auto}
+h1,h2,h3{font-family:Georgia,serif;color:#557786}
+.card{background:#fff;border:1px solid #e2e8e9;border-radius:16px;padding:22px;margin:18px 0}
+input:not([type=checkbox]),textarea,select{width:100%;padding:12px;margin:7px 0 15px;border:1px solid #d4dfe2;border-radius:8px;font:inherit}
+label{font-size:14px;font-weight:bold}
+button,.home-link{padding:12px 18px;border:0;border-radius:8px;background:#668b9a;color:white;font-weight:bold;cursor:pointer;margin:4px;text-decoration:none;display:inline-block}
+button:disabled{opacity:.55;cursor:wait}
+button.secondary,.home-link{background:#e8eff1;color:#405b66}
+button.danger{background:#a94e4e}
+button:hover{opacity:.88}
+.small{font-size:13px;color:#718087}
+.hidden{display:none!important}
+#message{margin:12px 0;color:#557786;overflow-wrap:anywhere}
+#loginMessage{color:#a94e4e}
+.actions{display:flex;flex-wrap:wrap;gap:6px}
+.category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:22px}
+.category-card{background:#fff;border:1px solid #dce8eb;border-radius:15px;padding:22px 12px;text-align:center;cursor:pointer;transition:.2s;min-height:145px}
+.category-card:hover{background:#f1f8fa;border-color:#9fc4d0;transform:translateY(-2px)}
+.category-icon{font-size:34px;margin-bottom:12px}
+.category-name{font-family:Georgia,serif;font-size:17px;color:#557786;font-weight:bold}
+.category-count{font-size:12px;color:#89999f;margin-top:8px}
+.product{display:flex;align-items:center;gap:15px;border:1px solid #e5e9ea;border-radius:12px;padding:13px;margin:12px 0;background:#fff}
+.product-photo{width:90px;height:90px;flex-shrink:0;border-radius:10px;background:#f0f5f6;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.product-photo img{width:100%;height:100%;object-fit:contain;padding:4px}
+.photo-error{font-size:11px;color:#a94e4e;text-align:center;padding:8px}
+.product-info{flex:1;min-width:0}
+.product-info strong{font-size:16px;color:#405b66}
+.product-info p{font-size:13px;color:#718087;margin:7px 0}
+.image-box{border:1px dashed #a9c2cb;background:#f8fcfd;border-radius:12px;padding:16px;margin:8px 0 18px}
+#imagePreview{display:block;max-width:220px;max-height:220px;width:auto;height:auto;object-fit:contain;border-radius:10px;margin:12px 0}
+.category-header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.field-editor{border:1px solid #dce8eb;border-radius:12px;padding:15px;margin:12px 0;background:#fbfdfe}
+.field-editor-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.field-editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field-editor-grid>div{min-width:0}
+.inline-check{display:flex;align-items:center;gap:8px;margin:8px 0 4px;font-size:13px}
+.inline-check input{width:auto;margin:0}
+.field-options{min-height:75px}
+@media(max-width:700px){body{padding:14px}.card{padding:17px}.category-grid{grid-template-columns:repeat(2,1fr);gap:10px}.category-card{padding:18px 8px;min-height:130px}.category-name{font-size:15px}.product{gap:11px;padding:10px}.product-photo{width:75px;height:75px}.product-info strong{font-size:14px}.product-info p{font-size:12px}.product-info .actions button{padding:9px 11px;font-size:12px}.field-editor-grid{grid-template-columns:1fr}}
 </style>
 </head>
-
 <body>
 <main>
-
 <h1>Il Laboratorio Dei Sogni</h1>
 <p>Area riservata – Gestione catalogo</p>
 
-<!-- LOGIN -->
-
 <section class="card" id="login">
-  <h2>Accedi</h2>
-
-  <form id="loginForm">
-    <label>Email</label>
-    <input id="email" type="email" required autocomplete="username">
-
-    <label>Password</label>
-    <input id="password" type="password" required autocomplete="current-password">
-
-    <button type="submit">Entra nel pannello</button>
-
-    <a href="/" class="home-link">Torna alla Home</a>
-  </form>
-
-  <p id="loginMessage"></p>
+<h2>Accedi</h2>
+<form id="loginForm">
+<label>Email</label><input id="email" type="email" required autocomplete="username">
+<label>Password</label><input id="password" type="password" required autocomplete="current-password">
+<button type="submit">Entra nel pannello</button><a href="/" class="home-link">Torna alla Home</a>
+</form>
+<p id="loginMessage"></p>
 </section>
-
-<!-- PANNELLO -->
 
 <section id="panel" class="hidden">
+<div class="card"><div class="actions">
+<button id="logout" class="secondary">Esci</button>
+<a href="/shop.html" target="_blank" rel="noopener noreferrer" class="home-link">Visualizza Shop</a>
+</div></div>
 
-  <div class="card">
-    <div class="actions">
-      <button id="logout" class="secondary">Esci</button>
-      <a href="/shop.html" target="_blank" rel="noopener noreferrer" class="home-link">
-        Visualizza Shop
-      </a>
-    </div>
-  </div>
-
-  <!-- SCHERMATA CATEGORIE -->
-
-  <section id="categoryView" class="card hidden">
-    <h2>Gestione catalogo</h2>
-    <p class="small">Seleziona la categoria nella quale vuoi inserire o gestire i tuoi prodotti.</p>
-
-    <div id="categoryGrid" class="category-grid">
-      Caricamento categorie...
-    </div>
-  </section>
-
-  <!-- SCHERMATA PRODOTTI -->
-
-  <section id="productsView" class="card hidden">
-
-    <div class="category-header">
-      <div>
-        <button id="backCategories" class="secondary">← Tutte le categorie</button>
-        <h2 id="selectedCategoryTitle">Prodotti</h2>
-        <p class="small" id="selectedCategoryDescription"></p>
-      </div>
-
-      <button id="newProduct">+ Aggiungi prodotto</button>
-    </div>
-
-    <div id="products">Caricamento...</div>
-
-  </section>
-
-  <!-- EDITOR -->
-
-  <div class="card hidden" id="editor">
-    <h2 id="editorTitle">Nuovo prodotto</h2>
-
-    <form id="productForm">
-
-      <label>Nome prodotto</label>
-      <input id="name" required>
-
-      <label>Categoria</label>
-      <select id="category" required></select>
-
-      <div id="subcategoryBox" class="hidden">
-        <label>Sezione catenella</label>
-        <select id="subcategory">
-          <option value="femminuccia">Femminuccia</option>
-          <option value="maschietto">Maschietto</option>
-        </select>
-      </div>
-
-      <label>Descrizione</label>
-      <textarea id="description" rows="3"></textarea>
-
-      <label>Prezzo in euro</label>
-      <input id="price" type="number" min="0" step="0.01" required>
-
-      <label>Link immagine</label>
-
-      <div class="image-box">
-        <p class="small">
-          Inserisci il percorso della fotografia oppure il link HTTPS.
-        </p>
-
-        <p class="small"><strong>/images/prodotti/catenella.jpeg</strong></p>
-
-        <input
-          id="image"
-          type="text"
-          placeholder="/images/prodotti/catenella.jpeg"
-          autocomplete="off"
-        >
-
-        <img id="imagePreview" class="hidden" alt="Anteprima fotografia">
-
-        <p class="small" id="imageStatus">Nessuna fotografia inserita.</p>
-      </div>
-
-      <label>Personalizzazioni (una per riga)</label>
-      <textarea id="fields" rows="5"
-        placeholder="Nome del bambino&#10;Colore: Rosa, Azzurro, Beige&#10;Decorazione: Cuore, Stella, Mongolfiera"></textarea>
-
-      <label>
-        <input id="visible" type="checkbox" checked
-          style="width:auto;margin:0 6px 0 0">
-        Prodotto visibile nel catalogo
-      </label>
-
-      <br><br>
-
-      <button type="submit" id="saveProduct">Salva prodotto</button>
-      <button type="button" id="cancel" class="secondary">Annulla</button>
-
-    </form>
-  </div>
-
+<section id="categoryView" class="card hidden">
+<h2>Gestione catalogo</h2>
+<p class="small">Seleziona la categoria nella quale vuoi inserire o gestire i tuoi prodotti.</p>
+<div id="categoryGrid" class="category-grid">Caricamento categorie...</div>
 </section>
 
-<p id="message"></p>
+<section id="productsView" class="card hidden">
+<div class="category-header">
+<div><button id="backCategories" class="secondary">← Tutte le categorie</button><h2 id="selectedCategoryTitle">Prodotti</h2><p class="small" id="selectedCategoryDescription"></p></div>
+<button id="newProduct">+ Aggiungi prodotto</button>
+</div>
+<div id="products">Caricamento...</div>
+</section>
 
+<div class="card hidden" id="editor">
+<h2 id="editorTitle">Nuovo prodotto</h2>
+<form id="productForm">
+<label>Nome prodotto</label><input id="name" required>
+<label>Categoria</label><select id="category" required></select>
+<div id="subcategoryBox" class="hidden"><label>Sezione catenella</label><select id="subcategory"><option value="femminuccia">Femminuccia</option><option value="maschietto">Maschietto</option></select></div>
+<label>Descrizione</label><textarea id="description" rows="3"></textarea>
+<label>Prezzo in euro</label><input id="price" type="number" min="0" step="0.01" required>
+<label>Link immagine</label>
+<div class="image-box">
+<p class="small">Inserisci il percorso della fotografia oppure il link HTTPS.</p>
+<p class="small"><strong>/images/prodotti/catenella.jpeg</strong></p>
+<input id="image" type="text" placeholder="/images/prodotti/catenella.jpeg" autocomplete="off">
+<img id="imagePreview" class="hidden" alt="Anteprima fotografia">
+<p class="small" id="imageStatus">Nessuna fotografia inserita.</p>
+</div>
+
+<h3>Personalizzazioni del prodotto</h3>
+<p class="small">Crea qui i campi che la cliente vedrà nello shop. Ogni prodotto può avere personalizzazioni diverse. Per una scelta singola la cliente potrà selezionare una sola opzione.</p>
+<div id="automaticNameNotice" class="small"></div>
+<div id="customFieldsEditor"></div>
+<button type="button" id="addField">+ AGGIUNGI SEZIONE</button>
+
+<br><br>
+<label><input id="visible" type="checkbox" checked style="width:auto;margin:0 6px 0 0">Prodotto visibile nel catalogo</label>
+<br><br>
+<button type="submit" id="saveProduct">Salva prodotto</button>
+<button type="button" id="cancel" class="secondary">Annulla</button>
+</form>
+</div>
+</section>
+<p id="message"></p>
 </main>
 
 <script>
-const API = "/api";
+const API="/api";
+const GITHUB_IMAGE_BASE="https://raw.githubusercontent.com/laboratoriodeisognievent/il-laboratorio-dei-sogni/main/images/prodotti/";
+let categories=[],allProducts=[],editingId=null,currentCategoryId=null,customFields=[];
+const $=id=>document.getElementById(id);
 
-const GITHUB_IMAGE_BASE =
-  "https://raw.githubusercontent.com/laboratoriodeisognievent/il-laboratorio-dei-sogni/main/images/prodotti/";
-
-let categories = [];
-let allProducts = [];
-let editingId = null;
-let currentCategoryId = null;
-
-const $ = id => document.getElementById(id);
-
-function esc(value) {
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[c]);
+function esc(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+async function api(path,options={}){
+ const response=await fetch(API+path,{...options,credentials:"same-origin",headers:{...(options.body?{"Content-Type":"application/json"}:{}),...(options.headers||{})}});
+ const text=await response.text();let data;
+ try{data=text?JSON.parse(text):{};}catch{throw new Error("Il server ha restituito una risposta non valida. "+text.slice(0,180));}
+ if(!response.ok)throw new Error(data.error||`Errore del server (${response.status})`);
+ return data;
 }
+function showMessage(message){$("message").textContent=message;}
 
-/* API */
-
-async function api(path, options = {}) {
-  const response = await fetch(API + path, {
-    ...options,
-    credentials: "same-origin",
-    headers: {
-      ...(options.body ? { "Content-Type": "application/json" } : {}),
-      ...(options.headers || {})
-    }
-  });
-
-  const text = await response.text();
-  let data;
-
-  try {
-    data = text ? JSON.parse(text) : {};
-  } catch {
-    throw new Error(
-      "Il server ha restituito una risposta non valida. " +
-      text.slice(0, 180)
-    );
-  }
-
-  if (!response.ok) {
-    throw new Error(
-      data.error || `Errore del server (${response.status})`
-    );
-  }
-
-  return data;
+function imageUrl(value){
+ const image=String(value||"").trim();if(!image)return "";
+ if(/^https:\/\//i.test(image))return image;
+ if(/^\/images\/prodotti\/[a-zA-Z0-9._-]+$/.test(image))return image;
+ if(/^[a-zA-Z0-9._-]+$/.test(image)&&!image.includes(".."))return GITHUB_IMAGE_BASE+encodeURIComponent(image);
+ return "";
 }
-
-function showMessage(message) {
-  $("message").textContent = message;
+function updateImagePreview(){
+ const filename=$("image").value.trim(),url=imageUrl(filename);
+ if(!filename){$("imagePreview").removeAttribute("src");$("imagePreview").classList.add("hidden");$("imageStatus").textContent="Nessuna fotografia inserita.";return;}
+ if(!url){$("imagePreview").removeAttribute("src");$("imagePreview").classList.add("hidden");$("imageStatus").textContent="Percorso non valido. Controlla il link.";return;}
+ $("imagePreview").onload=()=>$("imageStatus").textContent="Fotografia caricata correttamente.";
+ $("imagePreview").onerror=()=>{$("imagePreview").classList.add("hidden");$("imageStatus").textContent="Foto non trovata. Controlla il percorso e il nome del file.";};
+ $("imagePreview").src=url;$("imagePreview").classList.remove("hidden");$("imageStatus").textContent="Caricamento fotografia...";
 }
+$("image").addEventListener("input",updateImagePreview);
 
-/* FOTO */
-
-function imageUrl(value) {
-  const image = String(value || "").trim();
-
-  if (!image) return "";
-
-  if (/^https:\/\//i.test(image)) return image;
-
-  if (/^\/images\/prodotti\/[a-zA-Z0-9._-]+$/.test(image)) {
-    return image;
-  }
-
-  if (/^[a-zA-Z0-9._-]+$/.test(image) && !image.includes("..")) {
-    return GITHUB_IMAGE_BASE + encodeURIComponent(image);
-  }
-
-  return "";
+async function checkLogin(){
+ try{
+  const result=await api("/admin/me");if(!result.authenticated)throw new Error("Sessione non valida");
+  $("login").classList.add("hidden");$("panel").classList.remove("hidden");
+  await loadCategories();await loadProducts();showCategoryView();
+ }catch(error){$("login").classList.remove("hidden");$("panel").classList.add("hidden");$("products").textContent="Accedi per visualizzare i prodotti.";}
 }
-
-function updateImagePreview() {
-  const filename = $("image").value.trim();
-  const url = imageUrl(filename);
-
-  if (!filename) {
-    $("imagePreview").removeAttribute("src");
-    $("imagePreview").classList.add("hidden");
-    $("imageStatus").textContent = "Nessuna fotografia inserita.";
-    return;
-  }
-
-  if (!url) {
-    $("imagePreview").removeAttribute("src");
-    $("imagePreview").classList.add("hidden");
-    $("imageStatus").textContent = "Percorso non valido. Controlla il link.";
-    return;
-  }
-
-  $("imagePreview").onload = () => {
-    $("imageStatus").textContent = "Fotografia caricata correttamente.";
-  };
-
-  $("imagePreview").onerror = () => {
-    $("imagePreview").classList.add("hidden");
-    $("imageStatus").textContent =
-      "Foto non trovata. Controlla il percorso e il nome del file.";
-  };
-
-  $("imagePreview").src = url;
-  $("imagePreview").classList.remove("hidden");
-  $("imageStatus").textContent = "Caricamento fotografia...";
-}
-
-$("image").addEventListener("input", updateImagePreview);
-
-/* ACCESSO */
-
-async function checkLogin() {
-  try {
-    const result = await api("/admin/me");
-
-    if (!result.authenticated) {
-      throw new Error("Sessione non valida");
-    }
-
-    $("login").classList.add("hidden");
-    $("panel").classList.remove("hidden");
-
-    await loadCategories();
-    await loadProducts();
-
-    showCategoryView();
-
-  } catch(error) {
-    $("login").classList.remove("hidden");
-    $("panel").classList.add("hidden");
-    $("products").textContent = "Accedi per visualizzare i prodotti.";
-  }
-}
-
-$("loginForm").addEventListener("submit", async e => {
-  e.preventDefault();
-  $("loginMessage").textContent = "Accesso in corso...";
-
-  try {
-    await api("/admin/login", {
-      method: "POST",
-      body: JSON.stringify({
-        email: $("email").value,
-        password: $("password").value
-      })
-    });
-
-    $("password").value = "";
-    $("loginMessage").textContent = "";
-
-    await checkLogin();
-
-  } catch(error) {
-    $("loginMessage").textContent = error.message;
-  }
+$("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();$("loginMessage").textContent="Accesso in corso...";
+ try{await api("/admin/login",{method:"POST",body:JSON.stringify({email:$("email").value,password:$("password").value})});$("password").value="";$("loginMessage").textContent="";await checkLogin();}
+ catch(error){$("loginMessage").textContent=error.message;}
+});
+$("logout").addEventListener("click",async()=>{
+ try{await api("/admin/logout",{method:"POST"});}catch(error){console.error(error);}
+ $("panel").classList.add("hidden");$("editor").classList.add("hidden");$("login").classList.remove("hidden");$("loginMessage").textContent="";
 });
 
-$("logout").addEventListener("click", async () => {
-  try {
-    await api("/admin/logout", { method: "POST" });
-  } catch(error) {
-    console.error(error);
-  }
+async function loadCategories(){
+ categories=await api("/admin/categories");
+ $("category").innerHTML=categories.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");
+ renderCategories();updateSubcategoryVisibility();
+}
+function categoryIcon(slug){
+ const icons={"fiocchi-nascita":"🎀","catenelle-ciuccio":"🧸","lettere-3d":"🔤","body-personalizzati":"👕","bomboniere":"🎁","torte-scenografiche":"🎂","palline-di-natale":"🎄","fiocchi-fuoriporta-natale":"✨","regali-personalizzati":"💝"};
+ return icons[slug]||"🌸";
+}
+function renderCategories(){
+ if(!categories.length){$("categoryGrid").innerHTML="<p>Nessuna categoria disponibile.</p>";return;}
+ $("categoryGrid").innerHTML=categories.map(c=>{
+  const count=allProducts.filter(p=>Number(p.category_id)===Number(c.id)).length;
+  return `<div class="category-card" data-category="${Number(c.id)}"><div class="category-icon">${categoryIcon(c.slug)}</div><div class="category-name">${esc(c.name)}</div><div class="category-count">${count} ${count===1?"prodotto":"prodotti"}</div></div>`;
+ }).join("");
+}
+function showCategoryView(){currentCategoryId=null;$("editor").classList.add("hidden");$("productsView").classList.add("hidden");$("categoryView").classList.remove("hidden");renderCategories();}
+function openCategory(categoryId){
+ currentCategoryId=Number(categoryId);const category=categories.find(c=>Number(c.id)===currentCategoryId);if(!category)return;
+ $("categoryView").classList.add("hidden");$("productsView").classList.remove("hidden");$("editor").classList.add("hidden");
+ $("selectedCategoryTitle").textContent=category.name;$("selectedCategoryDescription").textContent="Gestisci qui i prodotti di questa categoria.";renderProducts();
+}
+$("categoryGrid").addEventListener("click",e=>{const card=e.target.closest("[data-category]");if(card)openCategory(card.dataset.category);});
+$("backCategories").addEventListener("click",showCategoryView);
 
-  $("panel").classList.add("hidden");
-  $("editor").classList.add("hidden");
-  $("login").classList.remove("hidden");
-  $("loginMessage").textContent = "";
+function selectedCategory(){
+ return categories.find(c=>Number(c.id)===Number($("category").value));
+}
+function isNameField(field){return /nome/i.test(String(field?.label||""));}
+function needsRequiredName(category){
+ const slug=category?.slug||"";
+ return slug==="fiocchi-nascita"||slug==="catenelle-ciuccio";
+}
+function normalizeFields(value,category,ensureName=true){
+ let source=value;
+ if(typeof source==="string"){try{source=JSON.parse(source);}catch{source=[];}}
+ if(!Array.isArray(source))source=[];
+ const result=source.map(f=>{
+  const options=Array.isArray(f?.options)?f.options.map(x=>String(x).trim()).filter(Boolean):[];
+  const type=f?.type==="select"||options.length?"select":"text";
+  return {label:String(f?.label||"").trim(),type,required:!!f?.required,options:type==="select"?options:[]};
+ }).filter(f=>f.label);
+ if(ensureName&&needsRequiredName(category)){
+  const nameField=result.find(isNameField);
+  if(nameField){nameField.required=true;if(!nameField.label)nameField.label="Nome del bambino";}
+  else result.unshift({label:"Nome del bambino",type:"text",required:true,options:[]});
+ }
+ return result;
+}
+function updateSubcategoryVisibility(){
+ const selected=selectedCategory();
+ $("subcategoryBox").classList.toggle("hidden",selected?.slug!=="catenelle-ciuccio");
+ updateNameNotice();
+}
+function updateNameNotice(){
+ const category=selectedCategory();
+ $("automaticNameNotice").textContent=needsRequiredName(category)
+  ?"Per questa categoria il campo «Nome del bambino» viene aggiunto automaticamente ed è sempre obbligatorio."
+  :"Per questa categoria puoi scegliere liberamente quali personalizzazioni rendere obbligatorie.";
+}
+$("category").addEventListener("change",()=>{
+ updateSubcategoryVisibility();
+ customFields=normalizeFields(customFields,selectedCategory(),true);
+ renderCustomFields();
 });
 
-/* CATEGORIE */
-
-async function loadCategories() {
-  categories = await api("/admin/categories");
-
-  $("category").innerHTML = categories.map(c =>
-    `<option value="${c.id}">${esc(c.name)}</option>`
-  ).join("");
-
-  renderCategories();
-  updateSubcategoryVisibility();
+async function loadProducts(){
+ $("products").textContent="Caricamento prodotti...";
+ allProducts=await api("/admin/products");renderCategories();if(currentCategoryId!==null)renderProducts();
+}
+function renderProducts(){
+ const products=allProducts.filter(p=>Number(p.category_id)===Number(currentCategoryId));
+ if(!products.length){$("products").innerHTML=`<div style="text-align:center;padding:30px 10px"><p>Non hai ancora inserito prodotti in questa categoria.</p><p class="small">Usa il pulsante qui sopra per aggiungere il primo!</p></div>`;return;}
+ $("products").innerHTML=products.map(p=>{
+  const photo=imageUrl(p.image_url);
+  const section=p.category_slug==="catenelle-ciuccio"?(p.subcategory==="maschietto"?"Maschietto":"Femminuccia"):"";
+  let fs=normalizeFields(p.custom_fields,categories.find(c=>Number(c.id)===Number(p.category_id)),false);
+  return `<div class="product"><div class="product-photo">${photo?`<img src="${esc(photo)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden')"><span class="photo-error hidden">Foto non disponibile</span>`:`<span class="photo-error">Nessuna foto</span>`}</div><div class="product-info"><strong>${esc(p.name)}</strong><p>€ ${Number(p.price).toFixed(2)} · ${Number(p.visible)?"Visibile nello shop":"Nascosto"}</p>${section?`<p>Sezione: ${section}</p>`:""}<p>${fs.length} ${fs.length===1?"personalizzazione":"personalizzazioni"}</p><div class="actions"><button class="secondary" data-edit="${Number(p.id)}">Modifica</button><button class="danger" data-delete="${Number(p.id)}">Elimina</button></div></div></div>`;
+ }).join("");
 }
 
-function categoryIcon(slug) {
-  const icons = {
-    "fiocchi-nascita": "🎀",
-    "catenelle-ciuccio": "🧸",
-    "lettere-3d": "🔤",
-    "body-personalizzati": "👕",
-    "bomboniere": "🎁",
-    "torte-scenografiche": "🎂",
-    "palline-di-natale": "🎄",
-    "fiocchi-fuoriporta-natale": "✨",
-    "regali-personalizzati": "💝"
-  };
-
-  return icons[slug] || "🌸";
+$("newProduct").addEventListener("click",()=>openEditor());
+function openEditor(product=null){
+ editingId=product?Number(product.id):null;
+ $("editorTitle").textContent=product?"Modifica prodotto":"Nuovo prodotto";
+ $("name").value=product?.name||"";
+ $("category").value=product?product.category_id:currentCategoryId||categories[0]?.id||"";
+ $("subcategory").value=product?.subcategory||"femminuccia";
+ $("description").value=product?.description||"";$("price").value=product?.price??"";$("image").value=product?.image_url||"";
+ $("visible").checked=product?Number(product.visible)===1:true;
+ customFields=normalizeFields(product?.custom_fields||[],selectedCategory(),true);
+ renderCustomFields();updateImagePreview();updateSubcategoryVisibility();
+ $("editor").classList.remove("hidden");$("editor").scrollIntoView({behavior:"smooth"});
 }
+$("cancel").addEventListener("click",()=>$("editor").classList.add("hidden"));
 
-function renderCategories() {
-  if (!categories.length) {
-    $("categoryGrid").innerHTML =
-      "<p>Nessuna categoria disponibile.</p>";
-    return;
-  }
-
-  $("categoryGrid").innerHTML = categories.map(c => {
-    const count = allProducts.filter(p =>
-      Number(p.category_id) === Number(c.id)
-    ).length;
-
-    return `
-      <div class="category-card" data-category="${Number(c.id)}">
-        <div class="category-icon">${categoryIcon(c.slug)}</div>
-        <div class="category-name">${esc(c.name)}</div>
-        <div class="category-count">
-          ${count} ${count === 1 ? "prodotto" : "prodotti"}
-        </div>
-      </div>
-    `;
-  }).join("");
-}
-
-function showCategoryView() {
-  currentCategoryId = null;
-  $("editor").classList.add("hidden");
-  $("productsView").classList.add("hidden");
-  $("categoryView").classList.remove("hidden");
-  renderCategories();
-}
-
-function openCategory(categoryId) {
-  currentCategoryId = Number(categoryId);
-
-  const category = categories.find(c =>
-    Number(c.id) === currentCategoryId
-  );
-
-  if (!category) return;
-
-  $("categoryView").classList.add("hidden");
-  $("productsView").classList.remove("hidden");
-  $("editor").classList.add("hidden");
-
-  $("selectedCategoryTitle").textContent = category.name;
-  $("selectedCategoryDescription").textContent =
-    "Gestisci qui i prodotti di questa categoria.";
-
-  renderProducts();
-}
-
-$("categoryGrid").addEventListener("click", e => {
-  const card = e.target.closest("[data-category]");
-  if (card) openCategory(card.dataset.category);
+$("products").addEventListener("click",async e=>{
+ const editButton=e.target.closest("[data-edit]"),deleteButton=e.target.closest("[data-delete]");
+ if(editButton){const product=allProducts.find(p=>Number(p.id)===Number(editButton.dataset.edit));if(product)openEditor(product);}
+ if(deleteButton){
+  if(!confirm("Vuoi davvero eliminare questo prodotto?"))return;
+  try{await api("/admin/products/"+deleteButton.dataset.delete,{method:"DELETE"});showMessage("Prodotto eliminato correttamente.");await loadProducts();}
+  catch(error){showMessage(error.message);}
+ }
 });
 
-$("backCategories").addEventListener("click", showCategoryView);
-
-/* CATEGORIA NEL MODULO */
-
-function updateSubcategoryVisibility() {
-  const selected = categories.find(
-    c => Number(c.id) === Number($("category").value)
-  );
-
-  $("subcategoryBox").classList.toggle(
-    "hidden",
-    selected?.slug !== "catenelle-ciuccio"
-  );
+function renderCustomFields(){
+ customFields=normalizeFields(customFields,selectedCategory(),true);
+ const lockedName=needsRequiredName(selectedCategory());
+ if(!customFields.length){$("customFieldsEditor").innerHTML='<p class="small">Nessuna sezione aggiunta. Premi «AGGIUNGI SEZIONE» per crearne una.</p>';return;}
+ $("customFieldsEditor").innerHTML=customFields.map((field,index)=>{
+  const isLocked=lockedName&&isNameField(field);
+  return `<div class="field-editor" data-field-index="${index}">
+   <div class="field-editor-top"><strong>Sezione ${index+1}${isLocked?" · obbligatoria":""}</strong><button type="button" class="danger" data-remove-field="${index}" ${isLocked?'disabled title="Campo richiesto per questa categoria"':''}>Elimina sezione</button></div>
+   <label>Nome della sezione</label><input type="text" data-label="${index}" value="${esc(field.label)}" placeholder="Es. Colore del fiocco" maxlength="80">
+   <div class="field-editor-grid">
+    <div><label>Tipo di risposta</label><select data-type="${index}"><option value="text" ${field.type==="text"?"selected":""}>Risposta libera (testo)</option><option value="select" ${field.type==="select"?"selected":""}>Scelta singola tra opzioni</option></select></div>
+    <div><label class="inline-check"><input type="checkbox" data-required="${index}" ${field.required?"checked":""} ${isLocked?"checked disabled":""}> Risposta obbligatoria</label><p class="small">${isLocked?"Obbligatoria automaticamente.": "Se disattivata, la cliente potrà lasciare il campo vuoto."}</p></div>
+   </div>
+   <div class="${field.type==="select"?"":"hidden"}" data-options-box="${index}">
+    <label>Opzioni disponibili (una per riga)</label><textarea class="field-options" data-options="${index}" rows="4" placeholder="Rosa&#10;Azzurro&#10;Beige">${esc((field.options||[]).join("\n"))}</textarea>
+   </div>
+  </div>`;
+ }).join("");
 }
-
-$("category").addEventListener("change", updateSubcategoryVisibility);
-
-/* CARICAMENTO PRODOTTI */
-
-async function loadProducts() {
-  $("products").textContent = "Caricamento prodotti...";
-  allProducts = await api("/admin/products");
-
-  renderCategories();
-
-  if (currentCategoryId !== null) {
-    renderProducts();
-  }
+function syncFieldEditors(){
+ const cards=[...$("customFieldsEditor").querySelectorAll("[data-field-index]")];
+ cards.forEach(card=>{
+  const i=Number(card.dataset.fieldIndex);
+  const label=card.querySelector("[data-label]").value.trim();
+  const type=card.querySelector("[data-type]").value;
+  const required=card.querySelector("[data-required]").checked;
+  const options=(card.querySelector("[data-options]")?.value||"").split("\n").map(x=>x.trim()).filter(Boolean);
+  customFields[i]={label,type,required,options:type==="select"?options:[]};
+ });
 }
-
-function renderProducts() {
-  const products = allProducts.filter(p =>
-    Number(p.category_id) === Number(currentCategoryId)
-  );
-
-  if (!products.length) {
-    $("products").innerHTML = `
-      <div style="text-align:center;padding:30px 10px">
-        <p>Non hai ancora inserito prodotti in questa categoria.</p>
-        <p class="small">Usa il pulsante qui sopra per aggiungere il primo!</p>
-      </div>
-    `;
-    return;
-  }
-
-  $("products").innerHTML = products.map(p => {
-    const photo = imageUrl(p.image_url);
-
-    const section = p.category_slug === "catenelle-ciuccio"
-      ? (p.subcategory === "maschietto" ? "Maschietto" : "Femminuccia")
-      : "";
-
-    return `
-      <div class="product">
-
-        <div class="product-photo">
-          ${photo
-            ? `<img
-                src="${esc(photo)}"
-                alt="${esc(p.name)}"
-                loading="lazy"
-                onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden')">
-               <span class="photo-error hidden">Foto non disponibile</span>`
-            : `<span class="photo-error">Nessuna foto</span>`
-          }
-        </div>
-
-        <div class="product-info">
-          <strong>${esc(p.name)}</strong>
-
-          <p>
-            € ${Number(p.price).toFixed(2)}
-            · ${Number(p.visible) ? "Visibile nello shop" : "Nascosto"}
-          </p>
-
-          ${section ? `<p>Sezione: ${section}</p>` : ""}
-
-          <div class="actions">
-            <button class="secondary" data-edit="${Number(p.id)}">
-              Modifica
-            </button>
-
-            <button class="danger" data-delete="${Number(p.id)}">
-              Elimina
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join("");
-}
-
-/* NUOVO PRODOTTO */
-
-$("newProduct").addEventListener("click", () => {
-  openEditor();
+$("addField").addEventListener("click",()=>{
+ syncFieldEditors();customFields.push({label:"",type:"text",required:false,options:[]});renderCustomFields();
+ const inputs=$("customFieldsEditor").querySelectorAll("[data-label]");inputs[inputs.length-1]?.focus();
 });
-
-/* APERTURA MODULO */
-
-function openEditor(product = null) {
-  editingId = product ? Number(product.id) : null;
-
-  $("editorTitle").textContent = product
-    ? "Modifica prodotto"
-    : "Nuovo prodotto";
-
-  $("name").value = product?.name || "";
-
-  $("category").value = product
-    ? product.category_id
-    : currentCategoryId || categories[0]?.id || "";
-
-  $("subcategory").value = product?.subcategory || "femminuccia";
-  $("description").value = product?.description || "";
-  $("price").value = product?.price ?? "";
-  $("image").value = product?.image_url || "";
-
-  $("visible").checked = product
-    ? Number(product.visible) === 1
-    : true;
-
-  let fields = product?.custom_fields || [];
-
-  if (typeof fields === "string") {
-    try {
-      fields = JSON.parse(fields);
-    } catch {
-      fields = [];
-    }
-  }
-
-  $("fields").value = Array.isArray(fields)
-    ? fields.map(f =>
-        f.label + (f.options?.length
-          ? ": " + f.options.join(", ")
-          : "")
-      ).join("\n")
-    : "";
-
-  updateImagePreview();
-  updateSubcategoryVisibility();
-
-  $("editor").classList.remove("hidden");
-  $("editor").scrollIntoView({ behavior: "smooth" });
+$("customFieldsEditor").addEventListener("input",e=>{
+ const type=e.target.closest("[data-type]");
+ if(type){const i=Number(type.dataset.type);const box=$("customFieldsEditor").querySelector(`[data-options-box="${i}"]`);box.classList.toggle("hidden",type.value!=="select");}
+});
+$("customFieldsEditor").addEventListener("change",e=>{
+ if(e.target.matches("[data-type]")){syncFieldEditors();renderCustomFields();}
+});
+$("customFieldsEditor").addEventListener("click",e=>{
+ const btn=e.target.closest("[data-remove-field]");if(!btn)return;
+ syncFieldEditors();const i=Number(btn.dataset.removeField);
+ if(needsRequiredName(selectedCategory())&&isNameField(customFields[i]))return;
+ customFields.splice(i,1);renderCustomFields();
+});
+function readCustomFields(){
+ syncFieldEditors();
+ const cleaned=customFields.map(f=>({
+  label:String(f.label||"").trim(),
+  type:f.type==="select"?"select":"text",
+  required:!!f.required,
+  options:f.type==="select"?(f.options||[]).map(x=>String(x).trim()).filter(Boolean):[]
+ })).filter(f=>f.label);
+ for(const f of cleaned){
+  if(f.type==="select"&&!f.options.length)throw new Error(`Inserisci almeno un'opzione per «${f.label}» oppure scegli Risposta libera.`);
+ }
+ return normalizeFields(cleaned,selectedCategory(),true);
 }
 
-$("cancel").addEventListener("click", () => {
-  $("editor").classList.add("hidden");
+$("productForm").addEventListener("submit",async e=>{
+ e.preventDefault();const saveButton=$("saveProduct");saveButton.disabled=true;saveButton.textContent="Salvataggio in corso...";
+ try{
+  const filename=$("image").value.trim(),imageUrlValue=imageUrl(filename);
+  if(filename&&!imageUrlValue)throw new Error("Percorso fotografia non valido. Usa /images/prodotti/nomefile.jpeg oppure un link HTTPS.");
+  const body={name:$("name").value.trim(),category_id:Number($("category").value),subcategory:$("subcategory").value,description:$("description").value,price:Number($("price").value),image_url:imageUrlValue,custom_fields:readCustomFields(),visible:$("visible").checked};
+  const path=editingId?"/admin/products/"+editingId:"/admin/products";
+  await api(path,{method:editingId?"PUT":"POST",body:JSON.stringify(body)});
+  $("editor").classList.add("hidden");showMessage("Prodotto salvato correttamente.");await loadProducts();
+ }catch(error){showMessage(error.message);}
+ finally{saveButton.disabled=false;saveButton.textContent="Salva prodotto";}
 });
-
-/* MODIFICA ED ELIMINAZIONE */
-
-$("products").addEventListener("click", async e => {
-  const editButton = e.target.closest("[data-edit]");
-  const deleteButton = e.target.closest("[data-delete]");
-
-  if (editButton) {
-    try {
-      const product = allProducts.find(p =>
-        Number(p.id) === Number(editButton.dataset.edit)
-      );
-
-      if (product) openEditor(product);
-
-    } catch(error) {
-      showMessage(error.message);
-    }
-  }
-
-  if (deleteButton) {
-    if (!confirm("Vuoi davvero eliminare questo prodotto?")) return;
-
-    try {
-      await api(
-        "/admin/products/" + deleteButton.dataset.delete,
-        { method: "DELETE" }
-      );
-
-      showMessage("Prodotto eliminato correttamente.");
-      await loadProducts();
-
-    } catch(error) {
-      showMessage(error.message);
-    }
-  }
-});
-
-/* PERSONALIZZAZIONI */
-
-function readCustomFields() {
-  return $("fields").value
-    .split("\n")
-    .map(line => line.trim())
-    .filter(Boolean)
-    .map(line => {
-      const separator = line.indexOf(":");
-
-      if (separator === -1) {
-        return { label: line, options: [] };
-      }
-
-      return {
-        label: line.slice(0, separator).trim(),
-        options: line.slice(separator + 1)
-          .split(",")
-          .map(x => x.trim())
-          .filter(Boolean)
-      };
-    });
-}
-
-/* SALVATAGGIO */
-
-$("productForm").addEventListener("submit", async e => {
-  e.preventDefault();
-
-  const saveButton = $("saveProduct");
-
-  saveButton.disabled = true;
-  saveButton.textContent = "Salvataggio in corso...";
-
-  try {
-    const filename = $("image").value.trim();
-    const imageUrlValue = imageUrl(filename);
-
-    if (filename && !imageUrlValue) {
-      throw new Error(
-        "Percorso fotografia non valido. Usa /images/prodotti/nomefile.jpeg oppure un link HTTPS."
-      );
-    }
-
-    const body = {
-      name: $("name").value.trim(),
-      category_id: Number($("category").value),
-      subcategory: $("subcategory").value,
-      description: $("description").value,
-      price: Number($("price").value),
-      image_url: imageUrlValue,
-      custom_fields: readCustomFields(),
-      visible: $("visible").checked
-    };
-
-    const path = editingId
-      ? "/admin/products/" + editingId
-      : "/admin/products";
-
-    await api(path, {
-      method: editingId ? "PUT" : "POST",
-      body: JSON.stringify(body)
-    });
-
-    $("editor").classList.add("hidden");
-    showMessage("Prodotto salvato correttamente.");
-
-    await loadProducts();
-
-  } catch(error) {
-    showMessage(error.message);
-
-  } finally {
-    saveButton.disabled = false;
-    saveButton.textContent = "Salva prodotto";
-  }
-});
-
-/* AVVIO */
-
 checkLogin();
-
 </script>
-
 </body>
 </html>
