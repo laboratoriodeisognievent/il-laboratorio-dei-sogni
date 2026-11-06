@@ -15,8 +15,6 @@ body {
   font-family: Arial, sans-serif;
 }
 
-/* MENU DI NAVIGAZIONE */
-
 .shop-nav {
   display: flex;
   justify-content: center;
@@ -34,15 +32,12 @@ body {
   font-family: Georgia, serif;
   font-size: 15px;
   font-weight: 500;
-  transition: 0.2s;
 }
 
 .shop-nav a:hover {
   color: #69b8e5;
   text-decoration: underline;
 }
-
-/* HEADER SHOP */
 
 header {
   text-align: center;
@@ -98,9 +93,7 @@ main {
   padding: 30px 22px;
 }
 
-/* ==========================
-   POP-UP PROMOZIONALE
-========================== */
+/* POP-UP PROMOZIONALE */
 
 #promoOverlay {
   position: fixed;
@@ -112,8 +105,6 @@ main {
   align-items: center;
   justify-content: center;
   padding: 18px;
-  opacity: 1;
-  transition: opacity 0.3s ease;
 }
 
 #promoOverlay.hidden {
@@ -159,7 +150,6 @@ main {
   border-radius: 50%;
   background: transparent;
   color: #55758e;
-  font-family: Arial, sans-serif;
   font-size: 30px;
   line-height: 1;
 }
@@ -192,7 +182,6 @@ main {
   color: #55758e;
   font-family: Georgia, serif;
   font-size: clamp(17px, 3.8vw, 23px);
-  font-weight: normal;
   line-height: 1.5;
 }
 
@@ -209,7 +198,7 @@ main {
   width: min(100%, 400px);
   margin: 0 auto 25px;
   padding: 15px 12px 12px;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255,255,255,.95);
   border: 2px solid #d9e6ef;
   border-radius: 18px;
 }
@@ -230,7 +219,6 @@ main {
   font-size: clamp(35px, 7vw, 48px);
   font-weight: bold;
   line-height: 1.15;
-  letter-spacing: 1px;
 }
 
 #promoBuy {
@@ -244,7 +232,6 @@ main {
   font-family: Georgia, serif;
   font-size: 21px;
   letter-spacing: 1px;
-  transition: 0.2s;
 }
 
 #promoBuy:hover {
@@ -258,13 +245,11 @@ main {
   color: #55758e;
   font-family: Georgia, serif;
   font-size: 21px;
-  line-height: 1.5;
 }
 
 .promo-decoration {
   margin-top: 9px;
   color: #729bb4;
-  font-family: Georgia, serif;
   font-size: 30px;
 }
 
@@ -286,9 +271,10 @@ main {
   transition: 0.2s;
 }
 
-.category:hover {
+.category:hover,
+.subcategory-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 5px 18px rgba(70, 100, 115, 0.08);
+  box-shadow: 0 5px 18px rgba(70,100,115,.08);
 }
 
 .category h3 {
@@ -314,11 +300,6 @@ main {
   transition: 0.2s;
 }
 
-.subcategory-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 18px rgba(70, 100, 115, 0.08);
-}
-
 .subcategory-button {
   width: 100%;
   background: #edf3f4;
@@ -337,7 +318,7 @@ main {
   margin: 15px 0 0;
 }
 
-/* TITOLO CATALOGO */
+/* CATALOGO */
 
 #catalogTitle {
   text-align: center;
@@ -347,8 +328,6 @@ main {
 }
 
 #back { margin-top: 20px; }
-
-/* ORDINAMENTO PRODOTTI */
 
 #sortBar {
   display: flex;
@@ -396,7 +375,7 @@ main {
 }
 
 .product:hover {
-  box-shadow: 0 5px 18px rgba(70, 100, 115, 0.09);
+  box-shadow: 0 5px 18px rgba(70,100,115,.09);
 }
 
 .product-image-button {
@@ -468,13 +447,19 @@ main {
   margin: 8px 0 0;
 }
 
+.customization-note {
+  font-size: 12px !important;
+  color: #718087 !important;
+  margin: 2px 0 8px;
+}
+
 /* FOTO INGRANDITA */
 
 #imageViewer {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: rgba(20, 29, 33, 0.92);
+  background: rgba(20,29,33,.92);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -502,7 +487,7 @@ main {
   color: #405b66;
 }
 
-/* CARRELLO FLOTTANTE */
+/* CARRELLO */
 
 #cartToggle {
   position: fixed;
@@ -516,7 +501,7 @@ main {
   background: #e5f5ff;
   color: #55758e;
   border: 1px solid #cce8f7;
-  box-shadow: 0 4px 15px rgba(70, 100, 115, 0.16);
+  box-shadow: 0 4px 15px rgba(70,100,115,.16);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -551,8 +536,6 @@ main {
   justify-content: center;
 }
 
-/* PANNELLO CARRELLO */
-
 #cart {
   position: fixed;
   top: 142px;
@@ -566,12 +549,10 @@ main {
   border-radius: 16px;
   padding: 20px;
   margin: 0;
-  box-shadow: 0 8px 30px rgba(55, 85, 100, 0.20);
+  box-shadow: 0 8px 30px rgba(55,85,100,.20);
 }
 
-#cart.hidden {
-  display: none !important;
-}
+#cart.hidden { display: none !important; }
 
 .cart-header {
   display: flex;
@@ -599,9 +580,7 @@ main {
   line-height: 1;
 }
 
-#cartItems {
-  padding-top: 8px;
-}
+#cartItems { padding-top: 8px; }
 
 #cartItems p {
   font-size: 14px;
@@ -631,8 +610,6 @@ main {
   font-size: 14px;
 }
 
-/* MESSAGGIO PRODOTTO AGGIUNTO */
-
 #cartMessage {
   position: fixed;
   top: 145px;
@@ -643,7 +620,7 @@ main {
   padding: 11px 16px;
   border-radius: 9px;
   font-size: 13px;
-  box-shadow: 0 4px 15px rgba(70, 100, 115, 0.15);
+  box-shadow: 0 4px 15px rgba(70,100,115,.15);
   pointer-events: none;
 }
 
@@ -679,9 +656,7 @@ footer {
     padding: 15px 8px;
   }
 
-  .shop-nav a {
-    font-size: 13px;
-  }
+  .shop-nav a { font-size: 13px; }
 
   #cartToggle {
     top: 85px;
@@ -712,22 +687,15 @@ footer {
     border-radius: 21px;
   }
 
-  .promo-description {
-    font-size: 16px;
-  }
-
-  .promo-code-label {
-    font-size: 16px;
-  }
+  .promo-description { font-size: 16px; }
+  .promo-code-label { font-size: 16px; }
 
   #promoBuy {
     font-size: 19px;
     padding: 15px;
   }
 
-  .promo-footer {
-    font-size: 18px;
-  }
+  .promo-footer { font-size: 18px; }
 }
 
 @media (max-width: 480px) {
@@ -768,8 +736,6 @@ footer {
 
 <body>
 
-<!-- MENU DI NAVIGAZIONE -->
-
 <nav class="shop-nav">
   <a href="index.html">Home</a>
   <a href="storia.html">La Nostra Storia</a>
@@ -783,17 +749,12 @@ footer {
   aria-modal="true" aria-labelledby="promoTitle">
 
   <div class="promo-box">
-
     <button id="closePromo" type="button"
       aria-label="Chiudi promozione">×</button>
 
-    <h2 class="promo-heading" id="promoTitle">
-      UN REGALO PER TE
-    </h2>
+    <h2 class="promo-heading" id="promoTitle">UN REGALO PER TE</h2>
 
-    <div class="promo-discount">
-      10% DI SCONTO ✨
-    </div>
+    <div class="promo-discount">10% DI SCONTO ✨</div>
 
     <p class="promo-subtitle">
       Perché ogni acquisto merita una sorpresa in più...
@@ -809,28 +770,20 @@ footer {
       <span class="promo-code">SOGNI10</span>
     </div>
 
-    <button id="promoBuy" type="button">
-      ACQUISTA ORA
-    </button>
+    <button id="promoBuy" type="button">ACQUISTA ORA</button>
 
-    <p class="promo-footer">
-      Piccole creazioni, grandi emozioni.
-    </p>
-
+    <p class="promo-footer">Piccole creazioni, grandi emozioni.</p>
     <div class="promo-decoration">♡</div>
-
   </div>
 </div>
 
-<!-- CARRELLO SEMPRE VISIBILE -->
+<!-- CARRELLO -->
 
-<button
-  id="cartToggle"
-  type="button"
+<button id="cartToggle" type="button"
   aria-label="Apri il carrello"
   aria-expanded="false"
-  title="Il tuo carrello"
->
+  title="Il tuo carrello">
+
   <svg viewBox="0 0 24 24" fill="none"
     stroke="currentColor" stroke-width="1.8"
     stroke-linecap="round" stroke-linejoin="round"
@@ -847,7 +800,7 @@ footer {
   Prodotto aggiunto!
 </div>
 
-<!-- INTESTAZIONE SHOP -->
+<!-- HEADER SHOP -->
 
 <header>
   <div class="eyebrow">SHOP ONLINE</div>
@@ -879,8 +832,7 @@ footer {
 
         <div class="subcategory-card">
           <button class="subcategory-button"
-            type="button"
-            data-subcategory="femminuccia">
+            type="button" data-subcategory="femminuccia">
             Femminuccia
           </button>
           <p class="subcategory-description">
@@ -890,8 +842,7 @@ footer {
 
         <div class="subcategory-card">
           <button class="subcategory-button"
-            type="button"
-            data-subcategory="maschietto">
+            type="button" data-subcategory="maschietto">
             Maschietto
           </button>
           <p class="subcategory-description">
@@ -900,8 +851,6 @@ footer {
         </div>
 
       </div>
-
-      <!-- ORDINAMENTO: APPARE SOPRA OGNI SEZIONE DI PRODOTTI -->
 
       <div id="sortBar" class="hidden">
         <label for="sortProducts">Ordina per:</label>
@@ -920,13 +869,14 @@ footer {
     </div>
   </section>
 
-  <!-- PANNELLO DEL CARRELLO -->
+  <!-- PANNELLO CARRELLO -->
 
   <section id="cart" class="hidden">
 
     <div class="cart-header">
       <h2>Il tuo carrello</h2>
-      <button id="closeCart" type="button" aria-label="Chiudi carrello">×</button>
+      <button id="closeCart" type="button"
+        aria-label="Chiudi carrello">×</button>
     </div>
 
     <div id="cartItems"></div>
@@ -937,7 +887,6 @@ footer {
     </button>
 
   </section>
-
 </main>
 
 <footer>
@@ -948,9 +897,11 @@ footer {
 <div id="imageViewer" class="hidden" role="dialog"
   aria-modal="true" aria-label="Fotografia del prodotto">
 
-  <button id="closeViewer" type="button" aria-label="Chiudi">×</button>
-  <img id="largeImage" src="" alt="Fotografia ingrandita del prodotto">
+  <button id="closeViewer" type="button"
+    aria-label="Chiudi">×</button>
 
+  <img id="largeImage" src=""
+    alt="Fotografia ingrandita del prodotto">
 </div>
 
 <script>
@@ -961,7 +912,6 @@ let cart = [];
 let categories = [];
 let currentCategory = "";
 let currentSubcategory = "";
-
 let currentProducts = [];
 let currentSort = "default";
 
@@ -987,36 +937,34 @@ async function getData(path) {
   return response.json();
 }
 
-/* ==========================
-   ORDINAMENTO PRODOTTI
-========================== */
+/* ORDINAMENTO PRODOTTI */
 
 function displayProducts(emptyMessage) {
   let sorted = [...currentProducts];
 
   if (currentSort === "price-asc") {
-    sorted.sort((a, b) => Number(a.price) - Number(b.price));
+    sorted.sort((a,b) => Number(a.price) - Number(b.price));
   }
 
   if (currentSort === "price-desc") {
-    sorted.sort((a, b) => Number(b.price) - Number(a.price));
+    sorted.sort((a,b) => Number(b.price) - Number(a.price));
   }
 
   if (currentSort === "name-asc") {
-    sorted.sort((a, b) =>
+    sorted.sort((a,b) =>
       String(a.name).localeCompare(String(b.name), "it")
     );
   }
 
   if (currentSort === "name-desc") {
-    sorted.sort((a, b) =>
+    sorted.sort((a,b) =>
       String(b.name).localeCompare(String(a.name), "it")
     );
   }
 
   $("products").innerHTML = sorted.length
     ? sorted.map(renderProduct).join("")
-    : `<p>${emptyMessage}</p>`;
+    : `<p>${esc(emptyMessage || "Nessun prodotto disponibile.")}</p>`;
 
   $("sortBar").classList.toggle("hidden", sorted.length === 0);
 }
@@ -1026,9 +974,7 @@ $("sortProducts").addEventListener("change", e => {
   displayProducts();
 });
 
-/* ==========================
-   APERTURA AUTOMATICA POP-UP
-========================== */
+/* POP-UP PROMOZIONALE */
 
 function closePromo() {
   $("promoOverlay").classList.add("hidden");
@@ -1040,9 +986,7 @@ function showPromo() {
 
   try {
     alreadyShown = sessionStorage.getItem("promoSogniShown") === "true";
-  } catch(error) {
-    alreadyShown = false;
-  }
+  } catch(error) {}
 
   if (alreadyShown) return;
 
@@ -1059,9 +1003,7 @@ setTimeout(showPromo, 3000);
 $("closePromo").addEventListener("click", closePromo);
 
 $("promoOverlay").addEventListener("click", e => {
-  if (e.target === $("promoOverlay")) {
-    closePromo();
-  }
+  if (e.target === $("promoOverlay")) closePromo();
 });
 
 $("promoBuy").addEventListener("click", () => {
@@ -1070,14 +1012,13 @@ $("promoBuy").addEventListener("click", () => {
 });
 
 document.addEventListener("keydown", e => {
-  if (e.key === "Escape" && !$("promoOverlay").classList.contains("hidden")) {
+  if (e.key === "Escape" &&
+      !$("promoOverlay").classList.contains("hidden")) {
     closePromo();
   }
 });
 
-/* ==========================
-   APERTURA E CHIUSURA CARRELLO
-========================== */
+/* APERTURA E CHIUSURA CARRELLO */
 
 $("cartToggle").addEventListener("click", () => {
   const isOpen = !$("cart").classList.contains("hidden");
@@ -1091,9 +1032,7 @@ $("closeCart").addEventListener("click", () => {
   $("cartToggle").setAttribute("aria-expanded", "false");
 });
 
-/* ==========================
-   APERTURA CATALOGO
-========================== */
+/* APERTURA CATALOGO */
 
 $("discover").addEventListener("click", async () => {
   $("discover").disabled = true;
@@ -1111,7 +1050,7 @@ $("discover").addEventListener("click", async () => {
     `).join("");
 
     $("categories").style.display = "grid";
-    $("categories").scrollIntoView({ behavior: "smooth" });
+    $("categories").scrollIntoView({behavior:"smooth"});
 
   } catch(error) {
     alert(error.message);
@@ -1121,9 +1060,7 @@ $("discover").addEventListener("click", async () => {
   }
 });
 
-/* ==========================
-   APERTURA CATEGORIA
-========================== */
+/* APERTURA CATEGORIA */
 
 $("categories").addEventListener("click", async e => {
   const card = e.target.closest("[data-slug]");
@@ -1158,13 +1095,9 @@ async function openCategory(slug) {
     $("products").innerHTML = "<p>Caricamento prodotti...</p>";
 
     try {
-      const products = await getData(
+      currentProducts = await getData(
         "/products?category=" + encodeURIComponent(slug)
       );
-
-      currentProducts = products;
-      currentSort = "default";
-      $("sortProducts").value = "default";
 
       displayProducts(
         "Stiamo preparando le nostre creazioni per questa categoria. Contattaci per informazioni!"
@@ -1177,12 +1110,10 @@ async function openCategory(slug) {
     }
   }
 
-  $("productsArea").scrollIntoView({ behavior: "smooth" });
+  $("productsArea").scrollIntoView({behavior:"smooth"});
 }
 
-/* ==========================
-   SCELTA FEMMINUCCIA / MASCHIETTO
-========================== */
+/* SCELTA FEMMINUCCIA / MASCHIETTO */
 
 $("subcategories").addEventListener("click", async e => {
   const button = e.target.closest("[data-subcategory]");
@@ -1209,16 +1140,12 @@ async function loadSubcategory() {
   $("products").innerHTML = "<p>Caricamento prodotti...</p>";
 
   try {
-    const products = await getData(
+    currentProducts = await getData(
       "/products?category=" +
       encodeURIComponent(currentCategory) +
       "&subcategory=" +
       encodeURIComponent(currentSubcategory)
     );
-
-    currentProducts = products;
-    currentSort = "default";
-    $("sortProducts").value = "default";
 
     displayProducts(
       "Presto troverai qui le nostre nuove catenelle. Contattaci per informazioni!"
@@ -1231,14 +1158,21 @@ async function loadSubcategory() {
   }
 }
 
-/* ==========================
-   VISUALIZZAZIONE PRODOTTI
-========================== */
+/* VISUALIZZAZIONE PRODOTTI */
 
 function renderProduct(p) {
+
   const fields = Array.isArray(p.custom_fields)
-    ? p.custom_fields
+    ? p.custom_fields.filter(f =>
+        !String(f.label || "").toLowerCase().includes("nome del bambino")
+      )
     : [];
+
+  // La scelta del disegno compare solo nella categoria fiocchi.
+
+  const isBirthBow = String(currentCategory || "")
+    .toLowerCase()
+    .includes("fiocchi");
 
   return `
     <article class="product" data-id="${Number(p.id)}">
@@ -1262,32 +1196,82 @@ function renderProduct(p) {
       <div class="product-content">
 
         <h3>${esc(p.name)}</h3>
+
         <p>${esc(p.description || "")}</p>
 
         <div class="price">
           € ${Number(p.price).toFixed(2)}
         </div>
 
+        <label>Nome del bambino *</label>
+
+        <input
+          type="text"
+          data-child-name
+          placeholder="Inserisci il nome"
+          maxlength="40"
+          autocomplete="off"
+          required
+        >
+
+        <p class="customization-note">
+          Indica il nome da inserire nella creazione.
+        </p>
+
+        ${isBirthBow ? `
+
+          <label>Desideri aggiungere un disegno?</label>
+
+          <select data-drawing-choice>
+            <option value="No">No, senza disegno</option>
+            <option value="Sì">Sì, desidero un disegno</option>
+          </select>
+
+          <div data-drawing-details class="hidden">
+
+            <label>Quale disegno desideri?</label>
+
+            <input
+              type="text"
+              data-drawing-name
+              placeholder="Es. Simba, Dumbo, Minnie, orsetto..."
+              maxlength="100"
+              autocomplete="off"
+            >
+
+          </div>
+
+        ` : ""}
+
         ${fields.map((f, i) => `
           <label>${esc(f.label)}</label>
 
-          ${f.options?.length ? `
+          ${Array.isArray(f.options) && f.options.length ? `
             <select data-field="${i}">
               <option value="">Seleziona</option>
+
               ${f.options.map(o => `
                 <option value="${esc(o)}">${esc(o)}</option>
               `).join("")}
+
             </select>
           ` : `
             <input
               data-field="${i}"
-              placeholder="Inserisci ${esc(f.label.toLowerCase())}"
+              placeholder="Inserisci ${esc(String(f.label || "").toLowerCase())}"
             >
           `}
         `).join("")}
 
         <label>Quantità</label>
-        <input type="number" min="1" value="1" data-quantity>
+
+        <input
+          type="number"
+          min="1"
+          step="1"
+          value="1"
+          data-quantity
+        >
 
         <button type="button" data-add="${Number(p.id)}">
           Aggiungi al carrello
@@ -1298,16 +1282,35 @@ function renderProduct(p) {
   `;
 }
 
-/* ==========================
-   APERTURA FOTO INGRANDITA
-========================== */
+/* PERSONALIZZAZIONE FIOCCHI: MOSTRA IL DISEGNO */
+
+$("products").addEventListener("change", e => {
+
+  if (!e.target.matches("[data-drawing-choice]")) return;
+
+  const card = e.target.closest(".product");
+  const details = card.querySelector("[data-drawing-details]");
+  const drawingInput = card.querySelector("[data-drawing-name]");
+
+  const show = e.target.value === "Sì";
+
+  details.classList.toggle("hidden", !show);
+
+  if (!show) {
+    drawingInput.value = "";
+  }
+});
+
+/* FOTO INGRANDITA */
 
 $("products").addEventListener("click", e => {
+
   const imageButton = e.target.closest("[data-image]");
   if (!imageButton) return;
 
   $("largeImage").src = imageButton.dataset.image;
   $("largeImage").alt = imageButton.dataset.alt || "Prodotto";
+
   $("imageViewer").classList.remove("hidden");
   document.body.style.overflow = "hidden";
 });
@@ -1327,37 +1330,96 @@ $("imageViewer").addEventListener("click", e => {
 });
 
 document.addEventListener("keydown", e => {
-  if (e.key === "Escape" && !$("imageViewer").classList.contains("hidden")) {
+
+  if (e.key === "Escape" &&
+      !$("imageViewer").classList.contains("hidden")) {
     closeImageViewer();
   }
 
-  if (e.key === "Escape" && !$("cart").classList.contains("hidden")) {
+  if (e.key === "Escape" &&
+      !$("cart").classList.contains("hidden")) {
     $("cart").classList.add("hidden");
     $("cartToggle").setAttribute("aria-expanded", "false");
   }
 });
 
-/* ==========================
-   AGGIUNTA AL CARRELLO
-========================== */
+/* AGGIUNTA AL CARRELLO */
 
 $("products").addEventListener("click", e => {
+
   const button = e.target.closest("[data-add]");
   if (!button) return;
 
   const card = button.closest(".product");
   const id = Number(button.dataset.add);
 
+  // NOME DEL BAMBINO OBBLIGATORIO
+
+  const childNameInput = card.querySelector("[data-child-name]");
+  const childName = childNameInput.value.trim();
+
+  if (!childName) {
+    alert("Inserisci il nome del bambino prima di aggiungere il prodotto.");
+    childNameInput.focus();
+    return;
+  }
+
+  const options = [
+    {
+      name: "Nome del bambino",
+      value: childName
+    }
+  ];
+
+  // DISEGNO PER I FIOCCHI NASCITA
+
+  const drawingChoice = card.querySelector("[data-drawing-choice]");
+
+  if (drawingChoice) {
+
+    options.push({
+      name: "Disegno",
+      value: drawingChoice.value
+    });
+
+    if (drawingChoice.value === "Sì") {
+
+      const drawingInput = card.querySelector("[data-drawing-name]");
+      const drawingName = drawingInput.value.trim();
+
+      if (!drawingName) {
+        alert("Specifica quale disegno desideri per il fiocco nascita.");
+        drawingInput.focus();
+        return;
+      }
+
+      options.push({
+        name: "Disegno richiesto",
+        value: drawingName
+      });
+    }
+  }
+
+  // ALTRI CAMPI DI PERSONALIZZAZIONE
+
   const fields = [...card.querySelectorAll("[data-field]")];
 
-  const options = fields.map(f => ({
-    name: f.previousElementSibling?.textContent || "Personalizzazione",
-    value: f.value.trim()
-  })).filter(f => f.value);
+  fields.forEach(f => {
+
+    if (f.value.trim()) {
+
+      options.push({
+        name: f.previousElementSibling?.textContent || "Personalizzazione",
+        value: f.value.trim()
+      });
+
+    }
+
+  });
 
   const quantity = Math.max(
     1,
-    Number(card.querySelector("[data-quantity]").value) || 1
+    Math.floor(Number(card.querySelector("[data-quantity]").value) || 1)
   );
 
   const name = card.querySelector("h3").textContent;
@@ -1366,7 +1428,13 @@ $("products").addEventListener("click", e => {
     card.querySelector(".price").textContent.replace("€", "").trim()
   );
 
-  cart.push({ id, name, price, quantity, options });
+  cart.push({
+    id,
+    name,
+    price,
+    quantity,
+    options
+  });
 
   updateCart();
 
@@ -1377,16 +1445,18 @@ $("products").addEventListener("click", e => {
   window.cartMessageTimeout = setTimeout(() => {
     $("cartMessage").classList.add("hidden");
   }, 1800);
+
 });
 
-/* ==========================
-   AGGIORNAMENTO CARRELLO
-========================== */
+/* AGGIORNAMENTO CARRELLO */
 
 function updateCart() {
+
   $("cartItems").innerHTML = cart.length
+
     ? cart.map((item, i) => `
         <p>
+
           <strong>${esc(item.name)}</strong> × ${item.quantity}
 
           ${item.options.map(o => `
@@ -1397,11 +1467,14 @@ function updateCart() {
           € ${(item.price * item.quantity).toFixed(2)}
 
           <br>
+
           <button class="secondary" data-remove="${i}">
             Rimuovi
           </button>
+
         </p>
       `).join("")
+
     : "<p>Il carrello è vuoto.</p>";
 
   const total = cart.reduce(
@@ -1424,29 +1497,29 @@ function updateCart() {
   $("sendOrder").disabled = !cart.length;
 }
 
-/* ==========================
-   RIMOZIONE PRODOTTO
-========================== */
+/* RIMOZIONE PRODOTTO */
 
 $("cartItems").addEventListener("click", e => {
+
   const button = e.target.closest("[data-remove]");
   if (!button) return;
 
   cart.splice(Number(button.dataset.remove), 1);
+
   updateCart();
 });
 
-/* ==========================
-   INVIO WHATSAPP
-========================== */
+/* INVIO WHATSAPP */
 
 $("sendOrder").addEventListener("click", () => {
+
   if (!cart.length) return;
 
   let message =
     "Ciao! Vorrei richiedere informazioni e un preventivo per questi prodotti:\n\n";
 
   cart.forEach(item => {
+
     message +=
       `${item.name} - Quantità: ${item.quantity} - € ${(item.price * item.quantity).toFixed(2)}\n`;
 
@@ -1455,6 +1528,7 @@ $("sendOrder").addEventListener("click", () => {
     });
 
     message += "\n";
+
   });
 
   message +=
@@ -1465,31 +1539,33 @@ $("sendOrder").addEventListener("click", () => {
     "?text=" + encodeURIComponent(message),
     "_blank"
   );
+
 });
 
-/* ==========================
-   RITORNO ALLE CATEGORIE
-========================== */
+/* RITORNO ALLE CATEGORIE */
 
 $("back").addEventListener("click", () => {
+
   $("productsArea").classList.add("hidden");
   $("subcategories").classList.add("hidden");
   $("products").classList.remove("hidden");
   $("sortBar").classList.add("hidden");
+
   $("categories").style.display = "grid";
 
   currentProducts = [];
   currentSort = "default";
+
   $("sortProducts").value = "default";
 
-  $("categories").scrollIntoView({ behavior: "smooth" });
+  $("categories").scrollIntoView({behavior:"smooth"});
+
 });
 
-/* ==========================
-   AVVIO
-========================== */
+/* AVVIO */
 
 updateCart();
+
 </script>
 
 </body>
